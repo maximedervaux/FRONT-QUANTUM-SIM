@@ -2,9 +2,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function BentoGrid() {
   return (
-    <div className="p-6">      
+    <div className="bento">      
       {/* Configuration du Grid : 4 colonnes sur desktop, 1 sur mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-full md:h-[600px]">
+      <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-full ">
         
         {/* Tuile 1 : La Grande (Prend 2 colonnes et 2 lignes) */}
         <Card className="md:col-span-2 md:row-span-2 bg-slate-950 text-white flex flex-col justify-end overflow-hidden border-none ring-1 ring-slate-800">

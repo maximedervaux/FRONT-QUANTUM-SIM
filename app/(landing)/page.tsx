@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import BentoGrid from "./components/Bento";
+import { Code } from "lucide-react";
+import CodeButton from "./components/CodeButton";
 
 
 export default function Home() {
@@ -17,9 +19,25 @@ export default function Home() {
           </a>
       </div>  
     </div>
+    
+    <BentoGrid />
+    
+    <div className="notebook">
+      <img
+        src="/notebook.png"
+        alt="notebook"
+        width={800}
+        height={600}
+      />
 
-    <div className="bento">
-      <BentoGrid />
+      <div className="text">
+        <h2>Installe notre librairie directement sur ton notebook !</h2>
+        <p>
+          Installe notre librairie en une seule commande et commence immédiatement à simuler des systèmes quantiques depuis ton notebook. Elle s’intègre sans configuration complexe et te permet de passer rapidement de l’installation à l’expérimentation. Que ce soit pour l’enseignement, la recherche ou le prototypage, tout est prêt pour exécuter tes premières simulations en quelques minutes.
+        </p>
+
+        <CodeButton />
+      </div>
 
     </div>
     </>
