@@ -1,0 +1,17 @@
+
+
+.menuBar{
+    z-index: 9999;
+}
+
+
+.tabTrigger{
+    color: var(--primary);
+}
+
+
+.tabTrigger[data-state="active"]{
+    background-color: var(--primary);
+    color: white;
+    
+}

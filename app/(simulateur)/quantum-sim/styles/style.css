@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 
+body{
+  height: 100vh;
+}
 
 .content {
   background: var(--foreground);
@@ -8,17 +11,22 @@
   font-family: Arial, Helvetica, sans-serif;
   display: flex ;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
   padding: 10px;
   font-size: 100%;
-
+  width: 100% ;
+  height: 98% ;
+  border-radius: 20px;
 }
 
-body > * {
-  width: 100% ;
-  height: 95vh ;
-  min-height: 600px ;
-  border-radius: 20px;
+
+.headerBar{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    padding: 0px;
+
 }
