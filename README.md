@@ -34,3 +34,85 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+```
+FRONT-QUANTUM-SIM
+├─ .DS_Store
+├─ README.md
+├─ app
+│  ├─ (landing)
+│  │  ├─ components
+│  │  │  ├─ Bento.tsx
+│  │  │  └─ CodeButton.tsx
+│  │  ├─ page.tsx
+│  │  └─ styles
+│  │     └─ style.css
+│  ├─ (simulateur)
+│  │  ├─ core
+│  │  │  ├─ controllers
+│  │  │  │  └─ mainController.jsx
+│  │  │  ├─ lib
+│  │  │  │  └─ main.py
+│  │  │  └─ workers
+│  │  │     └─ mainWorker.js
+│  │  └─ quantum-sim
+│  │     ├─ components
+│  │     │  └─ MenuBar
+│  │     │     ├─ MenuBar.module.css
+│  │     │     └─ MenuBar.tsx
+│  │     ├─ favicon.ico
+│  │     ├─ hooks
+│  │     ├─ page.tsx
+│  │     ├─ store
+│  │     │  └─ navigation.store.tsx
+│  │     └─ styles
+│  │        └─ style.css
+│  ├─ .DS_Store
+│  ├─ assets
+│  │  ├─ .DS_Store
+│  │  └─ fonts
+│  │     ├─ .DS_Store
+│  │     ├─ Lato
+│  │     │  ├─ Lato-Black.ttf
+│  │     │  ├─ Lato-BlackItalic.ttf
+│  │     │  ├─ Lato-Bold.ttf
+│  │     │  ├─ Lato-BoldItalic.ttf
+│  │     │  ├─ Lato-Italic.ttf
+│  │     │  ├─ Lato-Light.ttf
+│  │     │  ├─ Lato-LightItalic.ttf
+│  │     │  ├─ Lato-Regular.ttf
+│  │     │  ├─ Lato-Thin.ttf
+│  │     │  ├─ Lato-ThinItalic.ttf
+│  │     │  └─ OFL.txt
+│  │     └─ TiltWarp.ttf
+│  └─ styles
+│     └─ globals.css
+├─ components
+│  └─ ui
+│     ├─ button.tsx
+│     ├─ card.tsx
+│     ├─ menubar.tsx
+│     └─ tabs.tsx
+├─ components.json
+├─ eslint.config.mjs
+├─ lib
+│  └─ utils.ts
+├─ next-env.d.ts
+├─ next.config.ts
+├─ package-lock.json
+├─ package.json
+├─ postcss.config.mjs
+├─ public
+│  ├─ Hero.png
+│  ├─ file.svg
+│  ├─ globe.svg
+│  ├─ logo.png
+│  ├─ next.svg
+│  ├─ notebook.png
+│  ├─ onde.png
+│  ├─ vercel.svg
+│  ├─ waves.jpg
+│  └─ window.svg
+└─ tsconfig.json
+
+```
