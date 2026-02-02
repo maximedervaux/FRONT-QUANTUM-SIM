@@ -3,8 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-import { Button } from "@/components/ui/button";
+import './styles/style.css'
 import BentoGrid from "./components/Bento";
 import CodeButton from "./components/CodeButton";
 import { Toaster } from "sonner";
@@ -125,7 +124,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="containerLanding">
    
       {/* HERO */}
       <div className="hero" ref={heroRef}>
@@ -170,6 +169,6 @@ export default function Home() {
             
 
       </div>
-    </>
+    </div>
   );
 }
