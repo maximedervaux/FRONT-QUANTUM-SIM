@@ -35,6 +35,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+
 ```
 FRONT-QUANTUM-SIM
 ├─ .DS_Store
@@ -51,8 +52,6 @@ FRONT-QUANTUM-SIM
 │  │  ├─ core
 │  │  │  ├─ controllers
 │  │  │  │  └─ mainController.jsx
-│  │  │  ├─ lib
-│  │  │  │  └─ main.py
 │  │  │  └─ workers
 │  │  │     └─ mainWorker.js
 │  │  └─ quantum-sim
@@ -110,6 +109,8 @@ FRONT-QUANTUM-SIM
 │  ├─ next.svg
 │  ├─ notebook.png
 │  ├─ onde.png
+│  ├─ python
+│  │  └─ main.py
 │  ├─ vercel.svg
 │  ├─ waves.jpg
 │  └─ window.svg
