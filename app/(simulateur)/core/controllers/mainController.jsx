@@ -1,14 +1,11 @@
 // app/components/PythonController.jsx
 'use client';
-
 import { useEffect, useState, useCallback } from 'react';
-
 import dynamic from "next/dynamic";
 
 const Plot = dynamic(() => import("react-plotly.js"), {
   ssr: false,
-})
-
+});
 
 export default function PythonController() {
   const [worker, setWorker] = useState(null);
@@ -18,19 +15,34 @@ export default function PythonController() {
   });
   const [result, setResult] = useState(null);
   const [isReady, setIsReady] = useState(false);
+  const [loadingScript, setLoadingScript] = useState(null);
 
   // Initialiser le worker
   useEffect(() => {
     const pyWorker = new Worker(new URL('../workers/mainWorker.js', import.meta.url));
     
     pyWorker.onmessage = (e) => {
-      if (e.data.type === 'ready') {
-        setIsReady(true);
-      } else if (e.data.type === 'result') {
-        console.log('Résultat reçu du worker Python:', e.data.data);
-        setResult(e.data.data);
-     } else if (e.data.type === 'error') {
-        setResult({ error: e.data.error });
+      switch (e.data.type) {
+        case 'ready':
+          setIsReady(true);
+          console.log('Pyodide est prêt !');
+          break;
+          
+        case 'script_loaded':
+          console.log(`Script ${e.data.script} chargé`);
+          setLoadingScript(null);
+          break;
+          
+        case 'result':
+          console.log('Résultat reçu du worker Python:', e.data.data);
+          setResult(e.data.data);
+          break;
+          
+        case 'error':
+          console.error('Erreur Python:', e.data.error);
+          setResult({ error: e.data.error });
+          setLoadingScript(null);
+          break;
       }
     };
 
@@ -44,7 +56,12 @@ export default function PythonController() {
     if (worker && isReady) {
       worker.postMessage({
         type: 'run',
-        params: params
+        scriptName: 'main', // Nom du script Python (sans .py)
+        functionName: 'run_simulation', 
+        params: {
+          param1: params.param1,
+          param2: params.param2
+        }
       });
     }
   }, [params, worker, isReady]);
@@ -57,12 +74,19 @@ export default function PythonController() {
   }, []);
 
   return (
-    <div className="p-8 " style={{width: "1300px"}}>
+    <div className="p-8" style={{width: "1300px"}}>
       <h1 className="text-2xl font-bold mb-6">Contrôleur Python Temps Réel</h1>
-      
+
+      {/* Status de chargement */}
       {!isReady && (
         <div className="mb-4 p-4 bg-yellow-100 rounded">
-          Chargement de Python...
+          Chargement de Pyodide...
+        </div>
+      )}
+
+      {loadingScript && (
+        <div className="mb-4 p-4 bg-blue-100 rounded">
+          Chargement du script {loadingScript}...
         </div>
       )}
 
@@ -76,6 +100,7 @@ export default function PythonController() {
             type="range"
             min="0"
             max="10"
+            step="0.1"
             value={params.param1}
             onChange={(e) => handleParamChange('param1', e.target.value)}
             className="w-full"
@@ -105,7 +130,12 @@ export default function PythonController() {
       {result && (
         <div className="mt-8 p-4 bg-gray-100 rounded">
           <h2 className="font-bold mb-2">Résultats Python :</h2>
-          {result && result.length && (
+          
+          {result.error ? (
+            <div className="p-4 bg-red-100 text-red-700 rounded">
+              <strong>Erreur :</strong> {result.error}
+            </div>
+          ) : result.length ? (
             <Plot
               data={[
                 {
@@ -116,7 +146,7 @@ export default function PythonController() {
                 }
               ]}
               layout={{
-                title: 'Amplitude de l’onde |ψ(x)|',
+                title: 'Amplitude de l\'onde |ψ(x)|',
                 xaxis: { title: 'x (échantillons)' },
                 yaxis: { title: '|ψ|' },
                 margin: { t: 40, l: 50, r: 20, b: 40 }
@@ -124,7 +154,7 @@ export default function PythonController() {
               style={{ width: '100%', height: '400px' }}
               config={{ responsive: true }}
             />
-          )}
+          ) : null}
         </div>
       )}
     </div>
