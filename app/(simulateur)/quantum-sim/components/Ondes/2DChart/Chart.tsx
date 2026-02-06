@@ -42,12 +42,14 @@ export default function Chart() {
   };
 
   return (
-    <Plot
-      className="chart"
-      data={[{ y: result, type: 'scatter', mode: 'lines', line: { width: 2 } }]}
-      layout={layout}
-      style={{ width: '100%', height: '400px' }}
-      config={{ responsive: true }}
-    />
+    <>
+      <Plot
+        className="chart"
+        data={[{ y: result, type: 'scatter', mode: 'lines', line: { width: 2 } }]}
+        layout={layout}
+        style={{ width: '100%', height: '400px' }}
+        config={{ responsive: true }}
+      />
+    </>
   );
 }
