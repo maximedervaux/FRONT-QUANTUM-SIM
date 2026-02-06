@@ -131,7 +131,7 @@ export default function Home() {
       {/* HERO */}
       <div className="hero" ref={heroRef}>
         <div className="left">
-          <h1>Quantum SIM</h1>
+          <img src="/logo.png" alt="Quantum SIM" width={600} height={500} />
         </div>
 
         <div className="right">
