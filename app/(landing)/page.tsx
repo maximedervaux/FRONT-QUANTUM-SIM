@@ -18,10 +18,52 @@ export default function Home() {
   const loaderRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-
+   useEffect(() => {
+    // Loading animation
+    const tl = gsap.timeline({
+      onComplete: () => setIsLoading(false),
+    });
 
   
+
+    // Hero animation after loader
+    tl.fromTo(
+      heroRef.current,
+      { opacity: 0, y: -80 },
+      { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }
+    );
+
+    tl.fromTo(
+      ".hero .left h1",
+      { opacity: 0, x: -50 },
+      { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
+      "-=0.6"
+    );
+
+    tl.fromTo(
+      ".hero .right",
+      { opacity: 0, x: 50 },
+      { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
+      "-=0.6"
+    );
+
+    // Bento Grid scroll animation
+    gsap.fromTo(
+      bentoRef.current,
+      { opacity: 0, y: 100 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: bentoRef.current,
+          start: "top 80%",
+          end: "top 50%",
+          toggleActions: "play none none reverse",
+        },
+      }
+    );
 
     // Notebook section scroll animation
     gsap.fromTo(
@@ -80,6 +122,8 @@ export default function Home() {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
+
+
 
   return (
     <div className="containerLanding">

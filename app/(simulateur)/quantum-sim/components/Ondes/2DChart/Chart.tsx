@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import type { Layout } from 'plotly.js';
 import { useEffect, useState } from "react";
 import { usePythonFunction } from '../../../hooks/usePythonFunction';
+import styles from "./Chart.module.css";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
@@ -42,14 +43,13 @@ export default function Chart() {
   };
 
   return (
-    <>
+    <div className={styles.chart}>
       <Plot
-        className="chart"
         data={[{ y: result, type: 'scatter', mode: 'lines', line: { width: 2 } }]}
         layout={layout}
-        style={{ width: '100%', height: '400px' }}
+        style={{ width: '100%', height: '400px' , overflow: 'hidden'}}
         config={{ responsive: true }}
       />
-    </>
+    </div>
   );
 }
