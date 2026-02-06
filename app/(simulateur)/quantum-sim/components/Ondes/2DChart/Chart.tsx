@@ -4,11 +4,16 @@ import type { Layout } from 'plotly.js';
 import { useEffect, useState } from "react";
 import { usePythonFunction } from '../../../hooks/usePythonFunction';
 import styles from "./Chart.module.css";
+import { useWaveStore } from "../../../store/onde.store";
+
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 export default function Chart() {
-  const [params, setParams] = useState({ param1: 1.0, param2: 0.5 });
+      const {
+    amplitude,
+    phase
+  } = useWaveStore();
   const [result, setResult] = useState<number[]>([]);
 
   const { execute, isLoading, error, data, isReady } = usePythonFunction(
@@ -22,9 +27,7 @@ export default function Chart() {
       return;
     }
 
-    console.log('[Chart] Lancement simulation avec params:', params);
-    
-    execute(params)
+    execute({ amplitude, phase })
       .then((res: number[]) => {
         console.log('[Chart] Résultat reçu:', res);
         setResult(res);
@@ -33,7 +36,7 @@ export default function Chart() {
         console.error('[Chart] Erreur:', err);
       });
     
-  }, [params, isReady]); 
+  }, [amplitude, phase, isReady]); 
 
   const layout: Partial<Layout> = {
     title: "Amplitude de l'onde |ψ(x)|" as any,

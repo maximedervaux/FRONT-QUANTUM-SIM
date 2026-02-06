@@ -4,5 +4,28 @@
     align-items: center;
     height: 100%;
     width: 100%;
+    gap:10px;
 
+
+}
+
+.chartsContainer{
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.parametersContainer{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+    border-radius: 10px;
 }
