@@ -18,7 +18,7 @@ export default function BentoGrid() {
             <CardDescription>Observer des phénomènes quantiques en action</CardDescription>
           </CardHeader>
           <CardContent>
-            <img src="/onde.png" alt="Visualisation d'ondes"/>
+            <img src="/assets/onde.png" alt="Visualisation d'ondes"/>
           </CardContent>
         </Card>
 

@@ -131,7 +131,7 @@ export default function Home() {
       {/* HERO */}
       <div className="hero" ref={heroRef}>
         <div className="left">
-          <img src="/logo.png" alt="Quantum SIM" width={600} height={500} />
+          <img src="/assets/logo.png" alt="Quantum SIM" width={600} height={500} />
         </div>
 
         <div className="right">
@@ -147,7 +147,7 @@ export default function Home() {
       {/* NOTEBOOK SECTION */}
       <div className="notebook" ref={notebookRef}>
         <img
-          src="/notebook.png"
+          src="/assets/notebook.png"
           alt="notebook"
           width={800}
           height={600}

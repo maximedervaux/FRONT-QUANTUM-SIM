@@ -15,7 +15,6 @@
   }
 }
 
-
 .containerLanding {
   width: 100%;
   display: flex;
@@ -24,14 +23,12 @@
   justify-content: center;
 }
 
-
-
 .containerLanding> * {
   width: 100% ;
   height: 95vh ;
   min-height: 600px ;
-  border-radius: 20px;}
-
+  border-radius: 20px;
+}
 
 h2 {
   font-size: 32px;
@@ -49,13 +46,11 @@ h1 {
 } 
 
 .hero {
-  background-image: url('/hero.png');
+  background-image: url('/assets/Hero.png');
   background-size: cover;
   background-position: center;
   display: flex;
   flex-direction: row;
-  
-
 }
 
 .hero .left{
@@ -74,13 +69,10 @@ h1 {
   align-items: center;
 }
 
-
 .bento{
-
   padding: 40px;
   border-radius: 20px;
 }
-
 
 .startButton {
   color: white;
@@ -100,9 +92,8 @@ h1 {
   justify-content: center;
 }
 
-
 .waveCard {
-  background-image: url('/waves.jpg');
+  background-image: url('/assets/waves.jpg');
   background-size: cover;
   background-position: center;
 
