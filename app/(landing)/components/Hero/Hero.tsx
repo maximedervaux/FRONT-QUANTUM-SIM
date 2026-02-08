@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { forwardRef } from "react";
 import styles from './Hero.module.css';
+import StartIcon from "../../assets/start-button.svg";
+
 
 const Hero = forwardRef<HTMLDivElement>((props, ref) => {
   return (
@@ -10,7 +12,8 @@ const Hero = forwardRef<HTMLDivElement>((props, ref) => {
       </div>
       <div className={styles.right}>
         <Link href="/quantum-sim" className={styles.startButton}>
-          Lancer la simulation
+          <h2>Lancer</h2>
+          <StartIcon className={styles.startIcon}/>
         </Link>
       </div>
     </div>
