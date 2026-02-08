@@ -14,7 +14,7 @@ export default function Chart() {
     amplitude,
     phase
   } = useWaveStore();
-  const [result, setResult] = useState<number[]>([]);
+  const [result, setResult] = useState<number[][]>([]);
 
   const { execute, isLoading, error, data, isReady } = usePythonFunction(
     'main',
@@ -28,7 +28,7 @@ export default function Chart() {
     }
 
     execute({ amplitude, phase })
-      .then((res: number[]) => {
+      .then((res: number[][]) => {
         console.log('[Chart] Résultat reçu:', res);
         setResult(res);
       })
@@ -48,7 +48,22 @@ export default function Chart() {
   return (
     <div className={styles.chart}>
       <Plot
-        data={[{ y: result, type: 'scatter', mode: 'lines', line: { width: 2 } }]}
+        data={[
+    {
+      y: result[0],
+      type: 'scatter',
+      mode: 'lines',
+      name: 'Onde principale',
+      line: { width: 2, color: '#1f77b4' },
+    },
+    {
+      y: result[1],
+      type: 'scatter',
+      mode: 'lines',
+      name: 'Seconde onde',
+      line: { width: 2, dash: 'dash', color: '#ff7f0e' },
+    },
+  ]}
         layout={layout}
         style={{ width: '100%', height: '400px' , overflow: 'hidden'}}
         config={{ responsive: true }}
