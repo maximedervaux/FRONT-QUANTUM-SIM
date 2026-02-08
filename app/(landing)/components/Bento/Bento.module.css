@@ -1,0 +1,13 @@
+.bento{
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.waveCard {
+  background-image: url('/assets/waves.jpg');
+  background-size: cover;
+  background-position: center;
+
+  position: relative;
+  overflow: hidden;
+}
