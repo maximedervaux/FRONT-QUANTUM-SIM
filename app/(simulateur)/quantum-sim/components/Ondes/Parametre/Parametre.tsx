@@ -11,14 +11,14 @@ export default function Parametre( ) {
       const {
     amplitude,
     phase,
+    harmonics,
+    wavelength,
     setAmplitude,
     setPhase,
-    setFunction
+    setFunction,
+    setHarmonics,
+    setWavelength
   } = useWaveStore();
-
-  // TODO Useref temp
-   const [longueur, setLongueur] = useState(0.01);
-   const [harmonique, setHarmonique] = useState(0.01);
     
     return (
         <div className={style.parametre}>
@@ -52,25 +52,32 @@ export default function Parametre( ) {
                 />
             </div>
             <div className={style.inputContainer}>
-                    <p>Longueur d'onde</p>
-                    <Input
-                        placeholder="0"
-                        defaultValue={longueur}
-                        onChange={(value) => setLongueur(value.target.valueAsNumber)    
-                    }
+                <p>Longueur d'onde</p>
+                <Input
+                    placeholder="0"
+                    type="number"
+                    value={wavelength || ""}
+                    onChange={(e) => {
+                        const val = e.target.valueAsNumber;
+                        setWavelength(isNaN(val) ? 1 : val);
+                    }}
                 />
                 λ
             </div>
-              <div className={style.inputContainer}>
-                    <p>Harmonique</p>
-                    <Input
-                        placeholder="0"
-                        defaultValue={harmonique}
-                        onChange={(value) => setHarmonique(value.target.valueAsNumber)    
-                    }
+
+            <div className={style.inputContainer}>
+                <p>Harmonique</p>
+                <Input
+                    placeholder="0"
+                    type="number"
+                    value={harmonics || ""}
+                    onChange={(e) => {
+                        const val = e.target.valueAsNumber;
+                        setHarmonics(val);
+                    }}
                 />
-                
             </div>
+
 
             
         </div>

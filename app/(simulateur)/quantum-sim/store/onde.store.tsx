@@ -3,16 +3,22 @@ import { create } from "zustand";
 interface WaveState {
   amplitude: number;
   phase: number;
+  harmonics: number;
+  wavelength: number;
   
 
   setAmplitude: (value: number) => void;
   setPhase: (value: number) => void;
   setFunction: (value: string) => void;
+  setHarmonics: (value: number) => void;
+  setWavelength: (value: number) => void;
 }
 
 export const useWaveStore = create<WaveState>((set) => ({
   amplitude: 0,
   phase: 0,
+  harmonics: 1,
+  wavelength: 1,
 
   setAmplitude: (value) => set({ amplitude: value }),
   setPhase: (value) => set({ phase: value }),
@@ -28,4 +34,6 @@ export const useWaveStore = create<WaveState>((set) => ({
         set({ phase: 0 , amplitude: 0 });
     }
   },
+  setHarmonics: (value) => set({harmonics: value}),
+  setWavelength: (value) => set({wavelength: value})
 }));

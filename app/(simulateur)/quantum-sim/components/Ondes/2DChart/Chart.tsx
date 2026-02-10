@@ -11,14 +11,15 @@ const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 export default function Chart() {
       const {
-    amplitude,
-    phase
+    harmonics,
+    wavelength
   } = useWaveStore();
   const [result, setResult] = useState<number[][]>([]);
+  const [xAxis, setXAxis] = useState<number[]>([]);
 
   const { execute, isLoading, error, data, isReady } = usePythonFunction(
-    'main',
-    'run_simulation'
+    'plane_wave',
+    'generate_plane_waves'
   );
 
    useEffect(() => {
@@ -27,16 +28,19 @@ export default function Chart() {
       return;
     }
 
-    execute({ amplitude, phase })
-      .then((res: number[][]) => {
-        console.log('[Chart] Résultat reçu:', res);
-        setResult(res);
+    const n = isNaN(harmonics) || harmonics <= 0 ? 1 : harmonics;
+    const λ = isNaN(wavelength) || wavelength <= 0 ? 1 : wavelength;
+
+    execute({ harmonics, wavelength })
+      .then((waves: [number[], number[]][]) => {
+        setResult(waves.map(([x, y]) => y));
+        setXAxis(waves[0][0]);
       })
       .catch((err) => {
         console.error('[Chart] Erreur:', err);
       });
     
-  }, [amplitude, phase, isReady]); 
+  }, [harmonics, wavelength, isReady]); 
 
   const layout: Partial<Layout> = {
     title: "Amplitude de l'onde |ψ(x)|" as any,
@@ -48,22 +52,13 @@ export default function Chart() {
   return (
     <div className={styles.chart}>
       <Plot
-        data={[
-    {
-      y: result[0],
-      type: 'scatter',
-      mode: 'lines',
-      name: 'Onde principale',
-      line: { width: 2, color: '#1f77b4' },
-    },
-    {
-      y: result[1],
-      type: 'scatter',
-      mode: 'lines',
-      name: 'Seconde onde',
-      line: { width: 2, dash: 'dash', color: '#ff7f0e' },
-    },
-  ]}
+        data={result.map((wave, idx) => ({
+          x: xAxis,
+          y: wave,
+          type: 'scatter',
+          mode: 'lines',
+          name: `Onde ${idx + 1}`,
+        }))}
         layout={layout}
         style={{ width: '100%', height: '400px' , overflow: 'hidden'}}
         config={{ responsive: true }}
