@@ -54,6 +54,7 @@ export default function Parametre( ) {
             <div className={style.inputContainer}>
                     <p>Longueur d'onde</p>
                     <Input
+                        pattern="[0-9]*"
                         placeholder="0"
                         defaultValue={longueur}
                         onChange={(value) => setLongueur(value.target.valueAsNumber)    
@@ -64,6 +65,7 @@ export default function Parametre( ) {
               <div className={style.inputContainer}>
                     <p>Harmonique</p>
                     <Input
+                        pattern="[0-9]*"
                         placeholder="0"
                         defaultValue={harmonique}
                         onChange={(value) => setHarmonique(value.target.valueAsNumber)    
