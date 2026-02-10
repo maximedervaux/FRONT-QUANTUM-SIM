@@ -2,7 +2,7 @@
 
 import { PageKey, useNavigationStore } from "../../store/navigation.store"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import style from "./MenuBar.module.css"
+import style from "./NaviguationBar.module.css"
 
 export function NavigationTabs() {
   const { activePage, setActivePage } = useNavigationStore()

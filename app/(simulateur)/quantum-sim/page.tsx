@@ -1,9 +1,10 @@
 'use client';
 import  Link from "next/link";
-import { NavigationTabs} from "./components/MenuBar/MenuBar";
+
 import './styles/style.css'
 import DashBoard from "./components/DashBoard/DashBoard";
 import { PythonWorkerProvider } from "../core/contexts/PythonWorkerContext";
+import { NavigationTabs } from "./components/MenuBar/NaviguationBar";
 
 export default function Simulateur() {
   return (
