@@ -11,6 +11,7 @@ const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 export default function Chart() {
   const {
+    phase,
     harmonics,
     wavelength,
     period
@@ -28,7 +29,7 @@ export default function Chart() {
       console.log('[Chart] En attente du worker...');
       return;
     }
-    execute({ harmonics, wavelength, period })
+    execute({ harmonics, wavelength, period, phase })
       .then((waves: [number[], number[]][]) => {
         setResult(waves.map(([x, y]) => y));
         setXAxis(waves[0][0]);
@@ -38,7 +39,7 @@ export default function Chart() {
         console.error('[Chart] Erreur:', err);
       });
     
-  }, [harmonics, wavelength, period, isReady]); 
+  }, [harmonics, wavelength, period, phase, isReady]); 
 
   const layout: Partial<Layout> = {
     title: "Amplitude de l'onde |ψ(x)|" as any,

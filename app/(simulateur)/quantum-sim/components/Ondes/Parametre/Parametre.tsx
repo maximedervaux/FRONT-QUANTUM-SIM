@@ -4,6 +4,7 @@ import { useWaveStore } from "../../../store/onde.store";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 
 
@@ -21,6 +22,13 @@ export default function Parametre( ) {
         setWavelength,
         setPeriod
     } = useWaveStore();
+
+    const handleClickButtonPhase = () => {
+        setInterval(() => {
+            setPhase(0.1);
+        }, 100)
+        console.log("Lancement de l'animation")
+    }
     
     return (
         <div className={style.parametre}>
@@ -45,13 +53,7 @@ export default function Parametre( ) {
             </div>
             <div className={style.sliderContainer}>
                 <p>Phase : {phase} π</p>
-                <Slider
-                    defaultValue={[phase]}
-                    min={0.01}
-                    max={2}
-                    step={0.01}
-                    onValueChange={(value) => setPhase(value[0])}
-                />
+                <Button onClick={() => handleClickButtonPhase()}>Animer la phase</Button>
             </div>
             <div className={style.inputContainer}>
                 <p>Longueur d'onde</p>

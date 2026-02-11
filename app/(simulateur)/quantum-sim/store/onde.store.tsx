@@ -24,7 +24,8 @@ export const useWaveStore = create<WaveState>((set) => ({
   period: 3,
 
   setAmplitude: (value) => set({ amplitude: value }),
-  setPhase: (value) => set({ phase: value }),
+  setPhase: (value) =>
+  set((state) => ({ phase: state.phase + value })),
   setFunction: (value) => {
     switch (value) {
       case "gaussienne":
