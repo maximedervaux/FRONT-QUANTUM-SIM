@@ -15,19 +15,26 @@ export default function Parametre( ) {
         harmonics,
         wavelength,
         period,
+        time,
         setAmplitude,
         setPhase,
         setFunction,
         setHarmonics,
         setWavelength,
-        setPeriod
+        setPeriod,
+        setTime
     } = useWaveStore();
 
     const handleClickButtonPhase = () => {
         setInterval(() => {
             setPhase(0.1);
         }, 100)
-        console.log("Lancement de l'animation")
+    }
+
+    const handleClickButtonTime = () => {
+        setInterval(() => {
+            setTime(0.1);
+        }, 10)
     }
     
     return (
@@ -55,11 +62,17 @@ export default function Parametre( ) {
                 <p>Phase : {phase} π</p>
                 <Button onClick={() => handleClickButtonPhase()}>Animer la phase</Button>
             </div>
+            <div className={style.sliderContainer}>
+                <p>Temps : {time} s</p>
+                <Button onClick={() => handleClickButtonTime()}>Visualiser en fonction du temps</Button>
+            </div>
             <div className={style.inputContainer}>
                 <p>Longueur d'onde</p>
                 <Input
-                    placeholder="0"
+                    placeholder=""
                     type="number"
+                    min={0.01}
+                    step={0.01}
                     value={wavelength || ""}
                     onChange={(e) => {
                         const val = e.target.valueAsNumber;

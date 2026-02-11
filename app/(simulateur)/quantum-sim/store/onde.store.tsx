@@ -6,7 +6,7 @@ interface WaveState {
   harmonics: number;
   wavelength: number;
   period: number;
-  
+  time: number;
 
   setAmplitude: (value: number) => void;
   setPhase: (value: number) => void;
@@ -14,6 +14,7 @@ interface WaveState {
   setHarmonics: (value: number) => void;
   setWavelength: (value: number) => void;
   setPeriod: (value: number) => void;
+  setTime: (value: number) => void;
 }
 
 export const useWaveStore = create<WaveState>((set) => ({
@@ -22,10 +23,10 @@ export const useWaveStore = create<WaveState>((set) => ({
   harmonics: 1,
   wavelength: 1,
   period: 3,
+  time: 0,
 
   setAmplitude: (value) => set({ amplitude: value }),
-  setPhase: (value) =>
-  set((state) => ({ phase: state.phase + value })),
+  setPhase: (value) => set((state) => ({ phase: state.phase + value })),
   setFunction: (value) => {
     switch (value) {
       case "gaussienne":
@@ -41,4 +42,5 @@ export const useWaveStore = create<WaveState>((set) => ({
   setHarmonics: (value) => set({harmonics: value}),
   setWavelength: (value) => set({wavelength: value}),
   setPeriod: (value) => set({period: value}),
+  setTime: (value) => set((state) => ({ time: state.time + value })),
 }));

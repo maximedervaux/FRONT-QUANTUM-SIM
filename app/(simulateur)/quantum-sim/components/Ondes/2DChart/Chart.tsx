@@ -14,7 +14,8 @@ export default function Chart() {
     phase,
     harmonics,
     wavelength,
-    period
+    period,
+    time
   } = useWaveStore();
   const [result, setResult] = useState<number[][]>([]);
   const [xAxis, setXAxis] = useState<number[]>([]);
@@ -29,7 +30,7 @@ export default function Chart() {
       console.log('[Chart] En attente du worker...');
       return;
     }
-    execute({ harmonics, wavelength, period, phase })
+    execute({ harmonics, wavelength, period, phase, time })
       .then((waves: [number[], number[]][]) => {
         setResult(waves.map(([x, y]) => y));
         setXAxis(waves[0][0]);
@@ -39,7 +40,7 @@ export default function Chart() {
         console.error('[Chart] Erreur:', err);
       });
     
-  }, [harmonics, wavelength, period, phase, isReady]); 
+  }, [harmonics, wavelength, period, phase, time, isReady]); 
 
   const layout: Partial<Layout> = {
     title: "Amplitude de l'onde |ψ(x)|" as any,
