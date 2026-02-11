@@ -10,9 +10,10 @@ import { useWaveStore } from "../../../store/onde.store";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 export default function Chart() {
-      const {
+  const {
     harmonics,
-    wavelength
+    wavelength,
+    period
   } = useWaveStore();
   const [result, setResult] = useState<number[][]>([]);
   const [xAxis, setXAxis] = useState<number[]>([]);
@@ -27,20 +28,17 @@ export default function Chart() {
       console.log('[Chart] En attente du worker...');
       return;
     }
-
-    const n = isNaN(harmonics) || harmonics <= 0 ? 1 : harmonics;
-    const λ = isNaN(wavelength) || wavelength <= 0 ? 1 : wavelength;
-
-    execute({ harmonics, wavelength })
+    execute({ harmonics, wavelength, period })
       .then((waves: [number[], number[]][]) => {
         setResult(waves.map(([x, y]) => y));
         setXAxis(waves[0][0]);
+        console.log("Xaxis: ", xAxis);
       })
       .catch((err) => {
         console.error('[Chart] Erreur:', err);
       });
     
-  }, [harmonics, wavelength, isReady]); 
+  }, [harmonics, wavelength, period, isReady]); 
 
   const layout: Partial<Layout> = {
     title: "Amplitude de l'onde |ψ(x)|" as any,

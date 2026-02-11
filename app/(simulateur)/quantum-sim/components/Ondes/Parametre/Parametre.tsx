@@ -9,16 +9,18 @@ import { Input } from "@/components/ui/input";
 
 export default function Parametre( ) {
       const {
-    amplitude,
-    phase,
-    harmonics,
-    wavelength,
-    setAmplitude,
-    setPhase,
-    setFunction,
-    setHarmonics,
-    setWavelength
-  } = useWaveStore();
+        amplitude,
+        phase,
+        harmonics,
+        wavelength,
+        period,
+        setAmplitude,
+        setPhase,
+        setFunction,
+        setHarmonics,
+        setWavelength,
+        setPeriod
+    } = useWaveStore();
     
     return (
         <div className={style.parametre}>
@@ -42,11 +44,11 @@ export default function Parametre( ) {
                 />
             </div>
             <div className={style.sliderContainer}>
-                    <p>Phase : {phase} π</p>
-                    <Slider
-                        defaultValue={[phase]}
-                        min={0.01}
-                        max={2}
+                <p>Phase : {phase} π</p>
+                <Slider
+                    defaultValue={[phase]}
+                    min={0.01}
+                    max={2}
                     step={0.01}
                     onValueChange={(value) => setPhase(value[0])}
                 />
@@ -75,6 +77,17 @@ export default function Parametre( ) {
                         const val = e.target.valueAsNumber;
                         setHarmonics(val);
                     }}
+                />
+            </div>
+            
+            <div className={style.inputContainer}>
+                <p>Période</p>
+                <Slider
+                    defaultValue={[period]}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onValueChange={(value) => setPeriod(value[0])}
                 />
             </div>
 
