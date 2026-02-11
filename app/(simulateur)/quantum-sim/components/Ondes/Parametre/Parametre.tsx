@@ -48,14 +48,14 @@ export default function Parametre( ) {
                 </NativeSelect>
 
             </div>
-            <div className={style.sliderContainer}>
-                <p>Amplitude : {amplitude}</p>
+            <div className={style.inputContainer}>
+                <p>Période</p>
                 <Slider
-                    defaultValue={[amplitude]}
-                    min={0.01}
-                    max={2}
-                    step={0.1}
-                    onValueChange={(value) => setAmplitude(value[0])}
+                    defaultValue={[period]}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onValueChange={(value) => setPeriod(value[0])}
                 />
             </div>
             <div className={style.sliderContainer}>
@@ -76,7 +76,7 @@ export default function Parametre( ) {
                     value={wavelength || ""}
                     onChange={(e) => {
                         const val = e.target.valueAsNumber;
-                        setWavelength(isNaN(val) ? 1 : val);
+                        setWavelength(isNaN(val) ? 0.01 : val);
                     }}
                 />
                 λ
@@ -84,30 +84,18 @@ export default function Parametre( ) {
 
             <div className={style.inputContainer}>
                 <p>Harmonique</p>
+                {/* Mettre des ptn de useState */}
                 <Input
-                    placeholder="0"
                     type="number"
                     value={harmonics || ""}
+                    min={1}
+                    max={1000}
                     onChange={(e) => {
                         const val = e.target.valueAsNumber;
                         setHarmonics(val);
                     }}
                 />
             </div>
-            
-            <div className={style.inputContainer}>
-                <p>Période</p>
-                <Slider
-                    defaultValue={[period]}
-                    min={1}
-                    max={100}
-                    step={1}
-                    onValueChange={(value) => setPeriod(value[0])}
-                />
-            </div>
-
-
-            
         </div>
     );
 }

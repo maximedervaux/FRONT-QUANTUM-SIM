@@ -1,7 +1,7 @@
 'use client';
 import dynamic from "next/dynamic";
-import type { Layout } from 'plotly.js';
-import { useEffect, useState } from "react";
+import type { Layout, ScatterData } from 'plotly.js';
+import { useEffect, useMemo, useState } from "react";
 import { usePythonFunction } from '../../../hooks/usePythonFunction';
 import styles from "./Chart.module.css";
 import { useWaveStore } from "../../../store/onde.store";
@@ -42,24 +42,28 @@ export default function Chart() {
     
   }, [harmonics, wavelength, period, phase, time, isReady]); 
 
-  const layout: Partial<Layout> = {
+  const plotData: ScatterData[] = useMemo(() => {
+    return result.map((wave, idx) => ({
+      x: xAxis,
+      y: wave,
+      type: 'scatter' as const,
+      mode: 'lines' as const,
+      name: `Onde ${idx + 1}`,
+    }));
+  }, [result, xAxis]);
+
+  const plotLayout = useMemo<Partial<Layout>>(() => ({
     title: "Amplitude de l'onde |ψ(x)|" as any,
     xaxis: { title: 'x (échantillons)' as any },
     yaxis: { title: '|ψ|' as any },
     margin: { t: 40, l: 50, r: 20, b: 40 },
-  };
+  }), []);
 
   return (
     <div className={styles.chart}>
       <Plot
-        data={result.map((wave, idx) => ({
-          x: xAxis,
-          y: wave,
-          type: 'scatter',
-          mode: 'lines',
-          name: `Onde ${idx + 1}`,
-        }))}
-        layout={layout}
+        data={plotData}
+        layout={plotLayout}
         style={{ width: '100%', height: '400px' , overflow: 'hidden'}}
         config={{ responsive: true }}
       />
