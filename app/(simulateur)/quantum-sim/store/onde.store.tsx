@@ -7,6 +7,8 @@ interface WaveState {
   wavelength: number;
   period: number;
   time: number;
+  isAnimatingPhase: boolean;
+  isAnimatingTime: boolean;
 
   setAmplitude: (value: number) => void;
   setPhase: (value: number) => void;
@@ -15,6 +17,10 @@ interface WaveState {
   setWavelength: (value: number) => void;
   setPeriod: (value: number) => void;
   setTime: (value: number) => void;
+  toggleAnimationPhase: () => void;
+  toggleAnimationTime: () => void;
+  resetPhase: () => void;
+  resetTime: () => void;
 }
 
 export const useWaveStore = create<WaveState>((set) => ({
@@ -24,9 +30,13 @@ export const useWaveStore = create<WaveState>((set) => ({
   wavelength: 1,
   period: 3,
   time: 0,
+  isAnimatingPhase: false,
+  isAnimatingTime: false,
 
   setAmplitude: (value) => set({ amplitude: value }),
-  setPhase: (value) => set((state) => ({ phase: state.phase + value })),
+  setPhase: (value) => set((state) => ({
+    phase: (state.phase + value) % (2 * Math.PI) // Modulo 2π pour boucler
+  })),
   setFunction: (value) => {
     switch (value) {
       case "gaussienne":
@@ -43,4 +53,8 @@ export const useWaveStore = create<WaveState>((set) => ({
   setWavelength: (value) => set({wavelength: value}),
   setPeriod: (value) => set({period: value}),
   setTime: (value) => set((state) => ({ time: state.time + value })),
+  toggleAnimationPhase: () => set((state) => ({ isAnimatingPhase: !state.isAnimatingPhase })),
+  toggleAnimationTime: () => set((state) => ({ isAnimatingTime: !state.isAnimatingTime })),
+  resetPhase: () => set({ phase: 0 }),
+  resetTime: () => set({ time: 0 }),
 }));

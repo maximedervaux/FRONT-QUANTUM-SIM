@@ -2,7 +2,7 @@ import style from "./Parametre.module.css";
 import { Slider } from "@/components/ui/slider"
 import { useWaveStore } from "../../../store/onde.store";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-import { useState } from "react";
+import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -16,27 +16,43 @@ export default function Parametre( ) {
         wavelength,
         period,
         time,
+        isAnimatingPhase,
+        isAnimatingTime,
         setAmplitude,
         setPhase,
         setFunction,
         setHarmonics,
         setWavelength,
         setPeriod,
-        setTime
+        setTime,
+        toggleAnimationPhase,
+        toggleAnimationTime,
+        resetPhase,
+        resetTime
     } = useWaveStore();
 
-    const handleClickButtonPhase = () => {
-        setInterval(() => {
-            setPhase(0.1);
-        }, 100)
-    }
+    // Gestion de l'animation de la phase
+    useEffect(() => {
+        if (!isAnimatingPhase) return;
 
-    const handleClickButtonTime = () => {
-        setInterval(() => {
+        const interval = setInterval(() => {
+            setPhase(0.1);
+        }, 100);
+
+        return () => clearInterval(interval);
+    }, [isAnimatingPhase, setPhase]);
+
+    // Gestion de l'animation du temps
+    useEffect(() => {
+        if (!isAnimatingTime) return;
+
+        const interval = setInterval(() => {
             setTime(0.1);
-        }, 10)
-    }
-    
+        }, 10);
+
+        return () => clearInterval(interval);
+    }, [isAnimatingTime, setTime]);
+
     return (
         <div className={style.parametre}>
             <h1>Paramètres de l'onde</h1>
@@ -59,12 +75,26 @@ export default function Parametre( ) {
                 />
             </div>
             <div className={style.sliderContainer}>
-                <p>Phase : {phase} π</p>
-                <Button onClick={() => handleClickButtonPhase()}>Animer la phase</Button>
+                <p>Phase : {(phase / Math.PI).toFixed(2)} π</p>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <Button onClick={toggleAnimationPhase}>
+                        {isAnimatingPhase ? 'Pause Phase' : 'Animer la phase'}
+                    </Button>
+                    <Button onClick={resetPhase} variant="outline">
+                        Reset
+                    </Button>
+                </div>
             </div>
             <div className={style.sliderContainer}>
-                <p>Temps : {time} s</p>
-                <Button onClick={() => handleClickButtonTime()}>Visualiser en fonction du temps</Button>
+                <p>Temps : {time.toFixed(2)} s</p>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <Button onClick={toggleAnimationTime}>
+                        {isAnimatingTime ? 'Pause Temps' : 'Visualiser en fonction du temps'}
+                    </Button>
+                    <Button onClick={resetTime} variant="outline">
+                        Reset
+                    </Button>
+                </div>
             </div>
             <div className={style.inputContainer}>
                 <p>Longueur d'onde</p>

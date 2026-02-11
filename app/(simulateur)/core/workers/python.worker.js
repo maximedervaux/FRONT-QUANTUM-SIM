@@ -61,26 +61,32 @@ self.onmessage = async (event) => {
   if (event.data.type === 'run') {
     try {
       const { scriptName, functionName, params } = event.data;
-      
+
       // Charger le script si pas encore fait
       if (!loadedScripts.has(scriptName)) {
         await loadPythonScript(scriptName);
       }
-      
+
       // Passer les paramètres
+      const paramKeys = Object.keys(params);
       Object.entries(params).forEach(([key, value]) => {
         pyodide.globals.set(key, value);
       });
-      
+
       // Exécuter la fonction
       const resultProxy = await pyodide.runPythonAsync(`
         import numpy as np
-        np.real(${functionName}(${Object.keys(params).join(', ')}))
+        np.real(${functionName}(${paramKeys.join(', ')}))
       `);
-      
+
       const result = resultProxy.toJs({ copy: true });
       resultProxy.destroy();
-      
+
+      // Nettoyer les globals pour éviter les fuites mémoire
+      paramKeys.forEach(key => {
+        pyodide.globals.delete(key);
+      });
+
       self.postMessage({
         type: 'result',
         data: result,

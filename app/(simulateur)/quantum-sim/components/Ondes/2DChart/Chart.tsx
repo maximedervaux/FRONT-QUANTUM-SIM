@@ -1,7 +1,7 @@
 'use client';
 import dynamic from "next/dynamic";
 import type { Layout, ScatterData } from 'plotly.js';
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import { usePythonFunction } from '../../../hooks/usePythonFunction';
 import styles from "./Chart.module.css";
 import { useWaveStore } from "../../../store/onde.store";
@@ -20,29 +20,52 @@ export default function Chart() {
   const [result, setResult] = useState<number[][]>([]);
   const [xAxis, setXAxis] = useState<number[]>([]);
 
+  const isExecutingRef = useRef(false);
+  const pendingParamsRef = useRef<any>(null);
+
   const { execute, isLoading, error, data, isReady } = usePythonFunction(
     'plane_wave',
     'generate_plane_waves'
   );
 
-   useEffect(() => {
-    if (!isReady) {
-      console.log('[Chart] En attente du worker...');
+    // Fonction pour exécuter Python avec throttling intelligent
+  const runExecution = useCallback(async (params: any) => {
+    if (!isReady) return;
+
+    // Si une exécution est déjà en cours, stocker les params pour plus tard
+    if (isExecutingRef.current) {
+      pendingParamsRef.current = params;
       return;
     }
-    execute({ harmonics, wavelength, period, phase, time })
-      .then((waves: [number[], number[]][]) => {
-        setResult(waves.map(([x, y]) => y));
-        setXAxis(waves[0][0]);
-        console.log("Xaxis: ", xAxis);
-      })
-      .catch((err) => {
-        console.error('[Chart] Erreur:', err);
-      });
-    
-  }, [harmonics, wavelength, period, phase, time, isReady]); 
 
-  const plotData: ScatterData[] = useMemo(() => {
+    isExecutingRef.current = true;
+
+    try {
+      const waves = await execute(params) as [number[], number[]][];
+      setResult(waves.map(([x, y]) => y));
+      setXAxis(waves[0][0]);
+    } catch (err) {
+      console.error('[Chart] Erreur:', err);
+    } finally {
+      isExecutingRef.current = false;
+
+      // Si des params sont en attente, les exécuter maintenant
+      if (pendingParamsRef.current) {
+        const pending = pendingParamsRef.current;
+        pendingParamsRef.current = null;
+        runExecution(pending);
+      }
+    }
+  }, [execute, isReady]);
+
+  // Effect pour l'animation (time, phase) - sans debouncing pour fluidité
+  useEffect(() => {
+    const params = { harmonics, wavelength, period, phase, time };
+    runExecution(params);
+  }, [phase, time, harmonics, wavelength, period, runExecution]);
+
+
+  const plotData = useMemo(() => {
     return result.map((wave, idx) => ({
       x: xAxis,
       y: wave,

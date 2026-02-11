@@ -19,7 +19,8 @@ export function usePythonFunction<T = any>(scriptName: string, functionName: str
 
     try {
       await loadScript(scriptName);
-      
+      console.log(`[usePythonFunction] Script "${scriptName}" chargé, exécution de "${functionName}" avec params:`, params);
+      console.log(`[usePythonFunction] Worker prêt: ${isReady}`); 
       const result = await runPython(scriptName, functionName, params);
       setData(result);
       return result;
