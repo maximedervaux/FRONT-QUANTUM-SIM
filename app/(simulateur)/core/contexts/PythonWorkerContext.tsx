@@ -1,7 +1,7 @@
 // core/contexts/PythonWorkerContext.tsx
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useRef } from 'react';
 import { getPythonWorker } from '../workers/pythonWorkerInstance';
 
 interface PythonWorkerContextType {
@@ -17,7 +17,18 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false);
   const [loadedScripts, setLoadedScripts] = useState<Set<string>>(new Set());
   const [worker, setWorker] = useState<Worker | null>(null);
-  const [pendingCallbacks] = useState<Map<string, { resolve: Function, reject: Function }>>(new Map());
+  const pendingCallbacks = useRef<Map<string, { resolve: Function, reject: Function }>>(new Map()).current;
+  const pendingTimeouts = useRef<Map<string, NodeJS.Timeout>>(new Map()).current;
+
+  // Fonction helper pour nettoyer callback et timeout
+  const cleanupCallback = useCallback((key: string) => {
+    const timeoutId = pendingTimeouts.get(key);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      pendingTimeouts.delete(key);
+    }
+    pendingCallbacks.delete(key);
+  }, [pendingCallbacks, pendingTimeouts]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -31,52 +42,52 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
 
     const handleMessage = (e: MessageEvent) => {
       const { type, scriptName, data, error } = e.data;
-      
-      console.log('[Context] Message reçu:', { type, scriptName }); // Debug
 
       switch (type) {
         case 'ready':
-          console.log('[PyWorker] Pyodide prêt');
+          // console.log('[PyWorker] Pyodide prêt');
           setIsReady(true);
           break;
 
         case 'script_loaded':
-          console.log(`[PyWorker] Script chargé: ${scriptName}`);
+          // console.log(`[PyWorker] Script chargé: ${scriptName}`);
           setLoadedScripts(prev => new Set(prev).add(scriptName));
-          
+
           const loadCallback = pendingCallbacks.get(`load_${scriptName}`);
           if (loadCallback) {
             loadCallback.resolve();
-            pendingCallbacks.delete(`load_${scriptName}`);
+            cleanupCallback(`load_${scriptName}`);
           }
           break;
 
         case 'result':
-          console.log(`[PyWorker] Résultat reçu de ${scriptName}`, data);
-          // ⚠️ CORRECTION : Utiliser scriptName du message
+          // console.log(`[PyWorker] Résultat reçu de ${scriptName}`, data);
           const runCallback = pendingCallbacks.get(`run_${scriptName}`);
           if (runCallback) {
             runCallback.resolve(data);
-            pendingCallbacks.delete(`run_${scriptName}`);
+            cleanupCallback(`run_${scriptName}`);
           } else {
             console.warn(`[PyWorker] Aucun callback trouvé pour run_${scriptName}`);
-            console.log('[PyWorker] Callbacks en attente:', Array.from(pendingCallbacks.keys()));
+            // console.log('[PyWorker] Callbacks en attente:', Array.from(pendingCallbacks.keys()));
           }
           break;
 
         case 'error':
           console.error('[PyWorker] Erreur:', error);
           // Chercher le callback correspondant
-          const errorCallback = pendingCallbacks.get(`run_${scriptName}`) || 
+          const errorCallback = pendingCallbacks.get(`run_${scriptName}`) ||
                                pendingCallbacks.get(`load_${scriptName}`);
           if (errorCallback) {
             errorCallback.reject(new Error(error));
-            pendingCallbacks.delete(`run_${scriptName}`);
-            pendingCallbacks.delete(`load_${scriptName}`);
+            cleanupCallback(`run_${scriptName}`);
+            cleanupCallback(`load_${scriptName}`);
           } else {
             // Rejeter tous les callbacks en dernier recours
             pendingCallbacks.forEach(cb => cb.reject(new Error(error)));
             pendingCallbacks.clear();
+            // Nettoyer tous les timeouts
+            pendingTimeouts.forEach(timeout => clearTimeout(timeout));
+            pendingTimeouts.clear();
           }
           break;
       }
@@ -84,7 +95,7 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
 
     worker.addEventListener('message', handleMessage);
     return () => worker.removeEventListener('message', handleMessage);
-  }, [worker, pendingCallbacks]);
+  }, [worker, pendingCallbacks, pendingTimeouts, cleanupCallback]);
 
   const loadScript = useCallback((scriptName: string): Promise<void> => {
     if (!worker) {
@@ -96,24 +107,27 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
     }
 
     if (loadedScripts.has(scriptName)) {
-      console.log(`[Context] Script ${scriptName} déjà chargé`);
-      return Promise.resolve(); 
+      // console.log(`[Context] Script ${scriptName} déjà chargé`);
+      return Promise.resolve();
     }
 
-    console.log(`[Context] Chargement du script ${scriptName}`);
+    // console.log(`[Context] Chargement du script ${scriptName}`);
 
     return new Promise((resolve, reject) => {
-      pendingCallbacks.set(`load_${scriptName}`, { resolve, reject });
+      const key = `load_${scriptName}`;
+      pendingCallbacks.set(key, { resolve, reject });
       worker.postMessage({ type: 'load_script', scriptName });
-      
-      setTimeout(() => {
-        if (pendingCallbacks.has(`load_${scriptName}`)) {
-          pendingCallbacks.delete(`load_${scriptName}`);
+
+      const timeoutId = setTimeout(() => {
+        if (pendingCallbacks.has(key)) {
+          cleanupCallback(key);
           reject(new Error(`Timeout lors du chargement de ${scriptName}`));
         }
       }, 30000);
+
+      pendingTimeouts.set(key, timeoutId);
     });
-  }, [isReady, loadedScripts, worker, pendingCallbacks]);
+  }, [isReady, loadedScripts, worker, pendingCallbacks, pendingTimeouts, cleanupCallback]);
 
   const runPython = useCallback((
     scriptName: string, 
@@ -128,15 +142,14 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
       return Promise.reject(new Error('Worker pas encore prêt'));
     }
 
-    console.log(`[Context] Exécution ${functionName} dans ${scriptName}`, params);
+    // console.log(`[Context] Exécution ${functionName} dans ${scriptName}`, params);
 
     return new Promise((resolve, reject) => {
-      // ⚠️ Utiliser scriptName comme clé
       const callbackKey = `run_${scriptName}`;
       pendingCallbacks.set(callbackKey, { resolve, reject });
-      
-      console.log(`[Context] Callback enregistré: ${callbackKey}`);
-      
+
+      // console.log(`[Context] Callback enregistré: ${callbackKey}`);
+
       worker.postMessage({
         type: 'run',
         scriptName,
@@ -144,14 +157,16 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
         params
       });
 
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         if (pendingCallbacks.has(callbackKey)) {
-          pendingCallbacks.delete(callbackKey);
+          cleanupCallback(callbackKey);
           reject(new Error(`Timeout lors de l'exécution de ${functionName} dans ${scriptName}`));
         }
       }, 60000);
+
+      pendingTimeouts.set(callbackKey, timeoutId);
     });
-  }, [isReady, worker, pendingCallbacks]);
+  }, [isReady, worker, pendingCallbacks, pendingTimeouts, cleanupCallback]);
 
   return (
     <PythonWorkerContext.Provider value={{ isReady, loadScript, runPython, loadedScripts }}>

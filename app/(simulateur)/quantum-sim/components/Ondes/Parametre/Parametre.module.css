@@ -51,3 +51,12 @@
   width: 30%;
   min-width: 100px;
 }
+
+.buttonContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
