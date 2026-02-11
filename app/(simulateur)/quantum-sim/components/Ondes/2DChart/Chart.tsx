@@ -96,7 +96,7 @@ function Chart() {
       <Plot
         data={plotData}
         layout={plotLayout}
-        style={{ width: '100%', height: '400px' , overflow: 'hidden'}}
+        style={{ width: '100%', height: '100%' , overflow: 'hidden'}}
         config={{ responsive: true }}
       />
     </div>
