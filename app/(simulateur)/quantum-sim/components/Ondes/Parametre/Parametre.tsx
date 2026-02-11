@@ -6,6 +6,11 @@ import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+const LIMITS = {
+    harmonics: { min: 1, max: 100 },
+    wavelength: { min: 0.01, max: 100 },
+    period: { min: 1, max: 100 }
+};
 
 
 export default function Parametre( ) {
@@ -31,13 +36,18 @@ export default function Parametre( ) {
         resetTime
     } = useWaveStore();
 
+    // Fonction helper pour clamper une valeur
+    const clamp = (value: number, min: number, max: number) => {
+        return Math.max(min, Math.min(max, value));
+    };
+
     // Gestion de l'animation de la phase
     useEffect(() => {
         if (!isAnimatingPhase) return;
 
         const interval = setInterval(() => {
             setPhase(0.1);
-        }, 100);
+        }, 50); 
 
         return () => clearInterval(interval);
     }, [isAnimatingPhase, setPhase]);
@@ -47,8 +57,8 @@ export default function Parametre( ) {
         if (!isAnimatingTime) return;
 
         const interval = setInterval(() => {
-            setTime(0.1);
-        }, 10);
+            setTime(0.05);
+        }, 50); 
 
         return () => clearInterval(interval);
     }, [isAnimatingTime, setTime]);
@@ -74,27 +84,26 @@ export default function Parametre( ) {
                     onValueChange={(value) => setPeriod(value[0])}
                 />
             </div>
-            <div className={style.sliderContainer}>
+            <div className={style.buttonContainer}>
                 <p>Phase : {(phase / Math.PI).toFixed(2)} π</p>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <Button onClick={toggleAnimationPhase}>
-                        {isAnimatingPhase ? 'Pause Phase' : 'Animer la phase'}
+                        {isAnimatingPhase ? '⏸️' : '▶️'}
                     </Button>
                     <Button onClick={resetPhase} variant="outline">
                         Reset
                     </Button>
                 </div>
             </div>
-            <div className={style.sliderContainer}>
+            <div className={style.buttonContainer}>
                 <p>Temps : {time.toFixed(2)} s</p>
-                <div style={{ display: 'flex', gap: '8px' }}>
                     <Button onClick={toggleAnimationTime}>
-                        {isAnimatingTime ? 'Pause Temps' : 'Visualiser en fonction du temps'}
+                        {isAnimatingTime ? '⏸️' : '▶️'}
                     </Button>
                     <Button onClick={resetTime} variant="outline">
                         Reset
                     </Button>
-                </div>
+           
             </div>
             <div className={style.inputContainer}>
                 <p>Longueur d'onde</p>
@@ -114,12 +123,11 @@ export default function Parametre( ) {
 
             <div className={style.inputContainer}>
                 <p>Harmonique</p>
-                {/* Mettre des ptn de useState */}
                 <Input
                     type="number"
                     value={harmonics || ""}
-                    min={1}
-                    max={1000}
+                    min={LIMITS.harmonics.min}
+                    max={LIMITS.harmonics.max}
                     onChange={(e) => {
                         const val = e.target.valueAsNumber;
                         setHarmonics(val);

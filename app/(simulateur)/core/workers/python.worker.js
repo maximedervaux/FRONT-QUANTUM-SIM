@@ -48,7 +48,7 @@ self.onmessage = async (event) => {
   if (event.data.type === 'load_script') {
     // Charger un script spécifique à la demande
     try {
-      console.log(`ICI Loading script ${event.data.scriptName}...`);
+      // console.log(`Loading script ${event.data.scriptName}...`);
       await loadPythonScript(event.data.scriptName);
     } catch (error) {
       self.postMessage({

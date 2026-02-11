@@ -42,17 +42,15 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
 
     const handleMessage = (e: MessageEvent) => {
       const { type, scriptName, data, error } = e.data;
-      
-      console.log('[Context] Message reçu:', { type, scriptName }); // Debug
 
       switch (type) {
         case 'ready':
-          console.log('[PyWorker] Pyodide prêt');
+          // console.log('[PyWorker] Pyodide prêt');
           setIsReady(true);
           break;
 
         case 'script_loaded':
-          console.log(`[PyWorker] Script chargé: ${scriptName}`);
+          // console.log(`[PyWorker] Script chargé: ${scriptName}`);
           setLoadedScripts(prev => new Set(prev).add(scriptName));
 
           const loadCallback = pendingCallbacks.get(`load_${scriptName}`);
@@ -63,14 +61,14 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
           break;
 
         case 'result':
-          console.log(`[PyWorker] Résultat reçu de ${scriptName}`, data);
+          // console.log(`[PyWorker] Résultat reçu de ${scriptName}`, data);
           const runCallback = pendingCallbacks.get(`run_${scriptName}`);
           if (runCallback) {
             runCallback.resolve(data);
             cleanupCallback(`run_${scriptName}`);
           } else {
             console.warn(`[PyWorker] Aucun callback trouvé pour run_${scriptName}`);
-            console.log('[PyWorker] Callbacks en attente:', Array.from(pendingCallbacks.keys()));
+            // console.log('[PyWorker] Callbacks en attente:', Array.from(pendingCallbacks.keys()));
           }
           break;
 
@@ -109,11 +107,11 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
     }
 
     if (loadedScripts.has(scriptName)) {
-      console.log(`[Context] Script ${scriptName} déjà chargé`);
-      return Promise.resolve(); 
+      // console.log(`[Context] Script ${scriptName} déjà chargé`);
+      return Promise.resolve();
     }
 
-    console.log(`[Context] Chargement du script ${scriptName}`);
+    // console.log(`[Context] Chargement du script ${scriptName}`);
 
     return new Promise((resolve, reject) => {
       const key = `load_${scriptName}`;
@@ -144,13 +142,13 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
       return Promise.reject(new Error('Worker pas encore prêt'));
     }
 
-    console.log(`[Context] Exécution ${functionName} dans ${scriptName}`, params);
+    // console.log(`[Context] Exécution ${functionName} dans ${scriptName}`, params);
 
     return new Promise((resolve, reject) => {
       const callbackKey = `run_${scriptName}`;
       pendingCallbacks.set(callbackKey, { resolve, reject });
 
-      console.log(`[Context] Callback enregistré: ${callbackKey}`);
+      // console.log(`[Context] Callback enregistré: ${callbackKey}`);
 
       worker.postMessage({
         type: 'run',

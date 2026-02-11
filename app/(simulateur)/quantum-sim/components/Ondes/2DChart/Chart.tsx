@@ -1,7 +1,7 @@
 'use client';
 import dynamic from "next/dynamic";
 import type { Layout, ScatterData } from 'plotly.js';
-import { useEffect, useMemo, useState, useRef, useCallback } from "react";
+import { useEffect, useMemo, useState, useRef, useCallback, memo } from "react";
 import { usePythonFunction } from '../../../hooks/usePythonFunction';
 import styles from "./Chart.module.css";
 import { useWaveStore } from "../../../store/onde.store";
@@ -9,7 +9,7 @@ import { useWaveStore } from "../../../store/onde.store";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-export default function Chart() {
+function Chart() {
   const {
     phase,
     harmonics,
@@ -28,9 +28,18 @@ export default function Chart() {
     'generate_plane_waves'
   );
 
+  // Stocker execute et isReady dans des refs pour stabiliser useCallback
+  const executeRef = useRef(execute);
+  const isReadyRef = useRef(isReady);
+
+  useEffect(() => {
+    executeRef.current = execute;
+    isReadyRef.current = isReady;
+  }, [execute, isReady]);
+
     // Fonction pour exécuter Python avec throttling intelligent
   const runExecution = useCallback(async (params: any) => {
-    if (!isReady) return;
+    if (!isReadyRef.current) return;
 
     // Si une exécution est déjà en cours, stocker les params pour plus tard
     if (isExecutingRef.current) {
@@ -41,7 +50,7 @@ export default function Chart() {
     isExecutingRef.current = true;
 
     try {
-      const waves = await execute(params) as [number[], number[]][];
+      const waves = await executeRef.current(params) as [number[], number[]][];
       setResult(waves.map(([x, y]) => y));
       setXAxis(waves[0][0]);
     } catch (err) {
@@ -56,7 +65,7 @@ export default function Chart() {
         runExecution(pending);
       }
     }
-  }, [execute, isReady]);
+  }, []); // ✅ Pas de dépendances, totalement stable
 
   // Effect pour l'animation (time, phase) - sans debouncing pour fluidité
   useEffect(() => {
@@ -93,3 +102,5 @@ export default function Chart() {
     </div>
   );
 }
+
+export default memo(Chart);
