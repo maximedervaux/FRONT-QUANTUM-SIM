@@ -12,7 +12,7 @@ export default function DashBoard() {
     return (
                     <div className={styles.dashboard}>
                         <div className={styles.chartsContainer}>
-                                   {activePage === "ondes" && <div style={{ display: 'flex', flexDirection: 'column' , margin: '0px', padding: '0px', width: '100%' , height: '100%' }}><Chart /> <ThreeChart/></div>}
+                                   {activePage === "ondes" && <div style={{ display: 'flex', flexDirection: 'column' , margin: '0px', padding: '0px', width: '100%' , height: '100%' }}> <ThreeChart/></div>}
 
                        
 
