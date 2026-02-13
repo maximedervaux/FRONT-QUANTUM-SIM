@@ -6,9 +6,12 @@ import DashBoard from "./components/DashBoard/DashBoard";
 import { PythonWorkerProvider } from "../core/contexts/PythonWorkerContext";
 import { NavigationTabs } from "./components/MenuBar/NaviguationBar";
 import 'katex/dist/katex.min.css';
+import MobileWarning from "./components/MobileWarning/MobileWarning";
 
 export default function Simulateur() {
   return (
+    <>
+    <MobileWarning />
     <PythonWorkerProvider>
       <div className="simulatorRoot">
         <div className="content">
@@ -23,5 +26,9 @@ export default function Simulateur() {
         </div>
       </div>
     </PythonWorkerProvider>
+    
+    
+    
+    </>
   );
 }

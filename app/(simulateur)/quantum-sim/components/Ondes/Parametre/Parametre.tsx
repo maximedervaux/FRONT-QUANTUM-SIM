@@ -5,6 +5,7 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 const LIMITS = {
     harmonics: { min: 1, max: 100 },
@@ -134,6 +135,13 @@ export default function Parametre( ) {
                     }}
                 />
             </div>
+            <div className={style.buttonContainer}>
+                
+                <ButtonGroup>
+                    <Button>2D</Button>
+                    <Button>3D</Button>
+                </ButtonGroup>
+            </div>       
         </div>
     );
 }
