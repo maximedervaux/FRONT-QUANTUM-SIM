@@ -120,6 +120,9 @@ export default function Parametre( ) {
                     }}
                 />
                 λ
+                <br/>
+                <span> (k = {(2 * Math.PI / (wavelength || 0.01)).toFixed(2)}) </span>
+
             </div>
 
             <div className={style.inputContainer}>

@@ -1,6 +1,6 @@
 import { InlineMath } from 'react-katex';
 import style from "./Equation.module.css";
-import { useWaveStore } from '../../store/onde.store';
+import { useWaveStore } from '../../../store/onde.store';
 
 export default function Equation() {
   const {

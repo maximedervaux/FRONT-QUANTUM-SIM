@@ -2,7 +2,7 @@ import Chart from "../Ondes/2DChart/Chart";
 import styles from "./DashBoard.module.css";
 import Parametre from "../Ondes/Parametre/Parametre";
 import { useNavigationStore } from "../../store/navigation.store";
-import Equation from "../Equation/Equation";
+import Equation from "../Ondes/Equation/Equation";
 
 export default function DashBoard() {
 
