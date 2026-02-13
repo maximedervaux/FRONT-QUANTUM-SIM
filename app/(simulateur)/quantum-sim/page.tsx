@@ -5,6 +5,7 @@ import './styles/style.css'
 import DashBoard from "./components/DashBoard/DashBoard";
 import { PythonWorkerProvider } from "../core/contexts/PythonWorkerContext";
 import { NavigationTabs } from "./components/MenuBar/NaviguationBar";
+import 'katex/dist/katex.min.css';
 
 export default function Simulateur() {
   return (
