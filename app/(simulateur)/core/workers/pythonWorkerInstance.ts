@@ -23,7 +23,7 @@ export function getPythonWorker(): Worker {
     console.log('[getPythonWorker] Création du worker');
     worker = new Worker(
       new URL('./python.worker.js', import.meta.url),
-      { type: 'classic' }  // Utilise 'classic' pour compatibilité avec importScripts()
+      { type: 'classic' }
     );
     console.log('[getPythonWorker] Worker créé et assigné');
   }
