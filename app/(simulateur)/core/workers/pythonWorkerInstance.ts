@@ -20,10 +20,12 @@ export function getPythonWorker(): Worker {
   }
 
   if (!worker) {
+    console.log('[getPythonWorker] Création du worker');
     worker = new Worker(
       new URL('./python.worker.js', import.meta.url),
-      { type: 'module' }
+      { type: 'classic' }  // Utilise 'classic' pour compatibilité avec importScripts()
     );
+    console.log('[getPythonWorker] Worker créé et assigné');
   }
 
   return worker;

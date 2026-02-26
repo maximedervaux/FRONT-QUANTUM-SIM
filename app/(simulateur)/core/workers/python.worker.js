@@ -1,5 +1,7 @@
 // app/workers/python.worker.js
 
+console.log('[python.worker] Worker script chargé');
+
 /**
  * Contains Pyodide instance that will be used
  */
@@ -26,22 +28,30 @@ let initPromise = null;
  */
 async function initPyodide() {
   try {
+    console.log('[python.worker] Initialisation de Pyodide en cours...');
+    
     // Load Pyodide script
     importScripts('https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js');
+    console.log('[python.worker] Pyodide chargé du CDN');
 
     pyodide = await loadPyodide();
+    console.log('[python.worker] Pyodide instancié');
 
     // Load core packages
     await pyodide.loadPackage(['micropip', 'numpy']);
+    console.log('[python.worker] Packages chargés (micropip, numpy)');
 
     // Install custom package safely
     await pyodide.runPythonAsync(`
       import micropip
       await micropip.install("quantum-sim-library", deps=False)
     `);
+    console.log('[python.worker] quantum-sim-library installé');
 
+    console.log('[python.worker] Envoi du message ready');
     self.postMessage({ type: 'ready' });
   } catch (error) {
+    console.error('[python.worker] Erreur initPyodide:', error);
     self.postMessage({ type: 'error', error: String(error) });
     throw error;
   }
@@ -66,13 +76,14 @@ async function ensureInitialized() {
  *
  * @async
  * @param {string} scriptName - Script name without the `.py` extension.
+ * @param {string} [callbackKey] - Optional key to track this request in the main thread.
  * @returns {Promise<void>} Resolves when the script is loaded and executed.
  */
-async function loadPythonScript(scriptName) {
+async function loadPythonScript(scriptName, callbackKey) {
   if (loadedScripts.has(scriptName)) {
     return; 
   }
-  
+  console.log("Script loaded");
   const baseUrl = self.location.origin; 
   const scriptUrl = `${baseUrl}/python/${scriptName}.py`
   const response = await fetch(scriptUrl);
@@ -81,32 +92,37 @@ async function loadPythonScript(scriptName) {
   await pyodide.runPythonAsync(pythonCode);
   
   loadedScripts.add(scriptName);
-  self.postMessage({ type: 'script_loaded', scriptName: scriptName });
+  self.postMessage({ type: 'script_loaded', scriptName: scriptName, callbackKey });
 }
 
 self.onmessage = async (event) => {
+  console.log('[python.worker] Message reçu:', event.data.type);
+  
   try {
     // Guarantee Pyodide is ready before executing any message
     // Using ensureInitialized() prevents race conditions when messages arrive during init
     await ensureInitialized();
+    console.log('[python.worker] Pyodide est prêt, traitement du message:', event.data.type);
 
     if (event.data.type === 'load_script') {
       try {
-        await loadPythonScript(event.data.scriptName);
+        const { scriptName, callbackKey } = event.data;
+        await loadPythonScript(scriptName, callbackKey);
       } catch (error) {
         self.postMessage({
           type: 'error',
-          error: `Failed to load script ${event.data.scriptName}: ${error.message}`
+          error: `Failed to load script ${event.data.scriptName}: ${error.message}`,
+          callbackKey: event.data.callbackKey
         });
       }
     }
 
     if (event.data.type === 'run') {
-      const { scriptName, functionName, params } = event.data;
+      const { scriptName, functionName, params, callbackKey } = event.data;
 
       // Load script on first use to optimize startup
       if (!loadedScripts.has(scriptName)) {
-        await loadPythonScript(scriptName);
+        await loadPythonScript(scriptName, callbackKey);
       }
 
       // Set parameters in Pyodide's global scope for function access
@@ -134,12 +150,21 @@ self.onmessage = async (event) => {
         type: 'result',
         data: result,
         scriptName: scriptName,
+        callbackKey
       });
     }
   } catch (error) {
     self.postMessage({
       type: 'error',
-      error: error.message
+      error: error.message,
+      callbackKey: event.data?.callbackKey
     });
   }
 };
+
+// Initialize Pyodide on worker startup so it's ready when the first message arrives
+console.log('[python.worker] Lancement de l\'initialisation de Pyodide au démarrage du worker');
+ensureInitialized().catch((err) => {
+  console.error('[python.worker] Erreur critique lors de l\'initialisation:', err);
+  self.postMessage({ type: 'error', error: String(err) });
+});
