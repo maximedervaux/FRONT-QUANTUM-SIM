@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 
 const LIMITS = {
-    harmonics: { min: 1, max: 100 },
+    harmonics: { min: 1, max: 20 },
     wavelength: { min: 0.01, max: 100 },
     period: { min: 1, max: 100 }
 };
@@ -37,6 +37,7 @@ export default function Parametre( ) {
         resetTime
     } = useWaveStore();
 
+    
     // Fonction helper pour clamper une valeur
     const clamp = (value: number, min: number, max: number) => {
         return Math.max(min, Math.min(max, value));
@@ -134,7 +135,10 @@ export default function Parametre( ) {
                     max={LIMITS.harmonics.max}
                     onChange={(e) => {
                         const val = e.target.valueAsNumber;
-                        setHarmonics(val);
+                        if (!isNaN(val)) {
+                            const clampedVal = clamp(val, LIMITS.harmonics.min, LIMITS.harmonics.max);
+                            setHarmonics(clampedVal);
+                        }
                     }}
                 />
             </div>
