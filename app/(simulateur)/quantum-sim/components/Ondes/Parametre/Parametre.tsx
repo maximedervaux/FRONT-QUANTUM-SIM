@@ -58,7 +58,7 @@ export default function Parametre( ) {
         if (!isAnimatingTime) return;
 
         const interval = setInterval(() => {
-            setTime(0.1);
+            setTime(10);
         }, 50); 
 
         return () => clearInterval(interval);

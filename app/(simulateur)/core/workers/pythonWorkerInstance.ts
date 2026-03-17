@@ -15,18 +15,15 @@ let worker: Worker | null = null;
  * @returns {Worker} The initialized Python Web Worker instance.
  */
 export function getPythonWorker(): Worker {
-  if (typeof window === 'undefined') {
-    throw new TypeError('getPythonWorker can be called only on client-side');
-  }
+	if (typeof window === 'undefined') {
+		throw new TypeError('getPythonWorker can be called only on client-side');
+	}
 
-  if (!worker) {
-    console.log('[getPythonWorker] Création du worker');
-    worker = new Worker(
-      new URL('./python.worker.js', import.meta.url),
-      { type: 'classic' }
-    );
-    console.log('[getPythonWorker] Worker créé et assigné');
-  }
+	if (!worker) {
+		console.log('[getPythonWorker] Création du worker');
+		worker = new Worker(new URL('./python.worker.js', import.meta.url), { type: 'classic' });
+		console.log('[getPythonWorker] Worker créé et assigné');
+	}
 
-  return worker;
+	return worker;
 }
