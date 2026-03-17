@@ -5,6 +5,12 @@ console.log('[python.worker] Worker script chargé');
 /**
  * Contains Pyodide instance that will be used
  */
+
+console.log('[python.worker] Worker script chargé');
+
+/**
+ * Contains Pyodide instance that will be used
+ */
 let pyodide = null;
 
 /**
@@ -18,6 +24,25 @@ let loadedScripts = new Set();
  */
 let initPromise = null;
 
+/**
+ * Set containing all the scripts already loaded
+ */
+let loadedScripts = new Set();
+
+/**
+ * Promise that resolves when Pyodide is fully initialized.
+ * Ensures initialization happens only once even if multiple messages arrive.
+ */
+let initPromise = null;
+
+/**
+ * Initializes the Pyodide runtime inside the worker.
+ *
+ * Loads Pyodide, installs required Python packages once,
+ * and notifies the main thread when ready.
+ *
+ * @throws {Error} If initialization fails.
+ */
 /**
  * Initializes the Pyodide runtime inside the worker.
  *

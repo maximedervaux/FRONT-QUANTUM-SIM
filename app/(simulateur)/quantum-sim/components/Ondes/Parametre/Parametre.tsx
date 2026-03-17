@@ -6,9 +6,11 @@ import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { Plus } from "lucide-react";
+import { usePacketWavesStore } from "../../../store/packet-waves.store";
 
 const LIMITS = {
-    harmonics: { min: 1, max: 100 },
+    harmonics: { min: 1, max: 20 },
     wavelength: { min: 0.01, max: 100 },
     period: { min: 1, max: 100 }
 };
@@ -36,6 +38,20 @@ export default function Parametre( ) {
         resetPhase,
         resetTime
     } = useWaveStore();
+
+    const { addWave, setDrawerOpen } = usePacketWavesStore();
+
+    const addCurrentWaveToPackets = () => {
+        addWave({
+            amplitude,
+            phase,
+            harmonics,
+            wavelength,
+            period,
+            time
+        });
+        setDrawerOpen(true);
+    };
 
     // Fonction helper pour clamper une valeur
     const clamp = (value: number, min: number, max: number) => {
@@ -134,17 +150,26 @@ export default function Parametre( ) {
                     max={LIMITS.harmonics.max}
                     onChange={(e) => {
                         const val = e.target.valueAsNumber;
-                        setHarmonics(val);
+                        if (!isNaN(val)) {
+                            const clampedVal = clamp(val, LIMITS.harmonics.min, LIMITS.harmonics.max);
+                            setHarmonics(clampedVal);
+                        }
                     }}
                 />
             </div>
             <div className={style.buttonContainer}>
-                
                 <ButtonGroup>
                     <Button>2D</Button>
                     <Button>3D</Button>
                 </ButtonGroup>
-            </div>       
+            </div>
+
+            <div className={style.addContainer}>
+                <Button onClick={addCurrentWaveToPackets}>
+                    <Plus data-icon="inline-start" />
+                    Ajouter aux packets
+                </Button>
+            </div>
         </div>
     );
 }

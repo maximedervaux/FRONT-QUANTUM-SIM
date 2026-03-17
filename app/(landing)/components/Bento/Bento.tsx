@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { forwardRef } from "react";
 import styles from './Bento.module.css'
+import Image from "next/image";
 
 const Bento = forwardRef<HTMLDivElement>((props, ref) => {
   return (
@@ -20,7 +21,7 @@ const Bento = forwardRef<HTMLDivElement>((props, ref) => {
             <CardDescription>Observer des phénomènes quantiques en action</CardDescription>
           </CardHeader>
           <CardContent>
-            <img src="/assets/onde.png" alt="Visualisation d'ondes"/>
+            <Image src="/assets/onde.png" alt="Visualisation d'ondes" width={1000} height={1000} />
           </CardContent>
         </Card>
 

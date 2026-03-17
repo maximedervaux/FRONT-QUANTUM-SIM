@@ -3,8 +3,21 @@
 /**
  * Holds the singleton Worker instance.
  */
+
+/**
+ * Holds the singleton Worker instance.
+ */
 let worker: Worker | null = null;
 
+/**
+ * Returns a singleton instance of the Python Web Worker.
+ *
+ * The worker is lazily created on first invocation and reused afterwards.
+ * Must only be called in a browser environment.
+ *
+ * @throws {Error} If executed during server-side rendering.
+ * @returns {Worker} The initialized Python Web Worker instance.
+ */
 /**
  * Returns a singleton instance of the Python Web Worker.
  *
