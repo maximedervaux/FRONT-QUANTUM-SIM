@@ -2,11 +2,12 @@ import { forwardRef } from "react";
 import CodeButton from "../CodeButton/CodeButton";
 import { Toaster } from "sonner";
 import styles from './Notebook.module.css'
+import Image from "next/image";
 
 const Notebook = forwardRef<HTMLDivElement>((props, ref) => {
   return (
     <div className={styles.notebook} ref={ref}>
-      <img src="/assets/notebook.png" alt="notebook" width={800} height={600} />
+      <Image src="/assets/notebook.png" alt="notebook" width={800} height={600} />
       <div className="text">
         <h2>Installe notre librairie directement sur ton notebook !</h2>
         <p>
