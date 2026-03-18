@@ -1,7 +1,27 @@
 .notebook{
-  background-color : white;
-  display: flex ;
+  background-color: white;
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.notebook img {
+  width: 800px;
+  height: 600px;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .notebook{
+    flex-direction: column;
+    display: flex;
+    align-self: center;
+    padding: 20px;
+  }
+  
+  .notebook img {
+    width: 100%;
+    height: auto;
+  }
 }

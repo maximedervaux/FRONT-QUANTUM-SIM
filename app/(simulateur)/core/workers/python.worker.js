@@ -13,16 +13,6 @@ console.log('[python.worker] Worker script chargé');
  */
 let pyodide = null;
 
-/**
- * Set containing all the scripts already loaded
- */
-let loadedScripts = new Set();
-
-/**
- * Promise that resolves when Pyodide is fully initialized.
- * Ensures initialization happens only once even if multiple messages arrive.
- */
-let initPromise = null;
 
 /**
  * Set containing all the scripts already loaded
