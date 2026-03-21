@@ -1,69 +1,65 @@
 .parametre {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  background-color: var(--color-white);
-  border-radius: 10px;
-  gap:20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	align-items: center;
+	width: 100%;
+	padding: 20px;
+	background-color: var(--color-white);
+	border-radius: 10px;
+	gap: 20px;
 }
 
-
-.parametre h1{
-  font-size: 1.5em;
-  margin-bottom: 20px;
-  color: var(--color-primary);
-  margin: 0px;
+.parametre h1 {
+	font-size: 1.5em;
+	color: var(--color-primary);
 }
 
-
-.sliderContainer{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  width: 100%;
-  gap: 20px;
+.sliderContainer {
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	width: 100%;
 }
 
-.selectContainer{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  width: 100%;
-  gap: 20px;
+.selectContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	width: 100%;
+	gap: 20px;
 }
 
-.inputContainer{
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  width: 100%;
-  gap: 20px;
+.inputContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+	align-items: center;
+	width: 100%;
+	gap: 20px;
 }
 
-.inputContainer input{
-  width: 30%;
-  min-width: 100px;
+.inputContainer input {
+	width: 30%;
+	min-width: 100px;
 }
 
-.buttonContainer{
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  width: 100%;
-  gap: 20px;
+.buttonContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+	align-items: center;
+	width: 100%;
+	gap: 20px;
 }
 
 .addContainer {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
 }
 
+.wavelengthContainer {
+	width: 50%;
+}

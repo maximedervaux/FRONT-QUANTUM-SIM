@@ -1,63 +1,69 @@
 .wrapper {
-  width: 100%;
+	width: 100%;
 }
 
 .titleRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.titleRow svg {
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
 
 .stats {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  color: var(--muted-foreground);
-  font-size: 0.9rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	color: var(--muted-foreground);
+	font-size: 0.9rem;
 }
 
 .stats p {
-  margin: 0;
+	margin: 0;
 }
 
 .drawerContent {
-  display: flex;
+	display: flex;
 }
 
 .drawerList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 0 16px 16px 16px;
-  overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 0 16px 16px 16px;
+	overflow-y: auto;
 }
 
 .emptyState {
-  color: var(--muted-foreground);
-  padding: 16px;
+	color: var(--muted-foreground);
+	padding: 16px;
 }
 
 .waveTitle {
-  font-size: 1rem;
+	font-size: 1rem;
 }
 
 .waveParams {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .paramRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  font-size: 0.9rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+	font-size: 0.9rem;
 }

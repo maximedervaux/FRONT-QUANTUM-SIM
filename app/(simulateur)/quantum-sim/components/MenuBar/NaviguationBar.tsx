@@ -21,7 +21,7 @@ export function NavigationTabs() {
 					Ondes
 				</TabsTrigger>
 				<TabsTrigger className={style.tabTrigger} value="packets">
-					Packets d'ondes
+					Paquets d'ondes
 				</TabsTrigger>
 			</TabsList>
 		</Tabs>

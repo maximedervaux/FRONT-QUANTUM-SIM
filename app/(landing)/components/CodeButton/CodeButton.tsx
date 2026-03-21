@@ -1,21 +1,26 @@
-'use client'
-import { Button } from "@/components/ui/button"
-import { CopyIcon } from "lucide-react";
-import { toast } from "sonner"
+'use client';
+import { Button } from '@/components/ui/button';
+import { CopyIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function CodeButton() {
+	const title = 'pip install quantum-sim-library';
 
-    const copy = () => {
-        return () => {
-            navigator.clipboard.writeText("pip install dist/quantum_sim-1.0");
-            toast("Copié dans votre presse-papier !");
-        };
-    };
+	/**
+	 * Copy command to install quantum-sim-library
+	 * @returns Function to copy title
+	 */
+	const copy = () => {
+		return () => {
+			navigator.clipboard.writeText(title);
+			toast('Copié dans votre presse-papier !');
+		};
+	};
 
-  return (
-    <Button className="code-button" onClick={copy()}>
-         pip install dist/quantum_sim-1.0
-        <CopyIcon />
-    </Button>
-  );
+	return (
+		<Button className="code-button" onClick={copy()}>
+			{title}
+			<CopyIcon />
+		</Button>
+	);
 }
