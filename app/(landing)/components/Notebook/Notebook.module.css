@@ -1,27 +1,41 @@
-.notebook{
-  background-color: white;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+.notebook {
+	background-color: white;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+	padding: 20px;
 }
 
 .notebook img {
-  width: 800px;
-  height: 600px;
-  object-fit: contain;
+	width: 700px;
+	height: 500px;
+	box-shadow: 2px 2px 2px 2px grey;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+.textContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.textContainer > button {
+	width: fit-content;
 }
 
 @media (max-width: 900px) {
-  .notebook{
-    flex-direction: column;
-    display: flex;
-    align-self: center;
-    padding: 20px;
-  }
-  
-  .notebook img {
-    width: 100%;
-    height: auto;
-  }
+	.notebook {
+		flex-direction: column;
+		display: flex;
+		align-self: center;
+		padding: 20px;
+	}
+
+	.notebook img {
+		width: 100%;
+		height: auto;
+	}
 }

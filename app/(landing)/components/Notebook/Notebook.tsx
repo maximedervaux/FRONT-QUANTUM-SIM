@@ -8,7 +8,7 @@ const Notebook = forwardRef<HTMLDivElement>((props, ref) => {
 	return (
 		<div className={styles.notebook} ref={ref}>
 			<Image src="/assets/notebook.png" alt="notebook" width={800} height={600} />
-			<div className="text">
+			<div className={styles.textContainer}>
 				<h2>Installe notre librairie directement sur ton notebook !</h2>
 				<p>
 					Installe notre librairie en une seule commande et commence immédiatement à simuler des
