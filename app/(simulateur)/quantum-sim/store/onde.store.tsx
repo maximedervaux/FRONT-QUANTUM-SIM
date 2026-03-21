@@ -28,7 +28,6 @@ export const useWaveStore = create<WaveState>(set => ({
 	wavelength: 1,
 	period: 3,
 	time: 0,
-	isAnimatingPhase: false,
 	isAnimatingTime: false,
 
 	setAmplitude: value => set({ amplitude: value }),

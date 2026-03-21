@@ -24,7 +24,6 @@ export default function DashBoard() {
 		wavelength,
 		period,
 		time,
-		isAnimatingPhase,
 		isAnimatingTime,
 		setFunction,
 		setWavelength,
