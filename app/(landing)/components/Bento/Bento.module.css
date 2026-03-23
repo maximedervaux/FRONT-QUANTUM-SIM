@@ -1,4 +1,4 @@
-.bento{
+.bento {
   padding: 40px;
   border-radius: 20px;
 }
@@ -10,4 +10,10 @@
 
   position: relative;
   overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .bento {
+    padding: 20px;
+  }
 }

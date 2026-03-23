@@ -91,7 +91,7 @@ export default function Parametre() {
 				/>
 			</div>
 			<div className={style.buttonContainer}>
-				<p>Temps : {time.toFixed(2)} s</p>
+				<p>Temps : {time.toFixed(0)} s</p>
 				<Button onClick={toggleAnimationTime}>{isAnimatingTime ? '⏸️' : '▶️'}</Button>
 				<Button onClick={resetTime} variant="outline">
 					Reset
