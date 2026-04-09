@@ -13,6 +13,7 @@ import { Cpu, FlaskConical, Gauge, Play, RotateCcw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useWaveStore } from '../../store/onde.store';
 import WavePacketsStats from './WavePacketsStats/WavePacketsStats';
+import ChartWavePacket from '../Packets/2DChart/ChartWavePacket';
 
 //TODO: Retravailler car la structure n'esst pas très extensible
 export default function DashBoard() {
@@ -165,7 +166,11 @@ export default function DashBoard() {
 						<WavePacketsDrawer showTrigger={false} />
 					</>
 				)}
-				{activePage === 'packets'}
+				{activePage === 'packets' && (
+					<>
+						<ChartWavePacket />
+					</>
+				)}
 			</div>
 			<div className={styles.parametersContainer}>
 				{activePage === 'default'}

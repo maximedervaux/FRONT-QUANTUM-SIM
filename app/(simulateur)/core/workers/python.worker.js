@@ -13,7 +13,6 @@ console.log('[python.worker] Worker script chargé');
  */
 let pyodide = null;
 
-
 /**
  * Set containing all the scripts already loaded
  */
@@ -46,7 +45,7 @@ async function initPyodide() {
 		console.log('[python.worker] Initialisation de Pyodide en cours...');
 
 		// Load Pyodide script
-		importScripts('https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js');
+		importScripts('https://cdn.jsdelivr.net/pyodide/v0.29.0/full/pyodide.js');
 		console.log('[python.worker] Pyodide chargé du CDN');
 
 		pyodide = await loadPyodide();
