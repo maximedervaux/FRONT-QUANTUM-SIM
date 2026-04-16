@@ -11,7 +11,6 @@ def generate_plane_waves(
 ) -> list[tuple]:
     n = int(n)
     num_points = 1000
-    x_display = np.linspace(0, 1, num_points) * periods
 
     # Si aucune amplitude fournie, on met tout à 1.0
     amplitudes = harmonic_amplitudes if harmonic_amplitudes is not None else [1.0] * n
@@ -22,7 +21,7 @@ def generate_plane_waves(
         amp = amplitudes[i - 1] if i - 1 < len(amplitudes) else 1.0
 
         wave = PlaneWave(amp, λ_n, 0, phase, time)  
-        y = wave.evaluate(x_display)
-        all_waves.append((x_display, y))
+        x, y = wave.evaluate_interval(0, periods, num_points)
+        all_waves.append((x, y))
 
     return all_waves

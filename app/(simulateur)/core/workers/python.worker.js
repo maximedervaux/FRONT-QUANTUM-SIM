@@ -52,8 +52,8 @@ async function initPyodide() {
 		console.log('[python.worker] Pyodide instancié');
 
 		// Load core packages
-		await pyodide.loadPackage(['micropip', 'numpy']);
-		console.log('[python.worker] Packages chargés (micropip, numpy)');
+		await pyodide.loadPackage(['micropip',"numpy", "scipy"]);
+		console.log('[python.worker] Packages chargés (micropip)');
 
 		// Install custom package safely
 		await pyodide.runPythonAsync(`
