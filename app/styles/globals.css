@@ -131,6 +131,8 @@ body {
 	justify-content: center;
 	align-items: center;
 	width: 100%;
+	overflow-y: auto;
+	scrollbar-gutter: stable;
 	padding: 10px;
 	font-size: 100%;
 }

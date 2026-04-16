@@ -5,9 +5,9 @@
 	align-items: center;
 	width: 100%;
 	padding: 20px;
-	background-color: var(--color-white);
 	border-radius: 10px;
 	gap: 20px;
+	  border: none !important;
 }
 
 .parametre h1 {

@@ -6,145 +6,119 @@ import { useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
-import { Plus } from 'lucide-react';
-import { usePacketWavesStore } from '../../../store/packet-waves.store';
+import { SlidersHorizontal } from 'lucide-react';
+import HarmonicsDrawer from '../HarmonicsDrawer/HarmonicsDrawer';
 
-/**
- * Limits for each fields in parameters menu
- * Harmonics must be between 1 and 20 waves
- * Wavelength must be between 10e-2 and 10e2 nanometers
- * Period must be between 1 and 100 seconds
- */
 const LIMITS = {
-	harmonics: { min: 1, max: 20 },
-	wavelength: { min: 0.01, max: 100 },
-	period: { min: 1, max: 100 },
+  harmonics: { min: 1, max: 20 },
+  wavelength: { min: 0.01, max: 100 },
+  period: { min: 1, max: 100 },
 };
 
 export default function Parametre() {
-	// Fetching all data that will be modify by the user
-	const {
-		amplitude,
-		phase,
-		harmonics,
-		wavelength,
-		period,
-		time,
-		isAnimatingTime,
-		setFunction,
-		setHarmonics,
-		setWavelength,
-		setPeriod,
-		setTime,
-		toggleAnimationTime,
-		resetTime,
-	} = useWaveStore();
+  const {
+    phase,
+    harmonics,
+    wavelength,
+    period,
+    time,
+    isAnimatingTime,
+    setFunction,
+    setHarmonics,
+    setWavelength,
+    setPeriod,
+    setTime,
+    toggleAnimationTime,
+    toggleHarmonicsDrawer,
+    resetTime,
+  } = useWaveStore();
 
-	const { addWave, setDrawerOpen } = usePacketWavesStore();
+  const clamp = (value: number, min: number, max: number) =>
+    Math.max(min, Math.min(max, value));
 
-	const addCurrentWaveToPackets = () => {
-		addWave({
-			amplitude,
-			phase,
-			harmonics,
-			wavelength,
-			period,
-			time,
-		});
-		setDrawerOpen(true);
-	};
+  useEffect(() => {
+    if (!isAnimatingTime) return;
+    const interval = setInterval(() => setTime(10), 50);
+    return () => clearInterval(interval);
+  }, [isAnimatingTime, setTime]);
 
-	// Fonction helper pour clamper une valeur
-	const clamp = (value: number, min: number, max: number) => {
-		return Math.max(min, Math.min(max, value));
-	};
+  return (
+    <>
+      <div className={style.parametre}>
+        <h1>Paramètres de l'onde</h1>
 
-	// Gestion de l'animation du temps
-	useEffect(() => {
-		if (!isAnimatingTime) return;
+        <div className={style.selectContainer}>
+          <NativeSelect defaultValue="" onChange={e => setFunction(e.target.value)}>
+            <NativeSelectOption value="">Fonction d'onde</NativeSelectOption>
+            <NativeSelectOption value="gaussian">Gaussienne</NativeSelectOption>
+            <NativeSelectOption value="sinus">Sinusoidale</NativeSelectOption>
+          </NativeSelect>
+        </div>
 
-		const interval = setInterval(() => {
-			setTime(10);
-		}, 50);
+        <div className={style.inputContainer}>
+          <p>Période</p>
+          <Slider
+            defaultValue={[period]}
+            min={1}
+            max={100}
+            step={1}
+            onValueChange={value => setPeriod(value[0])}
+          />
+        </div>
 
-		return () => clearInterval(interval);
-	}, [isAnimatingTime, setTime]);
+        <div className={style.buttonContainer}>
+          <p>Temps : {time.toFixed(0)} s</p>
+          <Button onClick={toggleAnimationTime}>{isAnimatingTime ? '⏸️' : '▶️'}</Button>
+          <Button onClick={resetTime} variant="outline">Reset</Button>
+        </div>
 
-	return (
-		<div className={style.parametre}>
-			<h1>Paramètres de l'onde</h1>
-			<div className={style.selectContainer}>
-				<NativeSelect defaultValue="" onChange={value => setFunction(value.target.value)}>
-					<NativeSelectOption value="">Fonction d'onde</NativeSelectOption>
-					<NativeSelectOption value="gaussian">Gaussienne</NativeSelectOption>
-					<NativeSelectOption value="sinus">Sinusoidale</NativeSelectOption>
-				</NativeSelect>
-			</div>
-			<div className={style.inputContainer}>
-				<p>Période</p>
-				<Slider
-					defaultValue={[period]}
-					min={1}
-					max={100}
-					step={1}
-					onValueChange={value => setPeriod(value[0])}
-				/>
-			</div>
-			<div className={style.buttonContainer}>
-				<p>Temps : {time.toFixed(0)} s</p>
-				<Button onClick={toggleAnimationTime}>{isAnimatingTime ? '⏸️' : '▶️'}</Button>
-				<Button onClick={resetTime} variant="outline">
-					Reset
-				</Button>
-			</div>
-			<div className={style.inputContainer}>
-				<p>Longueur d'onde</p>
-				<Input
-					placeholder=""
-					type="number"
-					min={LIMITS.wavelength.min}
-					max={LIMITS.wavelength.max}
-					step={0.01}
-					value={wavelength || ''}
-					onChange={e => {
-						const val = e.target.valueAsNumber;
-						setWavelength(isNaN(val) ? 0.01 : val);
-					}}
-				/>
-				<div className={style.wavelengthContainer}>
-					λ <span> (k = {((2 * Math.PI) / (wavelength || 0.01)).toFixed(2)}) </span>
-				</div>
-			</div>
+        <div className={style.inputContainer}>
+          <p>Longueur d'onde</p>
+          <Input
+            placeholder=""
+            type="number"
+            min={LIMITS.wavelength.min}
+            max={LIMITS.wavelength.max}
+            step={0.01}
+            value={wavelength || ''}
+            onChange={e => {
+              const val = e.target.valueAsNumber;
+              setWavelength(isNaN(val) ? 0.01 : val);
+            }}
+          />
+          <div className={style.wavelengthContainer}>
+            λ <span>(k = {((2 * Math.PI) / (wavelength || 0.01)).toFixed(2)})</span>
+          </div>
+        </div>
 
-			<div className={style.inputContainer}>
-				<p>Harmonique</p>
-				<Input
-					type="number"
-					value={harmonics || ''}
-					min={LIMITS.harmonics.min}
-					max={LIMITS.harmonics.max}
-					onChange={e => {
-						const val = e.target.valueAsNumber;
-						if (!isNaN(val)) {
-							const clampedVal = clamp(val, LIMITS.harmonics.min, LIMITS.harmonics.max);
-							setHarmonics(clampedVal);
-						}
-					}}
-				/>
-			</div>
-			<div className={style.buttonContainer}>
-				<ButtonGroup>
-					<Button>2D</Button>
-					<Button>3D</Button>
-				</ButtonGroup>
-			</div>
+        <div className={style.inputContainer}>
+          <div className={style.harmonicHeader}>
+            <p>Harmonique</p>
+            <Button variant="ghost" size="sm" onClick={toggleHarmonicsDrawer}>
+              <SlidersHorizontal size={15} data-icon="inline-start" />
+              Amplitudes
+            </Button>
+          </div>
+          <Input
+            type="number"
+            value={harmonics || ''}
+            min={LIMITS.harmonics.min}
+            max={LIMITS.harmonics.max}
+            onChange={e => {
+              const val = e.target.valueAsNumber;
+              if (!isNaN(val)) setHarmonics(clamp(val, LIMITS.harmonics.min, LIMITS.harmonics.max));
+            }}
+          />
+        </div>
 
-			<div className={style.addContainer}>
-				<Button onClick={addCurrentWaveToPackets}>
-					<Plus data-icon="inline-start" />
-					Ajouter aux paquets
-				</Button>
-			</div>
-		</div>
-	);
+        <div className={style.buttonContainer}>
+          <ButtonGroup>
+            <Button>2D</Button>
+            <Button>3D</Button>
+          </ButtonGroup>
+        </div>
+      </div>
+
+    </>
+  );
 }
