@@ -23,11 +23,15 @@ export default function Parametre() {
     period,
     time,
     isAnimatingTime,
+    viewMode,
+    showImaginary,
     setFunction,
     setHarmonics,
     setWavelength,
     setPeriod,
     setTime,
+    setViewMode,
+    toggleShowImaginary,
     toggleAnimationTime,
     toggleHarmonicsDrawer,
     resetTime,
@@ -113,8 +117,9 @@ export default function Parametre() {
 
         <div className={style.buttonContainer}>
           <ButtonGroup>
-            <Button>2D</Button>
-            <Button>3D</Button>
+            <Button onClick={() => setViewMode('2d')}>2D</Button>
+            <Button onClick={() => setViewMode('3d')}>3D</Button>
+            <Button onClick={toggleShowImaginary}>Imaginaire</Button>
           </ButtonGroup>
         </div>
       </div>
