@@ -12,13 +12,16 @@ import {
 } from 'react';
 import { getPythonWorker } from '../workers/pythonWorkerInstance';
 
+type PythonResultPart = 'real' | 'imag' | 'complex';
+
 interface PythonWorkerContextType {
 	isReady: boolean;
 	loadScript: (scriptName: string) => Promise<void>;
 	runPython: (
 		scriptName: string,
 		functionName: string,
-		params: Record<string, any>
+		params: Record<string, any>,
+		part?: PythonResultPart
 	) => Promise<any>;
 	loadedScripts: Set<string>;
 }
@@ -192,7 +195,12 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
 	);
 
 	const runPython = useCallback(
-		(scriptName: string, functionName: string, params: Record<string, any>): Promise<any> => {
+		(
+			scriptName: string,
+			functionName: string,
+			params: Record<string, any>,
+			part: PythonResultPart = 'real'
+		): Promise<any> => {
 			if (!worker) {
 				console.error('[PythonWorkerProvider] runPython: Worker non initialisé');
 				return Promise.reject(new Error('Worker non initialisé'));
@@ -209,7 +217,9 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
 				'depuis',
 				scriptName,
 				'avec params:',
-				params
+				params,
+				'part:',
+				part
 			);
 
 			return new Promise((resolve, reject) => {
@@ -222,6 +232,7 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
 					scriptName,
 					functionName,
 					params,
+					part,
 					callbackKey,
 				});
 

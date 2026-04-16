@@ -2,7 +2,13 @@
 import { useState, useCallback } from 'react';
 import { usePythonWorker } from '../../core/contexts/PythonWorkerContext';
 
-export function usePythonFunction<T = any>(scriptName: string, functionName: string) {
+type PythonResultPart = 'real' | 'imag' | 'complex';
+
+export function usePythonFunction<T = any>(
+	scriptName: string,
+	functionName: string,
+	part: PythonResultPart = 'real'
+) {
 	const { isReady, loadScript, runPython } = usePythonWorker();
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
@@ -22,10 +28,12 @@ export function usePythonFunction<T = any>(scriptName: string, functionName: str
 				await loadScript(scriptName);
 				console.log(
 					`[usePythonFunction] Script "${scriptName}" chargé, exécution de "${functionName}" avec params:`,
-					params
+					params,
+					'part:',
+					part
 				);
 				console.log(`[usePythonFunction] Worker prêt: ${isReady}`);
-				const result = await runPython(scriptName, functionName, params);
+				const result = await runPython(scriptName, functionName, params, part);
 				setData(result);
 				return result;
 			} catch (err) {
@@ -36,7 +44,7 @@ export function usePythonFunction<T = any>(scriptName: string, functionName: str
 				setIsLoading(false);
 			}
 		},
-		[isReady, loadScript, runPython, scriptName, functionName]
+		[isReady, loadScript, runPython, scriptName, functionName, part]
 	);
 
 	return { execute, isLoading, error, data, isReady };

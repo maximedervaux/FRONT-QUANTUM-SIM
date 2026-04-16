@@ -21,7 +21,7 @@ function Chart() {
   const isExecutingRef = useRef(false);
   const pendingParamsRef = useRef<any>(null);
 
-  const { execute, isReady } = usePythonFunction('plane_wave', 'generate_plane_waves');
+  const { execute, isReady } = usePythonFunction('plane_wave', 'generate_plane_waves', 'real');
   const executeRef = useRef(execute);
   const isReadyRef = useRef(isReady);
 
