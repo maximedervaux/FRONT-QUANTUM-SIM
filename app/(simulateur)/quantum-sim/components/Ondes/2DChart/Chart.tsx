@@ -14,7 +14,7 @@ interface WaveData {
 }
 
 function Chart() {
-  const { harmonicAmplitudes, phase, harmonics, wavelength, period, time } = useWaveStore();
+	const { harmonicAmplitudes, phase, harmonics, wavelength, period, time } = useWaveStore();
 
   const [waves, setWaves] = useState<WaveData[]>([]);
 
@@ -59,6 +59,7 @@ function Chart() {
       { length: harmonics },
       (_, i) => harmonicAmplitudes[i + 1] ?? 1.0
     );
+
     const params = { harmonics, wavelength, period, phase, time, harmonic_amplitudes };
     runExecution(params);
   }, [harmonicAmplitudes, phase, time, harmonics, wavelength, period, runExecution]);
