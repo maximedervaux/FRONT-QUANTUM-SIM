@@ -12,10 +12,10 @@ export default function Equation() {
 	const [showValues, setShowValues] = useState(false);
 
 	// Formule symbolique (brute)
-	const symbolicEquation = `\\psi(x,t)=A\\exp[i(\\frac{2\\pi n}{\\lambda}(x-x_0)-\\frac{\\hbar}{2m}(\\frac{2\\pi}{\\lambda})^2t+\\phi)]`;
+	const symbolicEquation = `\\psi(x,t)=A\\exp[i(n\\cdot k(x-x_0)-\\frac{\\hbar}{2m}(k)^2t+\\phi)]`;
 
 	// Formule avec valeurs en temps réel
-	const numericEquation = `\\psi(x,${time.toFixed(2)})=A\\exp[i(\\frac{2\\pi n}{${wavelength.toFixed(2)}}(x-x_0)-\\frac{\\hbar}{2m}(\\frac{2\\pi}{${wavelength.toFixed(2)}})^2${time.toFixed(2)}+\\phi)]`;
+	const numericEquation = `\\psi(x,${time.toFixed(2)})=A\\exp[i(n\\cdot ${wavelength.toFixed(2)}(x-0)-\\frac{\\hbar}{2m}(${wavelength.toFixed(2)})^2${time.toFixed(2)}+\\phi)]`;
 
 	return (
 		<Card className={style.equationContainer}>
