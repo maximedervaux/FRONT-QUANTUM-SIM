@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useWaveStore } from '../../store/onde.store';
 import WavePacketsStats from './WavePacketsStats/WavePacketsStats';
 import ChartWavePacket from '../Packets/2DChart/ChartWavePacket';
+import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
 
 //TODO: Retravailler car la structure n'esst pas très extensible
 export default function DashBoard() {
@@ -163,7 +164,7 @@ export default function DashBoard() {
 					<>
 						<Equation />
 						<Chart />
-						<WavePacketsDrawer showTrigger={false} />
+						<HarmonicsDrawer />
 					</>
 				)}
 				{activePage === 'packets' && (

@@ -22,7 +22,6 @@ export default function WavePacketsDrawer({ showTrigger = true }: WavePacketsDra
   return (
     <Drawer
       direction="bottom"
-      modal={false}
       open={isDrawerOpen}
       onOpenChange={setDrawerOpen}
     >

@@ -9,7 +9,7 @@ import { useWaveStore } from '../../../store/onde.store';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 function Chart() {
-	const { phase, harmonics, wavelength, period, time } = useWaveStore();
+	const { harmonicAmplitudes, phase, harmonics, wavelength, period, time } = useWaveStore();
 
 	const [result, setResult] = useState<number[][]>([]);
 	const [xAxis, setXAxis] = useState<number[]>([]);
@@ -51,10 +51,15 @@ function Chart() {
 		}
 	}, []);
 
-	useEffect(() => {
-		const params = { harmonics, wavelength, period, phase, time };
-		runExecution(params);
-	}, [phase, time, harmonics, wavelength, period, runExecution]);
+  useEffect(() => {
+    const harmonic_amplitudes = Array.from(
+      { length: harmonics },
+      (_, i) => harmonicAmplitudes[i + 1] ?? 1.0
+    );
+
+    const params = { harmonics, wavelength, period, phase, time, harmonic_amplitudes };
+    runExecution(params);
+  }, [harmonicAmplitudes, phase, time, harmonics, wavelength, period, runExecution]);
 
 	const plotData = result.map((wave, idx) => ({
 		x: xAxis,
