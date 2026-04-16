@@ -73,7 +73,7 @@ export default function Parametre() {
         </div>
 
         <div className={style.inputContainer}>
-          <p>Longueur d'onde</p>
+          <p>Nombre d'onde</p>
           <Input
             placeholder=""
             type="number"
@@ -87,7 +87,7 @@ export default function Parametre() {
             }}
           />
           <div className={style.wavelengthContainer}>
-            λ <span>(k = {((2 * Math.PI) / (wavelength || 0.01)).toFixed(2)})</span>
+            k
           </div>
         </div>
 
