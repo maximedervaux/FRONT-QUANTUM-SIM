@@ -9,7 +9,7 @@ interface PacketInfo {
 	width_k: number;
 	uncertainty_product: number;
 	group_velocity: number;
-	wavelength_center: number;
+	waveNumber_center: number;
 }
 
 export default function WavePacketInfo() {
@@ -66,7 +66,7 @@ export default function WavePacketInfo() {
 
 				<div className={style.property}>
 					<span className={style.label}>Longueur d'onde centrale</span>
-					<span className={style.value}>{info.wavelength_center.toFixed(3)} m</span>
+					<span className={style.value}>{info.waveNumber_center.toFixed(3)} m</span>
 				</div>
 
 				<div className={style.property}>

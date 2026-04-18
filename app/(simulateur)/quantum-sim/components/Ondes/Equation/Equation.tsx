@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Eye, EyeOff } from 'lucide-react';
 
 export default function Equation() {
-	const { wavelength, time } = useWaveStore();
+	const { waveNumber, time } = useWaveStore();
 
 	const [showValues, setShowValues] = useState(false);
 
@@ -15,7 +15,7 @@ export default function Equation() {
 	const symbolicEquation = `\\psi(x,t)=A\\exp[i(n\\cdot k(x-x_0)-\\frac{\\hbar}{2m}(k)^2t+\\phi)]`;
 
 	// Formule avec valeurs en temps réel
-	const numericEquation = `\\psi(x,${time.toFixed(2)})=A\\exp[i(n\\cdot ${wavelength.toFixed(2)}(x-0)-\\frac{\\hbar}{2m}(${wavelength.toFixed(2)})^2${time.toFixed(2)}+\\phi)]`;
+	const numericEquation = `\\psi(x,${time.toFixed(2)})=A\\exp[i(n\\cdot ${waveNumber.toFixed(2)}(x-0)-\\frac{\\hbar}{2m}(${waveNumber.toFixed(2)})^2${time.toFixed(2)}+\\phi)]`;
 
 	return (
 		<Card className={style.equationContainer}>

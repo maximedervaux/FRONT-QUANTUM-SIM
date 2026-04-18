@@ -117,5 +117,5 @@ def get_packet_info(
         'width_k': delta_k,
         'uncertainty_product': uncertainty,
         'group_velocity': v_group,
-        'wavelength_center': 2 * cst.PI / k_c if k_c > 0 else 0,
+        'waveNumber_center': 2 * cst.PI / k_c if k_c > 0 else 0,
     }
