@@ -3,25 +3,20 @@ import styles from './DashBoard.module.css';
 import Parametre from '../Ondes/Parametre/Parametre';
 import { useNavigationStore } from '../../store/navigation.store';
 import Equation from '../Ondes/Equation/Equation';
-import WavePacketsDrawer from '../Packets/WavePacketsDrawer/WavePacketsDrawer';
 import { usePythonWorker } from '../../../core/contexts/PythonWorkerContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
 import { Cpu, FlaskConical, Gauge, Play, RotateCcw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useWaveStore } from '../../store/onde.store';
-import WavePacketsStats from './WavePacketsStats/WavePacketsStats';
-import ChartWavePacket from '../Packets/2DChart/ChartWavePacket';
 import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
+import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketParametre';
+import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
 
-//TODO: Retravailler car la structure n'esst pas très extensible
 export default function DashBoard() {
 	const { activePage, setActivePage } = useNavigationStore();
 	const {
-		amplitude,
-		phase,
 		harmonics,
 		wavelength,
 		period,
@@ -156,7 +151,6 @@ export default function DashBoard() {
 								<Progress value={workerProgress} />
 							</CardContent>
 						</Card>
-						<WavePacketsStats />
 					</>
 				)}
 
@@ -176,7 +170,7 @@ export default function DashBoard() {
 			<div className={styles.parametersContainer}>
 				{activePage === 'default'}
 				{activePage === 'ondes' && <Parametre />}
-				{activePage === 'packets'}
+				{activePage === 'packets' && <ParametreWavePacket />}
 			</div>
 		</div>
 	);

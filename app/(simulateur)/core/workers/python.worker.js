@@ -52,7 +52,7 @@ async function initPyodide() {
 		console.log('[python.worker] Pyodide instancié');
 
 		// Load core packages
-		await pyodide.loadPackage(['micropip',"numpy", "scipy"]);
+		await pyodide.loadPackage(['micropip', 'numpy', 'scipy']);
 		console.log('[python.worker] Packages chargés (micropip)');
 
 		// Install custom package safely
@@ -161,12 +161,19 @@ self.onmessage = async event => {
 				pyodide.globals.set(key, value);
 			});
 
-			// Execute and extract real part (quantum computations often return complex numbers)
-			// toJs() copies data from WASM memory to JavaScript, destroy() frees WASM resources
-			const resultProxy = await pyodide.runPythonAsync(`
-        import numpy as np
-        np.real(${functionName}(${paramKeys.join(', ')}))
-      `);
+			let resultProxy;
+			if (functionName === 'generate_plane_waves') {
+				// Execute and extract real part (quantum computations often return complex numbers)
+				// toJs() copies data from WASM memory to JavaScript, destroy() frees WASM resources
+				resultProxy = await pyodide.runPythonAsync(`
+					import numpy as np
+					np.real(${functionName}(${paramKeys.join(', ')}))
+				`);
+			} else if (functionName === 'generate_wave_packet') {
+				resultProxy = await pyodide.runPythonAsync(`
+					${functionName}(${paramKeys.join(', ')})
+				`);
+			}
 
 			const result = resultProxy.toJs({ copy: true });
 			resultProxy.destroy();

@@ -1,0 +1,142 @@
+.parametre {
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	align-items: center;
+	width: 100%;
+	padding: 20px;
+	gap: 20px;
+	overflow-y: auto;
+	border-radius: 10px;
+	border: none !important;
+}
+
+.parametre h1 {
+	font-size: 1.5rem;
+	color: var(--color-primary);
+}
+
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	width: 100%;
+}
+
+.section h3 {
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #64748b;
+}
+
+/* Inputs (sliders, inputs, etc.) */
+.inputContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	width: 100%;
+}
+
+.inputContainer p {
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: #475569;
+}
+
+/* Valeur affichée à droite */
+.value {
+	font-size: 0.85rem;
+	color: #64748b;
+	align-self: flex-end;
+}
+
+/* Boutons (ligne horizontale) */
+.buttonContainer {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	width: 100%;
+}
+
+.buttonContainer p {
+	flex: 1;
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: #475569;
+}
+
+/* Select */
+.selectContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	width: 100%;
+}
+
+/* Bloc incertitude */
+.uncertaintyBox {
+	background: #f1f5f9;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	margin-top: 0.5rem;
+}
+
+.uncertaintyBox h4 {
+	font-size: 0.9rem;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+	color: #334155;
+}
+
+.uncertaintyBox p {
+	font-size: 0.85rem;
+	color: #475569;
+	margin: 0.25rem 0;
+	font-family: 'Monaco', 'Courier New', monospace;
+}
+
+/* Switch */
+.switchContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	background: #f8fafc;
+	border-radius: 0.5rem;
+}
+
+.switchItem {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.switchItem label {
+	font-size: 0.9rem;
+	color: #475569;
+	cursor: pointer;
+}
+
+/* Range inputs (x min / x max) */
+.rangeInputs {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+	width: 100%;
+}
+
+/* Containers utilitaires */
+.addContainer {
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.wavelengthContainer {
+	width: 100%;
+}
+
+/* Full width helper */
+.fullWidth {
+	width: 100%;
+}
