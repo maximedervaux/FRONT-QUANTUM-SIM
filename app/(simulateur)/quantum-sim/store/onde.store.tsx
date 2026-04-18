@@ -5,7 +5,7 @@ interface WaveState {
 	phase: number;
 	harmonics: number;
 	harmonicAmplitudes: Record<number, number>;
-	wavelength: number;
+	waveNumber: number;
 	period: number;
 	time: number;
 	isAnimatingTime: boolean;
@@ -15,7 +15,7 @@ interface WaveState {
 	setFunction: (value: string) => void;
 	setHarmonics: (value: number) => void;
 	setHarmonicAmplitude: (index: number, value: number) => void;
-	setWavelength: (value: number) => void;
+	setWaveNumber: (value: number) => void;
 	setPeriod: (value: number) => void;
 	setTime: (value: number) => void;
 	toggleAnimationTime: () => void;
@@ -30,7 +30,7 @@ export const useWaveStore = create<WaveState>(set => ({
 	phase: 0,
 	harmonics: 1,
 	harmonicAmplitudes: { 1: 1.0 },
-	wavelength: 1,
+	waveNumber: 1,
 	period: 3,
 	time: 0,
 	isAnimatingTime: false,
@@ -73,7 +73,7 @@ export const useWaveStore = create<WaveState>(set => ({
 		set(state => ({
 			harmonicAmplitudes: { ...state.harmonicAmplitudes, [index]: value },
 		})),
-	setWavelength: value => set({ wavelength: value }),
+	setWaveNumber: value => set({ waveNumber: value }),
 	setPeriod: value => set({ period: value }),
 	setTime: value => set(state => ({ time: state.time + value })),
 	toggleAnimationTime: () => set(state => ({ isAnimatingTime: !state.isAnimatingTime })),

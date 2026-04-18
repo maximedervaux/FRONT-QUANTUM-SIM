@@ -18,12 +18,12 @@ export default function DashBoard() {
 	const { activePage, setActivePage } = useNavigationStore();
 	const {
 		harmonics,
-		wavelength,
+		waveNumber,
 		period,
 		time,
 		isAnimatingTime,
 		setFunction,
-		setWavelength,
+		setWaveNumber,
 		setPeriod,
 		setHarmonics,
 		resetPhase,
@@ -34,7 +34,7 @@ export default function DashBoard() {
 
 	const [isFirstVisit, setIsFirstVisit] = useState(true);
 	const [lastSnapshot, setLastSnapshot] = useState<null | {
-		wavelength: number;
+		waveNumber: number;
 		period: number;
 		harmonics: number;
 		time: number;
@@ -53,7 +53,7 @@ export default function DashBoard() {
 
 		try {
 			const parsed = JSON.parse(rawSnapshot) as {
-				wavelength: number;
+				waveNumber: number;
 				period: number;
 				harmonics: number;
 				time: number;
@@ -66,7 +66,7 @@ export default function DashBoard() {
 
 	useEffect(() => {
 		const snapshot = {
-			wavelength,
+			waveNumber,
 			period,
 			harmonics,
 			time,
@@ -74,7 +74,7 @@ export default function DashBoard() {
 
 		localStorage.setItem('quantum-sim-last-snapshot', JSON.stringify(snapshot));
 		setLastSnapshot(snapshot);
-	}, [wavelength, period, harmonics, time]);
+	}, [waveNumber, period, harmonics, time]);
 
 	const workerProgress = useMemo(() => {
 		if (!isReady) return 35;
@@ -88,7 +88,7 @@ export default function DashBoard() {
 		resetPhase();
 		resetTime();
 		setFunction('sinusoidale');
-		setWavelength(6);
+		setWaveNumber(6);
 		setPeriod(12);
 		setHarmonics(1);
 		setActivePage('ondes');
