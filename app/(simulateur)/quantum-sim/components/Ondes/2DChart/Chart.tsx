@@ -10,49 +10,70 @@ const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 interface WaveData {
 	x: number[];
-	y: number[];
+	yReal: number[];
+	yImag?: number[];
 }
 
 function Chart() {
-	const { harmonicAmplitudes, phase, harmonics, waveNumber, period, time } = useWaveStore();
+	const { harmonicAmplitudes, phase, harmonics, waveNumber, period, time, showImaginary } =
+		useWaveStore();
 
 	const [waves, setWaves] = useState<WaveData[]>([]);
 
 	const isExecutingRef = useRef(false);
 	const pendingParamsRef = useRef<any>(null);
 
-	const { execute, isReady } = usePythonFunction('plane_wave', 'generate_plane_waves');
-	const executeRef = useRef(execute);
+	const { execute: executeReal, isReady } = usePythonFunction(
+		'plane_wave',
+		'generate_plane_waves',
+		'real'
+	);
+	const { execute: executeImag } = usePythonFunction('plane_wave', 'generate_plane_waves', 'imag');
+	const executeRealRef = useRef(executeReal);
+	const executeImagRef = useRef(executeImag);
 	const isReadyRef = useRef(isReady);
 
 	useEffect(() => {
-		executeRef.current = execute;
+		executeRealRef.current = executeReal;
+		executeImagRef.current = executeImag;
 		isReadyRef.current = isReady;
-	}, [execute, isReady]);
+	}, [executeReal, executeImag, isReady]);
 
-	const runExecution = useCallback(async (params: any) => {
-		if (!isReadyRef.current) return;
-		if (isExecutingRef.current) {
-			pendingParamsRef.current = params;
-			return;
-		}
-
-		isExecutingRef.current = true;
-		try {
-			const result = (await executeRef.current(params)) as [number[], number[]][];
-
-			setWaves(result.map(([x, y]) => ({ x, y })));
-		} catch (err) {
-			console.error('[Chart] Erreur:', err);
-		} finally {
-			isExecutingRef.current = false;
-			if (pendingParamsRef.current) {
-				const pending = pendingParamsRef.current;
-				pendingParamsRef.current = null;
-				runExecution(pending);
+	const runExecution = useCallback(
+		async (params: any) => {
+			if (!isReadyRef.current) return;
+			if (isExecutingRef.current) {
+				pendingParamsRef.current = params;
+				return;
 			}
-		}
-	}, []);
+
+			isExecutingRef.current = true;
+			try {
+				const realResult = (await executeRealRef.current(params)) as [number[], number[]][];
+				const imagResult = showImaginary
+					? ((await executeImagRef.current(params)) as [number[], number[]][])
+					: null;
+
+				setWaves(
+					realResult.map(([x, y], idx) => ({
+						x,
+						yReal: y,
+						yImag: imagResult?.[idx]?.[1],
+					}))
+				);
+			} catch (err) {
+				console.error('[Chart] Erreur:', err);
+			} finally {
+				isExecutingRef.current = false;
+				if (pendingParamsRef.current) {
+					const pending = pendingParamsRef.current;
+					pendingParamsRef.current = null;
+					runExecution(pending);
+				}
+			}
+		},
+		[showImaginary]
+	);
 
 	useEffect(() => {
 		const harmonic_amplitudes = Array.from(
@@ -62,16 +83,35 @@ function Chart() {
 
 		const params = { harmonics, waveNumber, period, phase, time, harmonic_amplitudes };
 		runExecution(params);
-	}, [harmonicAmplitudes, phase, time, harmonics, waveNumber, period, runExecution]);
+	}, [harmonicAmplitudes, phase, time, harmonics, waveNumber, period, showImaginary, runExecution]);
 
-	const plotData = waves.map((wave, idx) => ({
-		x: wave.x,
-		y: wave.y,
-		type: 'scatter' as const,
-		mode: 'lines' as const,
-		name: `Harmonique ${idx + 1}`,
-		line: { width: 2 },
-	}));
+	const plotData = waves.flatMap((wave, idx) => {
+		const realTrace = {
+			x: wave.x,
+			y: wave.yReal,
+			type: 'scatter' as const,
+			mode: 'lines' as const,
+			name: '',
+			line: { width: 2 },
+			showlegend: false,
+		};
+
+		if (!showImaginary || !wave.yImag) {
+			return [realTrace];
+		}
+
+		const imagTrace = {
+			x: wave.x,
+			y: wave.yImag,
+			type: 'scatter' as const,
+			mode: 'lines' as const,
+			name: '',
+			line: { width: 2, dash: 'dash' as const },
+			showlegend: false,
+		};
+
+		return [realTrace, imagTrace];
+	});
 
 	const plotLayout: Partial<Layout> = {
 		xaxis: {
