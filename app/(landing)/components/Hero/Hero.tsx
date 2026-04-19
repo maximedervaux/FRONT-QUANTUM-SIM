@@ -9,7 +9,14 @@ const Hero = forwardRef<HTMLDivElement>((props, ref) => {
   return (
     <div className={styles.hero} ref={ref}>
       <div className={styles.left}>
-        <Image src="/assets/logo.png" alt="Quantum SIM" width={600} height={500} />
+        <Image
+          src="/assets/logo.png"
+          alt="Quantum SIM"
+          width={600}
+          height={500}
+          loading="eager"
+          style={{ height: 'auto' }}
+        />
       </div>
       <div className={styles.right}>
         <Link href="/quantum-sim" className={styles.startButton}>

@@ -1,10 +1,9 @@
 .dashboard {
 	display: flex;
-	justify-content: center;
-	align-items: stretch;
-	height: 100%;
-	width: 100%;
 	gap: 10px;
+	flex: 1;
+	min-height: 0;
+	width: 100%;
 }
 
 .chartsContainer {

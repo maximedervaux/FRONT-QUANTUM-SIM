@@ -52,7 +52,7 @@ async function initPyodide() {
 		console.log('[python.worker] Pyodide instancié');
 
 		// Load core packages
-		await pyodide.loadPackage(['micropip',"numpy", "scipy"]);
+		await pyodide.loadPackage(['micropip', 'numpy', 'scipy']);
 		console.log('[python.worker] Packages chargés (micropip)');
 
 		// Install custom package safely
@@ -148,7 +148,7 @@ self.onmessage = async event => {
 		}
 
 		if (event.data.type === 'run') {
-			const { scriptName, functionName, params, callbackKey } = event.data;
+			const { scriptName, functionName, params, callbackKey, part = 'real' } = event.data;
 
 			// Load script on first use to optimize startup (don't notify main thread)
 			if (!loadedScripts.has(scriptName)) {
@@ -161,12 +161,30 @@ self.onmessage = async event => {
 				pyodide.globals.set(key, value);
 			});
 
-			// Execute and extract real part (quantum computations often return complex numbers)
-			// toJs() copies data from WASM memory to JavaScript, destroy() frees WASM resources
-			const resultProxy = await pyodide.runPythonAsync(`
-        import numpy as np
-        np.real(${functionName}(${paramKeys.join(', ')}))
-      `);
+			let resultProxy;
+			if (functionName === 'generate_plane_waves') {
+				if (part === 'real') {
+					resultProxy = await pyodide.runPythonAsync(`
+					import numpy as np
+					np.real(${functionName}(${paramKeys.join(', ')}))
+				`);
+				} else if (part === 'imag') {
+					resultProxy = await pyodide.runPythonAsync(`
+						import numpy as np
+						np.imag(${functionName}(${paramKeys.join(', ')}))
+					`);
+				} else if (part === 'complex') {
+					resultProxy = await pyodide.runPythonAsync(`
+						${functionName}(${paramKeys.join(', ')})
+					`);
+				} else {
+					throw new Error(`Invalid part: ${part}. Must be 'real', 'imag', or 'complex'.`);
+				}
+			} else if (functionName === 'generate_wave_packet') {
+				resultProxy = await pyodide.runPythonAsync(`
+					${functionName}(${paramKeys.join(', ')})
+				`);
+			}
 
 			const result = resultProxy.toJs({ copy: true });
 			resultProxy.destroy();

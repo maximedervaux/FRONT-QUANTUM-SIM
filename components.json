@@ -8,7 +8,8 @@
     "css": "app/(landing)/styles/globals.css",
     "baseColor": "stone",
     "cssVariables": true,
-    "prefix": ""
+    "prefix": "",
+    "darkMode": "never"
   },
   "iconLibrary": "lucide",
   "aliases": {

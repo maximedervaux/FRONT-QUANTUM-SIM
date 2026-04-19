@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import './styles/style.css'
+import styles from './styles/style.module.css';
 import Bento from "./components/Bento/Bento";
 import Hero from "./components/Hero/Hero";
 import Notebook from "./components/Notebook/Notebook";
@@ -17,7 +17,7 @@ export default function Home() {
   useGsapAnimations(heroRef, bentoRef, notebookRef, setIsLoading);
 
   return (
-    <div className="containerLanding">
+    <div className={styles.containerLanding}>
       <Hero ref={heroRef}/>
       <Bento  ref={bentoRef}/>
       <Notebook ref={notebookRef}/>

@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 
-import './styles/style.css';
+import styles from './styles/style.module.css';
 import DashBoard from './components/DashBoard/DashBoard';
 import { PythonWorkerProvider } from '../core/contexts/PythonWorkerContext';
 import { NavigationTabs } from './components/MenuBar/NaviguationBar';
@@ -13,11 +13,18 @@ export default function Simulateur() {
 		<>
 			<MobileWarning />
 			<PythonWorkerProvider>
-				<div className="simulatorRoot">
-					<div className="content">
-						<div className="headerBar">
+				<div className={styles.simulatorRoot}>
+					<div className={styles.content}>
+						<div className={styles.headerBar}>
 							<Link href="/">
-								<Image src="/assets/logo.png" alt="Quantum Sim Logo" width={120} height={40} />
+								<Image
+									src="/assets/logo.png"
+									alt="Quantum Sim Logo"
+									width={120}
+									height={40}
+									loading="eager"
+									style={{ height: 'auto' }}
+								/>
 							</Link>
 							<NavigationTabs />
 						</div>

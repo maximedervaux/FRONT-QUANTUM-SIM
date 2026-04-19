@@ -3,32 +3,29 @@ import styles from './DashBoard.module.css';
 import Parametre from '../Ondes/Parametre/Parametre';
 import { useNavigationStore } from '../../store/navigation.store';
 import Equation from '../Ondes/Equation/Equation';
-import WavePacketsDrawer from '../Packets/WavePacketsDrawer/WavePacketsDrawer';
 import { usePythonWorker } from '../../../core/contexts/PythonWorkerContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
 import { Cpu, FlaskConical, Gauge, Play, RotateCcw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useWaveStore } from '../../store/onde.store';
-import WavePacketsStats from './WavePacketsStats/WavePacketsStats';
-import ChartWavePacket from '../Packets/2DChart/ChartWavePacket';
 import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
+import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketParametre';
+import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
+import PythonEngineLoader from '../Loader/PythonEngineLoader'
 
-//TODO: Retravailler car la structure n'esst pas très extensible
+
 export default function DashBoard() {
 	const { activePage, setActivePage } = useNavigationStore();
 	const {
-		amplitude,
-		phase,
 		harmonics,
-		wavelength,
+		waveNumber,
 		period,
 		time,
 		isAnimatingTime,
 		setFunction,
-		setWavelength,
+		setWaveNumber,
 		setPeriod,
 		setHarmonics,
 		resetPhase,
@@ -39,7 +36,7 @@ export default function DashBoard() {
 
 	const [isFirstVisit, setIsFirstVisit] = useState(true);
 	const [lastSnapshot, setLastSnapshot] = useState<null | {
-		wavelength: number;
+		waveNumber: number;
 		period: number;
 		harmonics: number;
 		time: number;
@@ -58,7 +55,7 @@ export default function DashBoard() {
 
 		try {
 			const parsed = JSON.parse(rawSnapshot) as {
-				wavelength: number;
+				waveNumber: number;
 				period: number;
 				harmonics: number;
 				time: number;
@@ -71,7 +68,7 @@ export default function DashBoard() {
 
 	useEffect(() => {
 		const snapshot = {
-			wavelength,
+			waveNumber,
 			period,
 			harmonics,
 			time,
@@ -79,7 +76,7 @@ export default function DashBoard() {
 
 		localStorage.setItem('quantum-sim-last-snapshot', JSON.stringify(snapshot));
 		setLastSnapshot(snapshot);
-	}, [wavelength, period, harmonics, time]);
+	}, [waveNumber, period, harmonics, time]);
 
 	const workerProgress = useMemo(() => {
 		if (!isReady) return 35;
@@ -93,7 +90,7 @@ export default function DashBoard() {
 		resetPhase();
 		resetTime();
 		setFunction('sinusoidale');
-		setWavelength(6);
+		setWaveNumber(6);
 		setPeriod(12);
 		setHarmonics(1);
 		setActivePage('ondes');
@@ -110,6 +107,10 @@ export default function DashBoard() {
 		resetPhase();
 		resetTime();
 	};
+
+	if (!isReady) {
+		return <PythonEngineLoader />
+	}
 
 	return (
 		<div className={styles.dashboard}>
@@ -156,7 +157,6 @@ export default function DashBoard() {
 								<Progress value={workerProgress} />
 							</CardContent>
 						</Card>
-						<WavePacketsStats />
 					</>
 				)}
 
@@ -176,7 +176,7 @@ export default function DashBoard() {
 			<div className={styles.parametersContainer}>
 				{activePage === 'default'}
 				{activePage === 'ondes' && <Parametre />}
-				{activePage === 'packets'}
+				{activePage === 'packets' && <ParametreWavePacket />}
 			</div>
 		</div>
 	);
