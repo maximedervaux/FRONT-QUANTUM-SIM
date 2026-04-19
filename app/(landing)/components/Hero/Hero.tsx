@@ -16,10 +16,11 @@ const Hero = forwardRef<HTMLDivElement>((props, ref) => {
           height={500}
           loading="eager"
           style={{ height: 'auto' }}
+          data-tour="logo"
         />
       </div>
       <div className={styles.right}>
-        <Link href="/quantum-sim" className={styles.startButton}>
+        <Link href="/quantum-sim" className={styles.startButton} data-tour="cta">
           <h2>Lancer</h2>
           <StartIcon className={styles.startIcon}/>
         </Link>

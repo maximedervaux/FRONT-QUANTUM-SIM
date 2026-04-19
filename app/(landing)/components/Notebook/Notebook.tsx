@@ -10,7 +10,7 @@ const Notebook = forwardRef<HTMLDivElement>((props, ref) => {
 			<Image src="/assets/notebook.png" alt="notebook" width={800} height={600} />
 			<div className={styles.textContainer}>
 				<h2>Installe notre librairie directement sur ton notebook !</h2>
-				<p>
+				<p data-tour="description">
 					Installe notre librairie en une seule commande et commence immédiatement à simuler des
 					systèmes quantiques depuis ton notebook. Elle s’intègre sans configuration complexe et te
 					permet de passer rapidement de l’installation à l’expérimentation. Que ce soit pour
