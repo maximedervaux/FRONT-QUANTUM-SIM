@@ -16,6 +16,7 @@ const Hero = forwardRef<HTMLDivElement>((props, ref) => {
           height={500}
           loading="eager"
           style={{ height: 'auto' }}
+          data-tour="logo"
         />
       </div>
       <div className={`right ${styles.right}`}>
