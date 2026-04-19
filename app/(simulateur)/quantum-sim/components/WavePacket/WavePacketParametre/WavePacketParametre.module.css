@@ -116,10 +116,6 @@
 	transition: all 0.2s ease;
 }
 
-.value:hover {
-	background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);
-	transform: scale(1.05);
-}
 
 /* ============================================
    SÉLECTEURS
