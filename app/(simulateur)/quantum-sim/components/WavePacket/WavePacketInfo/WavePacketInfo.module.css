@@ -1,0 +1,109 @@
+.parametre {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	padding: 1.5rem;
+	height: 100%;
+	overflow-y: auto;
+}
+
+.parametre h1 {
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.section h3 {
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #64748b;
+	margin-bottom: 0.25rem;
+}
+
+.inputContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.inputContainer p {
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: #475569;
+}
+
+.value {
+	font-size: 0.85rem;
+	color: #64748b;
+	text-align: right;
+}
+
+.buttonContainer {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.buttonContainer p {
+	flex: 1;
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+.uncertaintyBox {
+	background: #f1f5f9;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	margin-top: 0.5rem;
+}
+
+.uncertaintyBox h4 {
+	font-size: 0.9rem;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+	color: #334155;
+}
+
+.uncertaintyBox p {
+	font-size: 0.85rem;
+	color: #475569;
+	margin: 0.25rem 0;
+	font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.switchContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	background: #f8fafc;
+	border-radius: 0.5rem;
+}
+
+.switchItem {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.switchItem label {
+	font-size: 0.9rem;
+	color: #475569;
+	cursor: pointer;
+}
+
+.rangeInputs {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+}
+
+.fullWidth {
+	width: 100%;
+}

@@ -52,7 +52,7 @@ async function initPyodide() {
 		console.log('[python.worker] Pyodide instancié');
 
 		// Load core packages
-		await pyodide.loadPackage(['micropip',"numpy", "scipy"]);
+		await pyodide.loadPackage(['micropip', 'numpy', 'scipy']);
 		console.log('[python.worker] Packages chargés (micropip)');
 
 		// Install custom package safely
@@ -161,24 +161,29 @@ self.onmessage = async event => {
 				pyodide.globals.set(key, value);
 			});
 
-			// Execute and return the requested component of the result
 			let resultProxy;
-			if (part === 'real') {
-				resultProxy = await pyodide.runPythonAsync(`
+			if (functionName === 'generate_plane_waves') {
+				if (part === 'real') {
+					resultProxy = await pyodide.runPythonAsync(`
 					import numpy as np
 					np.real(${functionName}(${paramKeys.join(', ')}))
 				`);
-			} else if (part === 'imag') {
-				resultProxy = await pyodide.runPythonAsync(`
-					import numpy as np
-					np.imag(${functionName}(${paramKeys.join(', ')}))
-				`);
-			} else if (part === 'complex') {
+				} else if (part === 'imag') {
+					resultProxy = await pyodide.runPythonAsync(`
+						import numpy as np
+						np.imag(${functionName}(${paramKeys.join(', ')}))
+					`);
+				} else if (part === 'complex') {
+					resultProxy = await pyodide.runPythonAsync(`
+						${functionName}(${paramKeys.join(', ')})
+					`);
+				} else {
+					throw new Error(`Invalid part: ${part}. Must be 'real', 'imag', or 'complex'.`);
+				}
+			} else if (functionName === 'generate_wave_packet') {
 				resultProxy = await pyodide.runPythonAsync(`
 					${functionName}(${paramKeys.join(', ')})
 				`);
-			} else {
-				throw new Error(`Invalid part: ${part}. Must be 'real', 'imag', or 'complex'.`);
 			}
 
 			const result = resultProxy.toJs({ copy: true });
