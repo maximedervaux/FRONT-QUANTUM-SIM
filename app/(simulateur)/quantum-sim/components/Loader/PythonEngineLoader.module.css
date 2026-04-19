@@ -1,0 +1,70 @@
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  inset: 0;
+  height: 100dvh;
+  width: 100vw;
+  z-index: 9999;
+  position: fixed;
+  background-image: url('/assets/Hero.png');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.loaderCard {
+  width: 320px;
+  text-align: center;
+  border-color: none;
+  
+}
+
+.animationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.quantumBox {
+  font-size: 3rem;
+  animation: float 2s ease-in-out infinite;
+}
+
+.emoji {
+  display: inline-block;
+  animation: pulse 1.5s infinite;
+}
+
+.loadingText {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Animations */
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+}

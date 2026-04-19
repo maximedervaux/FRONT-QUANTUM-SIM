@@ -13,6 +13,8 @@ import { useWaveStore } from '../../store/onde.store';
 import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
 import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketParametre';
 import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
+import PythonEngineLoader from '../Loader/PythonEngineLoader'
+
 
 export default function DashBoard() {
 	const { activePage, setActivePage } = useNavigationStore();
@@ -105,6 +107,10 @@ export default function DashBoard() {
 		resetPhase();
 		resetTime();
 	};
+
+	if (!isReady) {
+		return <PythonEngineLoader />
+	}
 
 	return (
 		<div className={styles.dashboard}>

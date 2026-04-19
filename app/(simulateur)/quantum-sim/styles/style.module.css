@@ -1,7 +1,7 @@
-@import 'tailwindcss';
-
 .simulatorRoot {
-	height: 95vh;
+	height: calc(100dvh - 20px);
+	max-height: calc(100dvh - 20px);
+	min-height: 0;
 	width: 100%;
 	overflow: hidden;
 	display: flex;
