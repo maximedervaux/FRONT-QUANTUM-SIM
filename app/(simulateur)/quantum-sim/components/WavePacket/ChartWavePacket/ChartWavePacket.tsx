@@ -126,9 +126,7 @@ function ChartWavePacket() {
 
 	const plotData: Data[] = [];
 
-	// Wave Packet
 	if (visualizationMode === 'wavefunction') {
-		// Real part
 		plotData.push({
 			x: packetData.x,
 			y: packetData.y,
@@ -138,7 +136,6 @@ function ChartWavePacket() {
 			line: { width: 2, color: '#6366f1' },
 		} as Data);
 
-		// Imaginary part (optional)
 		if (packetData.y_imag) {
 			plotData.push({
 				x: packetData.x,

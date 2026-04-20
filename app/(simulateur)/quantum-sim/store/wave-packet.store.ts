@@ -6,7 +6,7 @@ export type VisualizationMode = 'wavefunction' | 'probability';
 interface IndividualWave {
 	id: string;
 	amplitude: number;
-	waveNumber: number; // k
+	waveNumber: number;
 	phase: number;
 	enabled: boolean;
 }
@@ -92,8 +92,8 @@ export const useWavePacketStore = create<WavePacketState>(set => ({
 	showEnvelope: true,
 	showIndividualWaves: false,
 	customWaves: [],
-	xMin: -10,
-	xMax: 10,
+	xMin: -2,
+	xMax: 2,
 	isWavesDrawerOpen: false,
 
 	// Type de paquet

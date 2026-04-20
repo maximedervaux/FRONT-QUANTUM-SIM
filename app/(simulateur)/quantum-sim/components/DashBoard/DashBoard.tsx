@@ -13,8 +13,9 @@ import { useWaveStore } from '../../store/onde.store';
 import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
 import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketParametre';
 import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
-import PythonEngineLoader from '../Loader/PythonEngineLoader'
-
+import PythonEngineLoader from '../Loader/PythonEngineLoader';
+import ChartSchrodinger from '../Schrodinger/ChartSchrodinger/ChartSchrodinger';
+import SchrodingerParametre from '../Schrodinger/SchrodingerParametre/SchrodingerParametre';
 
 export default function DashBoard() {
 	const { activePage, setActivePage } = useNavigationStore();
@@ -109,7 +110,7 @@ export default function DashBoard() {
 	};
 
 	if (!isReady) {
-		return <PythonEngineLoader />
+		return <PythonEngineLoader />;
 	}
 
 	return (
@@ -172,11 +173,17 @@ export default function DashBoard() {
 						<ChartWavePacket />
 					</>
 				)}
+				{activePage === 'potentials' && (
+					<>
+						<ChartSchrodinger />
+					</>
+				)}
 			</div>
 			<div className={styles.parametersContainer}>
 				{activePage === 'default'}
 				{activePage === 'ondes' && <Parametre />}
 				{activePage === 'packets' && <ParametreWavePacket />}
+				{activePage === 'potentials' && <SchrodingerParametre />}
 			</div>
 		</div>
 	);

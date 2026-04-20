@@ -40,8 +40,7 @@ export default function Parametre() {
 		resetTime,
 	} = useWaveStore();
 
-	const clamp = (value: number, min: number, max: number) => 
-		Math.max(min, Math.min(max, value));
+	const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 	useEffect(() => {
 		if (!isAnimatingTime) return;
@@ -62,7 +61,7 @@ export default function Parametre() {
 			<div className={style.section}>
 				<p className={style.sectionTitle}>Fonction d'onde</p>
 				<div className={style.selectContainer}>
-					<select 
+					<select
 						onChange={handleFunctionChange}
 						defaultValue=""
 						aria-label="Sélectionner la fonction d'onde"
@@ -98,16 +97,14 @@ export default function Parametre() {
 						onValueChange={value => setPeriod(value[0])}
 						aria-label="Période de l'onde"
 					/>
-					<p className={style.subText}>
-						Temps nécessaire pour une oscillation complète
-					</p>
+					<p className={style.subText}>Temps nécessaire pour une oscillation complète</p>
 				</div>
 
 				{/* Nombre d'onde */}
 				<div className={style.inputContainer}>
 					<div className={style.inputHeader}>
 						<label htmlFor="wave-number-input">
-							<p>Nombre d'onde (k)</p>
+							<p>Nombre d'onde (k) *π</p>
 						</label>
 					</div>
 					<div className={style.inputRow}>
@@ -122,16 +119,14 @@ export default function Parametre() {
 							onChange={e => {
 								const val = e.target.valueAsNumber;
 								setWaveNumber(
-									isNaN(val) 
-										? LIMITS.waveNumber.min 
+									isNaN(val)
+										? LIMITS.waveNumber.min
 										: clamp(val, LIMITS.waveNumber.min, LIMITS.waveNumber.max)
 								);
 							}}
 							aria-label="Nombre d'onde"
 						/>
-						
 					</div>
-				
 				</div>
 			</div>
 
@@ -140,13 +135,11 @@ export default function Parametre() {
 				<div className={style.harmonicHeader}>
 					<div>
 						<p className={style.sectionTitle}>Harmoniques</p>
-						<p className={style.subText}>
-							Nombre de fréquences superposées
-						</p>
+						<p className={style.subText}>Nombre de fréquences superposées</p>
 					</div>
-					<Button 
-						variant="ghost" 
-						size="sm" 
+					<Button
+						variant="ghost"
+						size="sm"
 						onClick={toggleHarmonicsDrawer}
 						aria-label="Ouvrir l'éditeur d'amplitudes des harmoniques"
 					>
@@ -161,8 +154,7 @@ export default function Parametre() {
 					max={LIMITS.harmonics.max}
 					onChange={e => {
 						const val = e.target.valueAsNumber;
-						if (!isNaN(val)) 
-							setHarmonics(clamp(val, LIMITS.harmonics.min, LIMITS.harmonics.max));
+						if (!isNaN(val)) setHarmonics(clamp(val, LIMITS.harmonics.min, LIMITS.harmonics.max));
 					}}
 					aria-label="Nombre d'harmoniques"
 					placeholder="Entre 1 et 20"
@@ -174,16 +166,16 @@ export default function Parametre() {
 				<p>
 					⏱️ <strong>Temps:</strong> {time.toFixed(1)} s
 				</p>
-				<Button 
+				<Button
 					onClick={toggleAnimationTime}
 					variant={isAnimatingTime ? 'default' : 'outline'}
-					title={isAnimatingTime ? 'Pausser l\'animation' : 'Lancer l\'animation'}
+					title={isAnimatingTime ? "Pausser l'animation" : "Lancer l'animation"}
 					aria-label={isAnimatingTime ? 'Pausser' : 'Lancer'}
 				>
 					{isAnimatingTime ? '⏸️' : '▶️'}
 				</Button>
-				<Button 
-					onClick={resetTime} 
+				<Button
+					onClick={resetTime}
 					variant="outline"
 					title="Réinitialiser le temps à 0"
 					aria-label="Réinitialiser"
@@ -197,25 +189,25 @@ export default function Parametre() {
 				<p className={style.sectionTitle}>Options de visualisation</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>
-						<Button 
-							size="sm" 
-							variant={viewMode === '2d' ? 'default' : 'outline'} 
+						<Button
+							size="sm"
+							variant={viewMode === '2d' ? 'default' : 'outline'}
 							onClick={() => setViewMode('2d')}
 							aria-pressed={viewMode === '2d'}
 						>
 							📊 2D
 						</Button>
-						<Button 
-							size="sm" 
-							variant={viewMode === '3d' ? 'default' : 'outline'} 
+						<Button
+							size="sm"
+							variant={viewMode === '3d' ? 'default' : 'outline'}
 							onClick={() => setViewMode('3d')}
 							aria-pressed={viewMode === '3d'}
 						>
 							🎯 3D
 						</Button>
-						<Button 
-							size="sm" 
-							variant={showImaginary ? 'default' : 'outline'} 
+						<Button
+							size="sm"
+							variant={showImaginary ? 'default' : 'outline'}
 							onClick={toggleShowImaginary}
 							aria-pressed={showImaginary}
 						>
@@ -224,8 +216,6 @@ export default function Parametre() {
 					</ButtonGroup>
 				</div>
 			</div>
-
-			
 		</div>
 	);
 }

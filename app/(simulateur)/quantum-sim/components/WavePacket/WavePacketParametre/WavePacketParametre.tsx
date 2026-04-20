@@ -9,10 +9,9 @@ import { useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
-import { Zap, Waves } from 'lucide-react';
 
 const LIMITS = {
-	k_center: { min: 0.1, max: 20, step: 0.1 },
+	k_center: { min: -20, max: 20, step: 0.1 },
 	sigma_k: { min: 0.1, max: 5, step: 0.1 },
 	x_center: { min: -10, max: 10, step: 0.5 },
 	nWaves: { min: 5, max: 200, step: 1 },
@@ -33,7 +32,6 @@ export default function ParametreWavePacket() {
 		sigma_k,
 		x_center,
 		nWaves,
-		time,
 		isAnimatingTime,
 		visualizationMode,
 		xMin,
@@ -44,8 +42,6 @@ export default function ParametreWavePacket() {
 		setXCenter,
 		setNWaves,
 		setTime,
-		toggleAnimationTime,
-		resetTime,
 		setVisualizationMode,
 		setXMin,
 		setXMax,
@@ -54,8 +50,7 @@ export default function ParametreWavePacket() {
 		loadWidePreset,
 	} = useWavePacketStore();
 
-	const clamp = (value: number, min: number, max: number) => 
-		Math.max(min, Math.min(max, value));
+	const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 	const setSafeXMin = (raw: number) => {
 		if (Number.isNaN(raw)) return;
@@ -82,7 +77,7 @@ export default function ParametreWavePacket() {
 	];
 
 	const visualizationButtons: Array<{ label: string; value: VisualizationMode }> = [
-		{ label: 'ψ(x) Fonction d\'onde', value: 'wavefunction' },
+		{ label: "ψ(x) Fonction d'onde", value: 'wavefunction' },
 		{ label: '|ψ|² Densité de probabilité', value: 'probability' },
 	];
 
@@ -113,9 +108,7 @@ export default function ParametreWavePacket() {
 						))}
 					</ButtonGroup>
 				</div>
-				<p className={style.subText}>
-					{getPacketDescription()}
-				</p>
+				<p className={style.subText}>{getPacketDescription()}</p>
 			</div>
 
 			{/* Section: Présets rapides */}
@@ -123,25 +116,25 @@ export default function ParametreWavePacket() {
 				<p className={style.sectionTitle}>Présets rapides</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>
-						<Button 
-							size="sm" 
-							variant="outline" 
+						<Button
+							size="sm"
+							variant="outline"
 							onClick={loadGaussianPreset}
 							title="Charger configuration standard"
 						>
 							⚡ Standard
 						</Button>
-						<Button 
-							size="sm" 
-							variant="outline" 
+						<Button
+							size="sm"
+							variant="outline"
 							onClick={loadNarrowPreset}
 							title="Paquet étroit - Faible dispersion"
 						>
 							🎯 Étroit
 						</Button>
-						<Button 
-							size="sm" 
-							variant="outline" 
+						<Button
+							size="sm"
+							variant="outline"
 							onClick={loadWidePreset}
 							title="Paquet large - Forte dispersion"
 						>
@@ -173,9 +166,7 @@ export default function ParametreWavePacket() {
 							onValueChange={value => setKCenter(value[0])}
 							aria-label="Vecteur d'onde central"
 						/>
-						<p className={style.subText}>
-							Fréquence d'oscillation dominante du paquet
-						</p>
+						<p className={style.subText}>Fréquence d'oscillation dominante du paquet</p>
 					</div>
 
 					{/* Largeur spectrale */}
@@ -195,9 +186,7 @@ export default function ParametreWavePacket() {
 							onValueChange={value => setSigmaK(value[0])}
 							aria-label="Largeur spectrale"
 						/>
-						<p className={style.subText}>
-							Relation d'incertitude: Δx · Δk ≥ 1/2
-						</p>
+						<p className={style.subText}>Relation d'incertitude: Δx · Δk ≥ 1/2</p>
 					</div>
 
 					{/* Position centrale */}
@@ -240,33 +229,8 @@ export default function ParametreWavePacket() {
 						onValueChange={value => setNWaves(value[0])}
 						aria-label="Nombre d'ondes planes composant le paquet"
 					/>
-					<p className={style.subText}>
-						Plus d'ondes = meilleure résolution du paquet
-					</p>
+					<p className={style.subText}>Plus d'ondes = meilleure résolution du paquet</p>
 				</div>
-			</div>
-
-			{/* Section: Contrôles temporels */}
-			<div className={style.buttonContainer}>
-				<p>
-					⏱️ <strong>Temps:</strong> {time.toFixed(1)} s
-				</p>
-				<Button 
-					onClick={toggleAnimationTime}
-					variant={isAnimatingTime ? 'default' : 'outline'}
-					title={isAnimatingTime ? 'Pausser l\'animation' : 'Lancer l\'animation'}
-					aria-label={isAnimatingTime ? 'Pausser' : 'Lancer'}
-				>
-					{isAnimatingTime ? '⏸️' : '▶️'}
-				</Button>
-				<Button 
-					onClick={resetTime} 
-					variant="outline"
-					title="Réinitialiser le temps à 0"
-					aria-label="Réinitialiser"
-				>
-					↻ Reset
-				</Button>
 			</div>
 
 			{/* Section: Visualisation */}
@@ -331,8 +295,6 @@ export default function ParametreWavePacket() {
 					💡 Astuce: gardez une fenêtre centrée autour de x = 0 pour une lecture plus stable.
 				</p>
 			</div>
-
-			
 		</div>
 	);
 }
