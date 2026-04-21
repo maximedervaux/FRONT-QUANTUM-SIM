@@ -194,9 +194,8 @@ self.onmessage = async event => {
 				pyodide.globals.delete(key);
 			});
 
-			console.log(result);
-			const safeResult = JSON.parse(JSON.stringify(result));
-			console.log(safeResult);
+			const safeResult =
+				functionName !== 'generate_plane_waves' ? JSON.parse(JSON.stringify(result)) : result;
 
 			self.postMessage({
 				type: 'result',
