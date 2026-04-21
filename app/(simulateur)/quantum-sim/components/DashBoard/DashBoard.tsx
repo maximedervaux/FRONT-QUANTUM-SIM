@@ -8,13 +8,14 @@ import { usePythonWorker } from '../../../core/contexts/PythonWorkerContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Cpu, FlaskConical, Gauge, Play, RotateCcw } from 'lucide-react';
+import { BookOpenText, Cpu, FlaskConical, Gauge, Play } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useWaveStore } from '../../store/onde.store';
 import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
 import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketParametre';
 import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
 import PythonEngineLoader from '../Loader/PythonEngineLoader'
+import WaveTour, { WAVE_TOUR_REQUEST_KEY } from '../Ondes/Tour/WaveTour';
 
 
 export default function DashBoard() {
@@ -110,6 +111,11 @@ export default function DashBoard() {
 		resetTime();
 	};
 
+	const launchWaveTutorial = () => {
+		window.localStorage.setItem(WAVE_TOUR_REQUEST_KEY, '1');
+		setActivePage('ondes');
+	};
+
 	if (!isReady) {
 		return <PythonEngineLoader />
 	}
@@ -143,6 +149,25 @@ export default function DashBoard() {
 							</CardContent>
 						</Card>
 
+						<Card className={styles.tutorialCard}>
+							<CardHeader>
+								<CardTitle className={styles.cardTitle}>
+									<BookOpenText />
+									Faire le tour complet de la section ondes
+								</CardTitle>
+								<CardDescription>
+									Démarre un tutoriel guidé en 10 étapes pour comprendre la formule,
+									le visualiseur et les paramètres fondamentaux.
+								</CardDescription>
+							</CardHeader>
+							<CardContent className={styles.heroActions}>
+								<Button onClick={launchWaveTutorial}>
+									<BookOpenText data-icon="inline-start" />
+									Lancer le tutoriel ondes
+								</Button>
+							</CardContent>
+						</Card>
+
 						<Card className={styles.statusCard}>
 							<CardHeader>
 								<CardTitle className={styles.cardTitle}>
@@ -164,6 +189,7 @@ export default function DashBoard() {
 
 				{activePage === 'ondes' && (
 					<>
+						<WaveTour />
 						<Equation />
 						{viewMode === '2d' ? <Chart /> : <ThreeChart />}
 						<HarmonicsDrawer />

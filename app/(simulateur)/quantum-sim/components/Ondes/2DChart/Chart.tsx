@@ -10,7 +10,7 @@ function Chart() {
 	const { plotData, plotLayout } = usePlaneWavesData();
 
 	return (
-		<div className={styles.chart}>
+		<div className={styles.chart} data-tour="wave-visualizer">
 			<Plot
 				data={plotData}
 				layout={plotLayout}

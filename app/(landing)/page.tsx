@@ -66,7 +66,7 @@ export default function Home() {
       buttons: ['back', 'close', 'primary', 'skip'],
       scrollOffset: 64,
       showProgress: true,
-      skipScroll: true, // 🔥 IMPORTANT
+      skipScroll: true, 
       spotlightPadding: 16,
       spotlightRadius: 16,
     },

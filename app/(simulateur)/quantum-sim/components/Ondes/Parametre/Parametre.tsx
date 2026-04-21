@@ -59,7 +59,7 @@ export default function Parametre() {
 			<h1>⚛️ Paramètres de l'onde</h1>
 
 			{/* Section: Fonction d'onde */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-function-select">
 				<p className={style.sectionTitle}>Fonction d'onde</p>
 				<div className={style.selectContainer}>
 					<select 
@@ -82,7 +82,7 @@ export default function Parametre() {
 				<p className={style.sectionTitle}>Paramètres fondamentaux</p>
 
 				{/* Période */}
-				<div className={style.inputContainer}>
+				<div className={style.inputContainer} data-tour="wave-period">
 					<div className={style.inputHeader}>
 						<label htmlFor="period-slider">
 							<p>Période (T)</p>
@@ -104,7 +104,7 @@ export default function Parametre() {
 				</div>
 
 				{/* Nombre d'onde */}
-				<div className={style.inputContainer}>
+				<div className={style.inputContainer} data-tour="wave-number">
 					<div className={style.inputHeader}>
 						<label htmlFor="wave-number-input">
 							<p>Nombre d'onde (k)</p>
@@ -136,7 +136,7 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Harmoniques */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-harmonics">
 				<div className={style.harmonicHeader}>
 					<div>
 						<p className={style.sectionTitle}>Harmoniques</p>
@@ -170,7 +170,7 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Contrôles temporels */}
-			<div className={style.buttonContainer}>
+			<div className={style.buttonContainer} data-tour="wave-time-controls">
 				<p>
 					⏱️ <strong>Temps:</strong> {time.toFixed(1)} s
 				</p>
@@ -193,7 +193,7 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Visualisation */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-visual-options">
 				<p className={style.sectionTitle}>Options de visualisation</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>
