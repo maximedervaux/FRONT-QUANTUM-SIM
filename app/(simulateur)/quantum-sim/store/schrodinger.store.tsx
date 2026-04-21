@@ -9,6 +9,6 @@ interface SchrodingerState {
 }
 
 export const useSchrodingerStore = create<SchrodingerState>(set => ({
-	potentialType: 'infiniteWell',
+	potentialType: 'free',
 	setPotentialType: type => set({ potentialType: type }),
 }));

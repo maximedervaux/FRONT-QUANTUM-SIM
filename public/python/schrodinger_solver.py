@@ -54,9 +54,9 @@ def schrodinger_solving_function(
         solver.init_from_array(psi0, normalize=True)
 
 
-    solved = solver.solve(1000, 10)
+    solved = solver.solve(100000, 20)
     x = solved["x"]
-    psi = np.real(solved["psi"]).T
+    psi = np.real(solved["prob"]).T
 
     return (
         x.tolist(),
