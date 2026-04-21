@@ -101,7 +101,7 @@ function ChartSchrodinger() {
 	const frames = schrodingerData
 		? schrodingerData.prob.map((frame, i) => ({
 				name: i.toString(),
-				data: [{ x: schrodingerData.x, y: frame }],
+				data: [{ x: schrodingerData.x, y: frame, type: 'scatter', mode: 'lines' }],
 				traces: [0],
 				group: 'animation',
 				baseframe: '',
@@ -179,15 +179,9 @@ function ChartSchrodinger() {
 
 	return (
 		<div className={styles.chart}>
-			{isLoading && (
-				<div className={styles.loadingOverlay}>
-					<span className={styles.spinner} />
-					Calcul en cours...
-				</div>
-			)}
-
 			<Plot
 				data={plotData}
+				style={{ width: '100%', height: '100%', overflow: 'hidden' }}
 				layout={{
 					...plotLayout,
 					updatemenus: [
