@@ -164,21 +164,17 @@ export default function DashBoard() {
 							<CardHeader>
 								<CardTitle className={styles.cardTitle}>
 									<BookOpenText />
-									Faire le tour complet des guides
+									Faire le tour complet de la section ondes
 								</CardTitle>
 								<CardDescription>
-									Lance un parcours guidé pour la section ondes ou la section paquets
-									d’ondes selon ce que tu veux explorer.
+									Démarre un tutoriel guidé en 10 étapes pour comprendre la formule,
+									le visualiseur et les paramètres fondamentaux.
 								</CardDescription>
 							</CardHeader>
 							<CardContent className={styles.heroActions}>
 								<Button onClick={launchWaveTutorial}>
 									<BookOpenText data-icon="inline-start" />
 									Lancer le tutoriel ondes
-								</Button>
-								<Button onClick={launchWavePacketTutorial} variant="outline">
-									<BookOpenText data-icon="inline-start" />
-									Lancer le tutoriel paquets d’ondes
 								</Button>
 							</CardContent>
 						</Card>
