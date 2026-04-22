@@ -6,6 +6,7 @@ import Bento from "./components/Bento/Bento";
 import Hero from "./components/Hero/Hero";
 import Notebook from "./components/Notebook/Notebook";
 import TechStack from "./components/TechStack/TechStack";
+import TeamSection from "./components/TeamSection/TeamSection";
 import { useGsapAnimations } from "./hooks/useGsapAnimation";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
       <Bento  ref={bentoRef}/>
       <Notebook ref={notebookRef}/>
       <TechStack />
+      <TeamSection />
       
     </div>
   );
