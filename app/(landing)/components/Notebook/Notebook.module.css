@@ -21,6 +21,13 @@
 	color: var(--foreground);
 }
 
+.textContainer h2 {
+	font-family: var(--font-tilt-warp);
+	font-size: clamp(2rem, 4vw, 3.2rem);
+	line-height: 1;
+	color: #1f1f1c;
+	margin: 0;
+}
 .textContainer > button {
 	width: fit-content;
 }
