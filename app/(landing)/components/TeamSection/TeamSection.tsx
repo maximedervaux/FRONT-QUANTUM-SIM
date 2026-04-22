@@ -63,16 +63,16 @@ export default function TeamSection() {
 						<div>
 							<p className={styles.personName}>Mr. Capiod</p>
 							<p>
-								Enseignant-chercheur, JUNIA ISEN. Initiateur du projet et encadrant
-								scientifique.
+								Enseignant-chercheur, JUNIA ISEN. Co-initiateur du projet et referent
+								pedagogique.
 							</p>
 						</div>
 						<Separator />
 						<div>
 							<p className={styles.personName}>Mr. David Mele</p>
 							<p>
-								Enseignant-chercheur, JUNIA ISEN. Co-initiateur du projet et referent
-								pedagogique.
+                                Enseignant-chercheur, JUNIA ISEN. Initiateur du projet et encadrant
+								scientifique.
 							</p>
 						</div>
 					</CardContent>
@@ -81,7 +81,6 @@ export default function TeamSection() {
 
 			<Card className={styles.academicCard}>
 				<CardHeader>
-					<CardDescription>Mention academique</CardDescription>
 					<CardTitle>Module R&D - JUNIA ISEN</CardTitle>
 				</CardHeader>
 				<CardContent className={styles.academicContent}>
@@ -92,7 +91,7 @@ export default function TeamSection() {
 						height={64}
 						className={styles.academicLogo}
 					/>
-					<p>Projet developpe dans le cadre du module R&D - JUNIA ISEN . Annee universitaire 2024-2025.</p>
+					<p>Projet developpe dans le cadre du module R&D - JUNIA ISEN . Annee 2025-2026.</p>
 				</CardContent>
 			</Card>
 		</section>

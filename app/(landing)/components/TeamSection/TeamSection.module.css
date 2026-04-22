@@ -1,11 +1,14 @@
 .teamSection {
 	min-height: 95vh;
-	padding: 48px;
+	padding: 54px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	gap: 20px;
-    background-color: white;
+	gap: 24px;
+	background:
+		radial-gradient(circle at 18% 16%, rgba(72, 112, 214, 0.11) 0%, rgba(72, 112, 214, 0) 34%),
+		radial-gradient(circle at 84% 84%, rgba(247, 170, 80, 0.16) 0%, rgba(247, 170, 80, 0) 42%),
+		linear-gradient(145deg, #ffffff 0%, #f6f5f3 100%);
 }
 
 .heading {
@@ -17,10 +20,10 @@
 
 .heading h2 {
 	font-family: var(--font-tilt-warp);
-	font-size: clamp(2rem, 4vw, 3.2rem);
+	font-size: clamp(2rem, 4.2vw, 3.3rem);
 	line-height: 1;
 	margin: 0;
-	color: #1d1c18;
+	color: #1a2138;
 }
 
 .heading p {
@@ -28,21 +31,21 @@
 	font-size: 1.05rem;
 	line-height: 1.6;
 	margin: 0;
-	color: #35342f;
+	color: #363f57;
 }
 
 .grid {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 16px;
+	gap: 18px;
 }
 
 .card,
 .academicCard {
-	background: rgba(255, 255, 255, 0.86);
-	border: 1px solid rgba(29, 28, 24, 0.1);
-	box-shadow: 0 16px 45px rgba(43, 40, 33, 0.08);
-	backdrop-filter: blur(2px);
+	background: rgba(255, 255, 255, 0.82);
+	border: 1px solid rgba(31, 40, 66, 0.1);
+	box-shadow: 0 16px 45px rgba(31, 40, 66, 0.1);
+	backdrop-filter: blur(4px);
 }
 
 .membersGrid {
@@ -55,10 +58,10 @@
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	padding: 10px;
+	padding: 12px;
 	border-radius: 12px;
 	background: #ffffff;
-	border: 1px solid rgba(29, 28, 24, 0.1);
+	border: 1px solid rgba(29, 38, 61, 0.12);
 }
 
 .memberAvatar {
@@ -72,7 +75,7 @@
 	font-weight: 700;
 	font-size: 0.8rem;
 	color: #f8f6f1;
-	background: linear-gradient(140deg, #18140f 0%, #4f4436 100%);
+	background: linear-gradient(140deg, #1d2b57 0%, #4360b5 100%);
 	flex-shrink: 0;
 }
 
@@ -88,7 +91,7 @@
 	font-size: 0.95rem;
 	line-height: 1.2;
 	margin: 0;
-	color: #1e1c17;
+	color: #1d2236;
 }
 
 .memberRole {
@@ -96,7 +99,7 @@
 	font-size: 0.8rem;
 	line-height: 1.2;
 	margin: 0;
-	color: #575249;
+	color: #586178;
 }
 
 .supervisionContent {
@@ -109,21 +112,21 @@
 	font-family: var(--font-lato);
 	font-weight: 700;
 	margin: 0 0 4px;
-	color: #1f1e1a;
+	color: #1e2744;
 }
 
 .supervisionContent p {
 	font-family: var(--font-lato);
 	margin: 0;
 	line-height: 1.55;
-	color: #38362f;
+	color: #36425f;
 }
 
 .academicCard p {
 	font-family: var(--font-lato);
 	margin: 0;
 	line-height: 1.55;
-	color: #343229;
+	color: #323d57;
 }
 
 .academicContent {
@@ -141,7 +144,7 @@
 
 @media (max-width: 960px) {
 	.teamSection {
-		padding: 24px;
+		padding: 26px;
 		height: fit-content;
 	}
 
