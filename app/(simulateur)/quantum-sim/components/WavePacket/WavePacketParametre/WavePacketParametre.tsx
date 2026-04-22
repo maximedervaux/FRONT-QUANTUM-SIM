@@ -92,10 +92,10 @@ export default function ParametreWavePacket() {
 
 	return (
 		<div className={style.parametre}>
-			<h1>📦 Paquet d'ondes quantiques</h1>
+			<h1 data-tour="packet-header">📦 Paquet d'ondes quantiques</h1>
 
 			{/* Section: Type de paquet */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="packet-type">
 				<p className={style.sectionTitle}>Type de paquet</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>
@@ -119,7 +119,7 @@ export default function ParametreWavePacket() {
 			</div>
 
 			{/* Section: Présets rapides */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="packet-presets">
 				<p className={style.sectionTitle}>Présets rapides</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>
@@ -222,7 +222,7 @@ export default function ParametreWavePacket() {
 			)}
 
 			{/* Section: Nombre d'ondes planes */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="packet-composition">
 				<p className={style.sectionTitle}>Composition du paquet</p>
 				<div className={style.inputContainer}>
 					<div className={style.inputHeader}>
@@ -247,7 +247,7 @@ export default function ParametreWavePacket() {
 			</div>
 
 			{/* Section: Contrôles temporels */}
-			<div className={style.buttonContainer}>
+			<div className={style.buttonContainer} data-tour="packet-time-controls">
 				<p>
 					⏱️ <strong>Temps:</strong> {time.toFixed(1)} s
 				</p>
@@ -270,7 +270,7 @@ export default function ParametreWavePacket() {
 			</div>
 
 			{/* Section: Visualisation */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="packet-visualization">
 				<p className={style.sectionTitle}>Mode de visualisation</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>
@@ -290,7 +290,7 @@ export default function ParametreWavePacket() {
 			</div>
 
 			{/* Section: Fenêtre spatiale */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="packet-window">
 				<p className={style.sectionTitle}>Fenêtre spatiale</p>
 				<div className={style.rangeInputs}>
 					<div className={style.inputContainer}>

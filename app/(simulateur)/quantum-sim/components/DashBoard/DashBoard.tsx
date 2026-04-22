@@ -16,6 +16,7 @@ import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketPar
 import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
 import PythonEngineLoader from '../Loader/PythonEngineLoader'
 import WaveTour, { WAVE_TOUR_REQUEST_KEY } from '../Ondes/Tour/WaveTour';
+import WavePacketTour, { WAVE_PACKET_TOUR_REQUEST_KEY } from '../WavePacket/Tour/WavePacketTour';
 
 
 export default function DashBoard() {
@@ -116,6 +117,11 @@ export default function DashBoard() {
 		setActivePage('ondes');
 	};
 
+	const launchWavePacketTutorial = () => {
+		window.localStorage.setItem(WAVE_PACKET_TOUR_REQUEST_KEY, '1');
+		setActivePage('packets');
+	};
+
 	if (!isReady) {
 		return <PythonEngineLoader />
 	}
@@ -153,17 +159,21 @@ export default function DashBoard() {
 							<CardHeader>
 								<CardTitle className={styles.cardTitle}>
 									<BookOpenText />
-									Faire le tour complet de la section ondes
+									Faire le tour complet des guides
 								</CardTitle>
 								<CardDescription>
-									Démarre un tutoriel guidé en 10 étapes pour comprendre la formule,
-									le visualiseur et les paramètres fondamentaux.
+									Lance un parcours guidé pour la section ondes ou la section paquets
+									d’ondes selon ce que tu veux explorer.
 								</CardDescription>
 							</CardHeader>
 							<CardContent className={styles.heroActions}>
 								<Button onClick={launchWaveTutorial}>
 									<BookOpenText data-icon="inline-start" />
 									Lancer le tutoriel ondes
+								</Button>
+								<Button onClick={launchWavePacketTutorial} variant="outline">
+									<BookOpenText data-icon="inline-start" />
+									Lancer le tutoriel paquets d’ondes
 								</Button>
 							</CardContent>
 						</Card>
@@ -197,6 +207,7 @@ export default function DashBoard() {
 				)}
 				{activePage === 'packets' && (
 					<>
+						<WavePacketTour />
 						<ChartWavePacket />
 					</>
 				)}
