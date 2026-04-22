@@ -16,7 +16,7 @@ const stackItems: StackItem[] = [
 		category: "Python",
 		title: "Python - Coeur du projet",
 		description:
-			"Le package principal. Toute la logique quantique - calculs d'ondes, potentiels, evolution temporelle - est implementee ici. Installable via pip et importable dans n'importe quel environnement Python.",
+			"Le package principal. Toute la logique quantique calculs d'ondes, potentiels, evolution temporelle est executee ici . Cote front on le concomme via Pyodide l'application n'a donc pas de backend dedie.",
 		logoSrc: "/assets/tech/python.svg",
 		logoAlt: "Logo Python",
 	},
