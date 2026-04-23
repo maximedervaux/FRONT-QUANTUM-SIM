@@ -16,7 +16,7 @@ const LIMITS = {
 
 const WAVE_DESCRIPTIONS = {
 	gaussian: 'Onde gaussienne - Distribution normale, lisse et symétrique',
-	sinus: 'Onde sinusoidale - Oscillation régulière et périodique',
+	sinus: 'Onde sinusoïdale - Oscillation régulière et périodique',
 };
 
 export default function Parametre() {
@@ -72,7 +72,7 @@ export default function Parametre() {
 							Choisir une fonction d'onde...
 						</option>
 						<option value="gaussian">Gaussienne</option>
-						<option value="sinus">Sinusoidale</option>
+						<option value="sinus">Sinusoïdale</option>
 					</select>
 				</div>
 			</div>
@@ -177,8 +177,8 @@ export default function Parametre() {
 				<Button 
 					onClick={toggleAnimationTime}
 					variant={isAnimatingTime ? 'default' : 'outline'}
-					title={isAnimatingTime ? 'Pausser l\'animation' : 'Lancer l\'animation'}
-					aria-label={isAnimatingTime ? 'Pausser' : 'Lancer'}
+					title={isAnimatingTime ? 'Mettre en pause l\'animation' : 'Lancer l\'animation'}
+					aria-label={isAnimatingTime ? 'Mettre en pause' : 'Lancer'}
 				>
 					{isAnimatingTime ? '⏸️' : '▶️'}
 				</Button>
@@ -188,7 +188,7 @@ export default function Parametre() {
 					title="Réinitialiser le temps à 0"
 					aria-label="Réinitialiser"
 				>
-					↻ Reset
+					↻ Réinitialiser
 				</Button>
 			</div>
 

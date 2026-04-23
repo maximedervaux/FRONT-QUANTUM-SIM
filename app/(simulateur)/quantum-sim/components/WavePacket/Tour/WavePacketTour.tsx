@@ -34,7 +34,7 @@ export default function WavePacketTour() {
 					title: 'Choisir le type de paquet',
 					content: (
 						<p>
-							Ici, tu sélectionnes la structure du paquet: gaussien, aléatoire ou
+							Ici, tu sélectionnes la structure du paquet : gaussien, aléatoire ou
 							personnalisé selon l’expérience que tu veux faire.
 						</p>
 					),
@@ -67,7 +67,7 @@ export default function WavePacketTour() {
 					title: 'Animation temporelle',
 					content: (
 						<p>
-							Lecture, pause et reset servent a observer la propagation du paquet dans
+							Lecture, pause et réinitialisation servent à observer la propagation du paquet dans
 							le temps et comparer les régimes.
 						</p>
 					),

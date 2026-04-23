@@ -15,7 +15,19 @@ import WaveTourTooltip from './WaveTourTooltip';
 import styles from './WaveTour.module.css';
 
 export const WAVE_TOUR_REQUEST_KEY = 'quantum-sim-wave-tour-request';
+export const WAVE_TOUR_SEEN_COOKIE = 'quantum-sim-wave-tour-seen';
+const WAVE_TOUR_SEEN_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 const HARMONICS_DRAWER_STEP = 7;
+
+function hasCookie(cookieName: string): boolean {
+	return document.cookie
+		.split('; ')
+		.some(cookie => cookie.startsWith(`${cookieName}=`));
+}
+
+function setSeenCookie(cookieName: string): void {
+	document.cookie = `${cookieName}=1; path=/; max-age=${WAVE_TOUR_SEEN_COOKIE_MAX_AGE}; SameSite=Lax`;
+}
 
 const TourBeacon = forwardRef<HTMLSpanElement, BeaconRenderProps>(function TourBeacon(_, ref) {
 	return <span ref={ref} className={styles.beacon} />;
@@ -144,8 +156,10 @@ export default function WaveTour() {
 	);
 
 	useEffect(() => {
-		const shouldStart = window.localStorage.getItem(WAVE_TOUR_REQUEST_KEY) === '1';
-		if (!shouldStart) return;
+		const shouldStartFromButton = window.localStorage.getItem(WAVE_TOUR_REQUEST_KEY) === '1';
+		const shouldStartAutomatically = !hasCookie(WAVE_TOUR_SEEN_COOKIE);
+
+		if (!shouldStartFromButton && !shouldStartAutomatically) return;
 
 		let cancelled = false;
 		let attempts = 0;
@@ -156,7 +170,10 @@ export default function WaveTour() {
 
 			const firstTarget = document.querySelector('[data-tour="wave-equation"]');
 			if (firstTarget) {
-				window.localStorage.removeItem(WAVE_TOUR_REQUEST_KEY);
+				if (shouldStartFromButton) {
+					window.localStorage.removeItem(WAVE_TOUR_REQUEST_KEY);
+				}
+				setSeenCookie(WAVE_TOUR_SEEN_COOKIE);
 				setRun(true);
 				return;
 			}

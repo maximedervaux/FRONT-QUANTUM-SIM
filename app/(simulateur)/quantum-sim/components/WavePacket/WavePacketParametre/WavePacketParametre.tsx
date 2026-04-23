@@ -196,7 +196,7 @@ export default function ParametreWavePacket() {
 							aria-label="Largeur spectrale"
 						/>
 						<p className={style.subText}>
-							Relation d'incertitude: Δx · Δk ≥ 1/2
+							Relation d'incertitude : Δx · Δk ≥ 1/2
 						</p>
 					</div>
 
@@ -254,8 +254,8 @@ export default function ParametreWavePacket() {
 				<Button 
 					onClick={toggleAnimationTime}
 					variant={isAnimatingTime ? 'default' : 'outline'}
-					title={isAnimatingTime ? 'Pausser l\'animation' : 'Lancer l\'animation'}
-					aria-label={isAnimatingTime ? 'Pausser' : 'Lancer'}
+					title={isAnimatingTime ? 'Mettre en pause l\'animation' : 'Lancer l\'animation'}
+					aria-label={isAnimatingTime ? 'Mettre en pause' : 'Lancer'}
 				>
 					{isAnimatingTime ? '⏸️' : '▶️'}
 				</Button>
@@ -265,7 +265,7 @@ export default function ParametreWavePacket() {
 					title="Réinitialiser le temps à 0"
 					aria-label="Réinitialiser"
 				>
-					↻ Reset
+					↻ Réinitialiser
 				</Button>
 			</div>
 
@@ -328,7 +328,7 @@ export default function ParametreWavePacket() {
 					</div>
 				</div>
 				<p className={style.subText}>
-					💡 Astuce: gardez une fenêtre centrée autour de x = 0 pour une lecture plus stable.
+					💡 Astuce : garde une fenêtre centrée autour de x = 0 pour une lecture plus stable.
 				</p>
 			</div>
 

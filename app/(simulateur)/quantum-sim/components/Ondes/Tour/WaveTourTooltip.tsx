@@ -22,7 +22,7 @@ export default function WaveTourTooltip({
 		<Card className={styles.tooltipCard}>
 			<div className={styles.tooltipHeader}>
 				<span className={styles.tooltipStep}>
-					Etape {index + 1} / {size}
+					Étape {index + 1} / {size}
 				</span>
 				<Button variant="ghost" size="sm" {...closeProps}>
 					Fermer

@@ -15,7 +15,7 @@ import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
 import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketParametre';
 import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
 import PythonEngineLoader from '../Loader/PythonEngineLoader'
-import WaveTour, { WAVE_TOUR_REQUEST_KEY } from '../Ondes/Tour/WaveTour';
+import WaveTour, { WAVE_TOUR_REQUEST_KEY, WAVE_TOUR_SEEN_COOKIE } from '../Ondes/Tour/WaveTour';
 import WavePacketTour, { WAVE_PACKET_TOUR_REQUEST_KEY } from '../WavePacket/Tour/WavePacketTour';
 
 
@@ -47,12 +47,17 @@ export default function DashBoard() {
 	}>(null);
 
 	useEffect(() => {
-		const visitKey = 'quantum-sim-visited';
 		const snapshotKey = 'quantum-sim-last-snapshot';
+		const hasSeenWaveTour = document.cookie
+			.split('; ')
+			.some(cookie => cookie.startsWith(`${WAVE_TOUR_SEEN_COOKIE}=`));
 
-		const hasVisited = localStorage.getItem(visitKey) === 'true';
-		setIsFirstVisit(!hasVisited);
-		localStorage.setItem(visitKey, 'true');
+		setIsFirstVisit(!hasSeenWaveTour);
+
+		if (!hasSeenWaveTour) {
+			window.localStorage.setItem(WAVE_TOUR_REQUEST_KEY, '1');
+			setActivePage('ondes');
+		}
 
 		const rawSnapshot = localStorage.getItem(snapshotKey);
 		if (!rawSnapshot) return;
@@ -68,7 +73,7 @@ export default function DashBoard() {
 		} catch {
 			setLastSnapshot(null);
 		}
-	}, []);
+	}, [setActivePage]);
 
 	useEffect(() => {
 		const snapshot = {
