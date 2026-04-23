@@ -7,7 +7,6 @@ def schrodinger_solving_function(
     sigma_k: float = 1.0,
     x_center: float = 0.0,
     n_waves: int = 50,
-    time: float = 0.0,
     x_min: float = -10.0,
     x_max: float = 10.0,
     potential_type: str = "free",
@@ -20,7 +19,6 @@ def schrodinger_solving_function(
         sigma_k: Écart-type en espace des moments
         x_center: Centre spatial du paquet
         n_waves: Nombre d'ondes dans la décomposition
-        time: Temps initial
         x_min, x_max: Limites du domaine spatial
         potential_type: Type de potentiel ("infiniteWell")
     
@@ -59,7 +57,6 @@ def schrodinger_solving_function(
         sigma_k=sigma_k,
         position_center=x_center,
         n_waves=n_waves,
-        time=time,
     )
     
     solver.init_from_packet(packet)

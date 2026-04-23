@@ -22,7 +22,7 @@ function ChartSchrodinger() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { potentialType } = useSchrodingerStore();
-	const { k_center, sigma_k, x_center, nWaves, time, xMin, xMax } = useWavePacketStore();
+	const { k_center, sigma_k, x_center, nWaves, xMin, xMax } = useWavePacketStore();
 
 	const { execute: executePacket, isReady: isPacketReady } = usePythonFunction(
 		'schrodinger_solver',
@@ -71,14 +71,13 @@ function ChartSchrodinger() {
 			sigma_k,
 			x_center,
 			n_waves: nWaves,
-			time,
-			x_min: xMin,
-			x_max: xMax,
+			x_min: Number(xMin),
+			x_max: Number(xMax),
 			potential_type: potentialType,
 		};
 
 		runExecution(params);
-	}, [k_center, sigma_k, x_center, nWaves, time, xMin, xMax, potentialType, runExecution]);
+	}, [k_center, sigma_k, x_center, nWaves, xMin, xMax, potentialType, runExecution]);
 
 	const plotData: Data[] = schrodingerData
 		? [
