@@ -6,7 +6,7 @@ import {
 	Joyride,
 	STATUS,
 	type BeaconRenderProps,
-	type CallBackProps,
+	type EventData,
 	type Step,
 } from 'react-joyride';
 
@@ -37,7 +37,7 @@ export default function WaveTour() {
 	const [run, setRun] = useState(false);
 	const { isHarmonicsDrawerOpen, setHarmonicsDrawerOpen } = useWaveStore();
 
-	const steps = useMemo<Step[]>(
+	const steps = useMemo(
 		() =>
 			[
 			{
@@ -151,7 +151,7 @@ export default function WaveTour() {
 				),
 				placement: 'left',
 			},
-			].map(step => ({ ...step, skipBeacon: true })),
+			].map(step => ({ ...step, skipBeacon: true } as Step)),
 		[]
 	);
 
@@ -198,7 +198,7 @@ export default function WaveTour() {
 	}, [setHarmonicsDrawerOpen]);
 
 	const handleJoyrideCallback = useCallback(
-		(data: CallBackProps) => {
+		(data: EventData) => {
 			const { index, status, type } = data;
 
 			if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
@@ -221,19 +221,8 @@ export default function WaveTour() {
 		<>
 			<Joyride
 				beaconComponent={TourBeacon}
-				callback={handleJoyrideCallback}
+				onEvent={handleJoyrideCallback}
 				continuous
-				disableCloseOnEsc={false}
-				disableOverlayClose
-				floaterProps={{
-					offset: 18,
-					styles: {
-						arrow: {
-							color: '#ffffff',
-						},
-					},
-				}}
-				hideCloseButton
 				locale={{
 					back: 'Retour',
 					close: 'Fermer',
@@ -243,22 +232,21 @@ export default function WaveTour() {
 					skip: 'Passer',
 				}}
 				run={run}
-				scrollOffset={96}
 				scrollToFirstStep
-				showProgress
-				showSkipButton
-				spotlightClicks
 				steps={steps}
-				styles={{
-					options: {
-						arrowColor: '#ffffff',
-						backgroundColor: '#ffffff',
-						overlayColor: 'rgba(15, 23, 42, 0.42)',
-						primaryColor: '#0f172a',
-						spotlightShadow: '0 0 0 12px rgba(255, 255, 255, 0.18)',
-						textColor: '#0f172a',
-						zIndex: 1200,
-					},
+				options={{
+					arrowSpacing: 18,
+					arrowColor: '#ffffff',
+					backgroundColor: '#ffffff',
+					overlayClickAction: false,
+					overlayColor: 'rgba(15, 23, 42, 0.42)',
+					primaryColor: '#0f172a',
+					scrollOffset: 96,
+					showProgress: true,
+					spotlightPadding: 0,
+					blockTargetInteraction: false,
+					textColor: '#0f172a',
+					zIndex: 1200,
 				}}
 				tooltipComponent={WaveTourTooltip}
 			/>

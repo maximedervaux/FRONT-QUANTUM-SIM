@@ -15,7 +15,7 @@ function TourBeacon(_: BeaconRenderProps) {
 export default function WavePacketTour() {
 	const [run, setRun] = useState(false);
 
-	const steps = useMemo<Step[]>(
+	const steps = useMemo(
 		() =>
 			[
 				{
@@ -106,7 +106,7 @@ export default function WavePacketTour() {
 					),
 					placement: 'auto',
 				},
-			].map(step => ({ ...step, skipBeacon: true })),
+			].map(step => ({ ...step, skipBeacon: true } as Step)),
 		[]
 	);
 
@@ -145,23 +145,12 @@ export default function WavePacketTour() {
 	return (
 		<Joyride
 			beaconComponent={TourBeacon}
-			callback={data => {
+			onEvent={data => {
 				if (data.status === 'finished' || data.status === 'skipped') {
 					setRun(false);
 				}
 			}}
 			continuous
-			disableCloseOnEsc={false}
-			disableOverlayClose
-			floaterProps={{
-				offset: 18,
-				styles: {
-					arrow: {
-						color: '#ffffff',
-					},
-				},
-			}}
-			hideCloseButton
 			locale={{
 				back: 'Retour',
 				close: 'Fermer',
@@ -171,22 +160,21 @@ export default function WavePacketTour() {
 				skip: 'Passer',
 			}}
 			run={run}
-			scrollOffset={96}
 			scrollToFirstStep
-			showProgress
-			showSkipButton
-			spotlightClicks
 			steps={steps}
-			styles={{
-				options: {
-					arrowColor: '#ffffff',
-					backgroundColor: '#ffffff',
-					overlayColor: 'rgba(15, 23, 42, 0.42)',
-					primaryColor: '#0f172a',
-					spotlightShadow: '0 0 0 12px rgba(255, 255, 255, 0.18)',
-					textColor: '#0f172a',
-					zIndex: 1200,
-				},
+			options={{
+				arrowSpacing: 18,
+				arrowColor: '#ffffff',
+				backgroundColor: '#ffffff',
+				overlayClickAction: false,
+				overlayColor: 'rgba(15, 23, 42, 0.42)',
+				primaryColor: '#0f172a',
+				scrollOffset: 96,
+				showProgress: true,
+				spotlightPadding: 0,
+				blockTargetInteraction: false,
+				textColor: '#0f172a',
+				zIndex: 1200,
 			}}
 			tooltipComponent={WaveTourTooltip}
 		/>
