@@ -1,46 +1,62 @@
 import style from './Parametre.module.css';
-import { Slider } from '@/components/ui/slider';
 import { useWaveStore } from '../../../store/onde.store';
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
-import { SlidersHorizontal, Info } from 'lucide-react';
+import { formatTimeQuantum } from '../../../services/formatQuantumTime.service';
+import {
+	SlidersHorizontal,
+	Info,
+	TimerResetIcon,
+	CirclePlayIcon,
+	CirclePauseIcon,
+	TimerIcon,
+} from 'lucide-react';
 
 const LIMITS = {
 	harmonics: { min: 1, max: 20 },
 	waveNumber: { min: 0.01, max: 100 },
-	period: { min: 1, max: 100 },
-};
-
-const WAVE_DESCRIPTIONS = {
-	gaussian: 'Onde gaussienne - Distribution normale, lisse et symétrique',
-	sinus: 'Onde sinusoidale - Oscillation régulière et périodique',
+	xMin: { min: -50, max: 0, step: 1 },
+	xMax: { min: 0, max: 50, step: 1 },
 };
 
 export default function Parametre() {
 	const {
 		harmonics,
 		waveNumber,
-		period,
 		time,
 		isAnimatingTime,
 		viewMode,
 		showImaginary,
+		xMin,
+		xMax,
 		setFunction,
 		setHarmonics,
 		setWaveNumber,
-		setPeriod,
 		setTime,
 		setViewMode,
 		toggleShowImaginary,
 		toggleAnimationTime,
 		toggleHarmonicsDrawer,
 		resetTime,
+		setXMin,
+		setXMax,
 	} = useWaveStore();
 
 	const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+
+	const setSafeXMin = (raw: number) => {
+		if (Number.isNaN(raw)) return;
+		const clamped = clamp(raw, LIMITS.xMin.min, LIMITS.xMin.max);
+		setXMin(Math.min(clamped, xMax - 1));
+	};
+
+	const setSafeXMax = (raw: number) => {
+		if (Number.isNaN(raw)) return;
+		const clamped = clamp(raw, LIMITS.xMax.min, LIMITS.xMax.max);
+		setXMax(Math.max(clamped, xMin + 1));
+	};
 
 	useEffect(() => {
 		if (!isAnimatingTime) return;
@@ -67,11 +83,8 @@ export default function Parametre() {
 						aria-label="Sélectionner la fonction d'onde"
 						className={style.functionSelect}
 					>
-						<option value="" disabled>
-							Choisir une fonction d'onde...
-						</option>
+						<option value="sinus">Sinusoïde</option>
 						<option value="gaussian">Gaussienne</option>
-						<option value="sinus">Sinusoidale</option>
 					</select>
 				</div>
 			</div>
@@ -79,32 +92,47 @@ export default function Parametre() {
 			{/* Section: Paramètres de base */}
 			<div className={style.section}>
 				<p className={style.sectionTitle}>Paramètres fondamentaux</p>
-
-				{/* Période */}
 				<div className={style.inputContainer}>
 					<div className={style.inputHeader}>
-						<label htmlFor="period-slider">
-							<p>Période (T)</p>
+						<label htmlFor="xmin-input">
+							<p>Borne inférieure</p>
 						</label>
-						<span className={style.value}>{period.toFixed(1)} s</span>
 					</div>
-					<Slider
-						id="period-slider"
-						value={[period]}
-						min={LIMITS.period.min}
-						max={LIMITS.period.max}
-						step={1}
-						onValueChange={value => setPeriod(value[0])}
-						aria-label="Période de l'onde"
+					<Input
+						id="xmin-input"
+						type="number"
+						value={xMin}
+						min={LIMITS.xMin.min}
+						max={LIMITS.xMin.max}
+						step={LIMITS.xMin.step}
+						onChange={e => setSafeXMin(Number(e.target.value))}
+						aria-label="Position minimum de la fenêtre"
+						placeholder="Min"
 					/>
-					<p className={style.subText}>Temps nécessaire pour une oscillation complète</p>
 				</div>
-
+				<div className={style.inputContainer}>
+					<div className={style.inputHeader}>
+						<label htmlFor="xmax-input">
+							<p>Borne supérieure</p>
+						</label>
+					</div>
+					<Input
+						id="xmax-input"
+						type="number"
+						value={xMax}
+						min={LIMITS.xMax.min}
+						max={LIMITS.xMax.max}
+						step={LIMITS.xMax.step}
+						onChange={e => setSafeXMax(Number(e.target.value))}
+						aria-label="Position maximum de la fenêtre"
+						placeholder="Max"
+					/>
+				</div>
 				{/* Nombre d'onde */}
 				<div className={style.inputContainer}>
 					<div className={style.inputHeader}>
 						<label htmlFor="wave-number-input">
-							<p>Nombre d'onde (k) *π</p>
+							<p>Nombre d’onde k (en multiples de π)</p>
 						</label>
 					</div>
 					<div className={style.inputRow}>
@@ -138,6 +166,7 @@ export default function Parametre() {
 						<p className={style.subText}>Nombre de fréquences superposées</p>
 					</div>
 					<Button
+						style={{ cursor: 'pointer' }}
 						variant="ghost"
 						size="sm"
 						onClick={toggleHarmonicsDrawer}
@@ -163,24 +192,30 @@ export default function Parametre() {
 
 			{/* Section: Contrôles temporels */}
 			<div className={style.buttonContainer}>
-				<p>
-					⏱️ <strong>Temps:</strong> {time.toFixed(1)} s
-				</p>
+				<div className={style.timeContainer}>
+					<div className={style.timeLabel}>
+						<TimerIcon size={20} />
+						<span className={style.labelText}>Temps écoulé</span>
+					</div>
+					<span className={style.timeValue}>{formatTimeQuantum(time)}</span>
+				</div>
 				<Button
 					onClick={toggleAnimationTime}
 					variant={isAnimatingTime ? 'default' : 'outline'}
 					title={isAnimatingTime ? "Pausser l'animation" : "Lancer l'animation"}
 					aria-label={isAnimatingTime ? 'Pausser' : 'Lancer'}
+					style={{ cursor: 'pointer' }}
 				>
-					{isAnimatingTime ? '⏸️' : '▶️'}
+					{isAnimatingTime ? <CirclePauseIcon /> : <CirclePlayIcon />}
 				</Button>
 				<Button
 					onClick={resetTime}
 					variant="outline"
 					title="Réinitialiser le temps à 0"
 					aria-label="Réinitialiser"
+					style={{ cursor: 'pointer' }}
 				>
-					↻ Reset
+					<TimerResetIcon />
 				</Button>
 			</div>
 
@@ -194,6 +229,7 @@ export default function Parametre() {
 							variant={viewMode === '2d' ? 'default' : 'outline'}
 							onClick={() => setViewMode('2d')}
 							aria-pressed={viewMode === '2d'}
+							style={{ cursor: 'pointer' }}
 						>
 							📊 2D
 						</Button>
@@ -202,6 +238,7 @@ export default function Parametre() {
 							variant={viewMode === '3d' ? 'default' : 'outline'}
 							onClick={() => setViewMode('3d')}
 							aria-pressed={viewMode === '3d'}
+							style={{ cursor: 'pointer' }}
 						>
 							🎯 3D
 						</Button>
@@ -210,6 +247,7 @@ export default function Parametre() {
 							variant={showImaginary ? 'default' : 'outline'}
 							onClick={toggleShowImaginary}
 							aria-pressed={showImaginary}
+							style={{ cursor: 'pointer' }}
 						>
 							𝑖 Imaginaire
 						</Button>

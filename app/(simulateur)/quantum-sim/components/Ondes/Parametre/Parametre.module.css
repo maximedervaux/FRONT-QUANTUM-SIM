@@ -116,8 +116,6 @@
 	transition: all 0.2s ease;
 }
 
-
-
 /* ============================================
    SÉLECTEURS
    ============================================ */
@@ -196,28 +194,40 @@
 }
 
 /* ============================================
-   EN-TÊTE HARMONIQUES
+   CONTRÔLES TEMPORELS - Affichage du temps
    ============================================ */
-.harmonicHeader {
+.timeContainer {
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
-	gap: 12px;
-	width: 100%;
-	flex-wrap: wrap;
-}
-
-.harmonicHeader .inputHeader {
+	justify-content: space-between;
 	flex: 1;
-	min-width: 150px;
+	min-width: 0;
+	padding: 0 12px;
+	border-right: 1px solid #cbd5e1;
+	gap: 12px;
 }
 
-.harmonicHeader button {
-	transition: all 0.2s ease;
+.timeLabel {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	min-width: 0;
+	flex: 1;
 }
 
-.harmonicHeader button:hover {
-	transform: translateY(-2px);
+.labelText {
+	font-size: 0.85rem;
+	color: #64748b;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.timeValue {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #0f172a;
+	white-space: nowrap;
+	flex-shrink: 0;
 }
 
 /* ============================================
@@ -239,15 +249,6 @@
 .buttonContainer:hover {
 	background: #f1f5f9;
 	border-color: #cbd5e1;
-}
-
-.buttonContainer p {
-	flex: 1;
-	font-size: 0.9rem;
-	font-weight: 600;
-	color: #475569;
-	margin: 0;
-	min-width: 100px;
 }
 
 .buttonContainer button {
@@ -277,6 +278,31 @@
 }
 
 /* ============================================
+   EN-TÊTE HARMONIQUES
+   ============================================ */
+.harmonicHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	flex-wrap: wrap;
+}
+
+.harmonicHeader .inputHeader {
+	flex: 1;
+	min-width: 150px;
+}
+
+.harmonicHeader button {
+	transition: all 0.2s ease;
+}
+
+.harmonicHeader button:hover {
+	transform: translateY(-2px);
+}
+
+/* ============================================
    TEXTES SUPPLÉMENTAIRES
    ============================================ */
 .subText {
@@ -288,7 +314,6 @@
 	border-left: 2px solid #e0e7ff;
 	line-height: 1.4;
 }
-
 
 /* ============================================
    UTILITAIRES
@@ -338,14 +363,12 @@
 		align-items: stretch;
 	}
 
-	.buttonContainer p {
+	.timeContainer {
 		width: 100%;
-		flex: none;
+		border-right: none;
+		border-bottom: 1px solid #cbd5e1;
+		padding: 12px 0;
 		margin-bottom: 8px;
-	}
-
-	.buttonContainer button {
-		width: 100%;
 	}
 
 	.harmonicHeader {
@@ -363,7 +386,6 @@
 	}
 }
 
-
 /* ============================================
    LARGE ÉCRANS (1200px+)
    ============================================ */
@@ -378,4 +400,3 @@
 		gap: 18px;
 	}
 }
-
