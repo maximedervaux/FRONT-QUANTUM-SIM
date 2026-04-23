@@ -1,48 +1,58 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { forwardRef } from "react";
-import styles from './Bento.module.css'
-import Image from "next/image";
+  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+  import { forwardRef } from "react";
+  import styles from './Bento.module.css'
+  import Image from "next/image";
 
-const Bento = forwardRef<HTMLDivElement>((props, ref) => {
-  return (
-    <div className={styles.bento} ref={ref}>      
-      <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-full ">
-        
-        <Card className={`md:col-span-2 md:row-span-2 bg-slate-950 text-white flex flex-col justify-end overflow-hidden border-none ring-1 ring-slate-800 ${styles.waveCard}`}>
-          <CardHeader>
-            <CardTitle className="text-2xl">Ondes</CardTitle>
-            <CardDescription className="text-slate-400">Visualiser des ondes en 3D</CardDescription>
-          </CardHeader>
-        </Card>
+  const Bento = forwardRef<HTMLDivElement>((props, ref) => {
+    return (
+      <section className={`${styles.bento} bento`} ref={ref}>
+        <div className={styles.heading}>
+          <p className={styles.kicker}>Experience</p>
+          <h2>Un laboratoire quantique interactif, pense pour apprendre en manipulant.</h2>
+        </div>
 
-        <Card className="md:col-span-2 bg-white border-none">
-          <CardHeader>
-            <CardTitle>Visualisation Scientifique</CardTitle>
-            <CardDescription>Observer des phénomènes quantiques en action</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Image src="/assets/onde.png" alt="Visualisation d'ondes" width={1000} height={1000} />
-          </CardContent>
-        </Card>
+        <div className={`grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-full ${styles.grid}`}>
+          
+          <Card className={`md:col-span-2 md:row-span-2 text-white flex flex-col justify-end overflow-hidden border-none ${styles.waveCard}`}>
+            <CardHeader>
+              <CardTitle className="text-2xl">Ondes</CardTitle>
+              <CardDescription className="text-slate-400">Simulation interactive</CardDescription>
+            </CardHeader>
+          </Card>
 
-        <Card className="bg-orange-500 text-white border-none">
-          <CardHeader>
-            <CardTitle className="text-lg">Comprendre</CardTitle>
-          </CardHeader>
-        </Card>
+          <Card className={`md:col-span-2 border-none ${styles.softCard}`}>
+            <CardHeader>
+              <CardTitle>Visualisation Scientifique</CardTitle>
+              <CardDescription>Observer des phénomènes quantiques en action</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Image className={styles.previewImage} src="/assets/onde.png" alt="Visualisation d'ondes" width={1000} height={1000} />
+            </CardContent>
+          </Card>
 
-        <Card className="bg-slate-100 border-none">
-          <CardHeader>
-            <CardTitle className="text-lg">Apprendre</CardTitle>
-          </CardHeader>
-         
-        </Card>
+          <Card className={`text-white border-none ${styles.highlightCard}`}>
+            <CardHeader>
+              <CardTitle className="text-lg">Package Python</CardTitle>
+            </CardHeader>
+             <CardContent>
+              <p>Un package Python clé en main Toutes les fonctions quantiques fondamentales encapsulées dans un package installable. Intégrez-les dans vos scripts, vos calculs, vos projets personnels en une ligne.</p>
+            </CardContent>
+          </Card>
 
-      </div>
-    </div>
-  )
-});
+          <Card className={`border-none ${styles.softCardAlt}`}>
+            <CardHeader>
+              <CardTitle className="text-lg">Open source</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Un projet open source dédié à l'éducation en mécanique quantique, accessible à tous.</p>
+            </CardContent>
+          </Card>
 
-Bento.displayName = "Bento";
+        </div>
+      </section>
+    )
+  });
 
-export default Bento;
+  Bento.displayName = "Bento";
+
+  export default Bento;

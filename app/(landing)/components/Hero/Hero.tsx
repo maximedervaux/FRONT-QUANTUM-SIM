@@ -7,8 +7,8 @@ import StartIcon from "../../assets/start-button.svg";
 
 const Hero = forwardRef<HTMLDivElement>((props, ref) => {
   return (
-    <div className={styles.hero} ref={ref}>
-      <div className={styles.left}>
+    <div className={`hero ${styles.hero}`} ref={ref}>
+      <div className={`left ${styles.left}`}>
         <Image
           src="/assets/logo.png"
           alt="Quantum SIM"
@@ -18,7 +18,7 @@ const Hero = forwardRef<HTMLDivElement>((props, ref) => {
           style={{ height: 'auto' }}
         />
       </div>
-      <div className={styles.right}>
+      <div className={`right ${styles.right}`}>
         <Link href="/quantum-sim" className={styles.startButton}>
           <h2>Lancer</h2>
           <StartIcon className={styles.startIcon}/>

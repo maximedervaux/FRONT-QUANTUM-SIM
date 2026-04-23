@@ -1,4 +1,5 @@
 import Chart from '../Ondes/2DChart/Chart';
+import ThreeChart from '../Ondes/3DChart/ThreeChart';
 import styles from './DashBoard.module.css';
 import Parametre from '../Ondes/Parametre/Parametre';
 import { useNavigationStore } from '../../store/navigation.store';
@@ -25,6 +26,7 @@ export default function DashBoard() {
 		period,
 		time,
 		isAnimatingTime,
+		viewMode,
 		setFunction,
 		setWaveNumber,
 		setPeriod,
@@ -164,7 +166,7 @@ export default function DashBoard() {
 				{activePage === 'ondes' && (
 					<>
 						<Equation />
-						<Chart />
+						{viewMode === '2d' ? <Chart /> : <ThreeChart />}
 						<HarmonicsDrawer />
 					</>
 				)}
