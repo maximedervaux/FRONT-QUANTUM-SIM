@@ -32,7 +32,6 @@ export default function ParametreWavePacket() {
 		sigma_k,
 		x_center,
 		nWaves,
-		isAnimatingTime,
 		visualizationMode,
 		xMin,
 		xMax,
@@ -41,7 +40,6 @@ export default function ParametreWavePacket() {
 		setSigmaK,
 		setXCenter,
 		setNWaves,
-		setTime,
 		setVisualizationMode,
 		setXMin,
 		setXMax,
@@ -63,12 +61,6 @@ export default function ParametreWavePacket() {
 		const clamped = clamp(raw, LIMITS.xMax.min, LIMITS.xMax.max);
 		setXMax(Math.max(clamped, xMin + 1));
 	};
-
-	useEffect(() => {
-		if (!isAnimatingTime) return;
-		const interval = setInterval(() => setTime(10), 50);
-		return () => clearInterval(interval);
-	}, [isAnimatingTime, setTime]);
 
 	const packetTypeButtons: Array<{ label: string; value: WavePacketType }> = [
 		{ label: 'Gaussien', value: 'gaussian' },
@@ -102,6 +94,7 @@ export default function ParametreWavePacket() {
 								onClick={() => setPacketType(option.value)}
 								aria-pressed={packetType === option.value}
 								title={PACKET_TYPE_INFO[option.value as keyof typeof PACKET_TYPE_INFO]}
+								style={{ cursor: 'pointer' }}
 							>
 								{option.label}
 							</Button>
@@ -121,6 +114,7 @@ export default function ParametreWavePacket() {
 							variant="outline"
 							onClick={loadGaussianPreset}
 							title="Charger configuration standard"
+							style={{ cursor: 'pointer' }}
 						>
 							⚡ Standard
 						</Button>
@@ -129,6 +123,7 @@ export default function ParametreWavePacket() {
 							variant="outline"
 							onClick={loadNarrowPreset}
 							title="Paquet étroit - Faible dispersion"
+							style={{ cursor: 'pointer' }}
 						>
 							🎯 Étroit
 						</Button>
@@ -137,6 +132,7 @@ export default function ParametreWavePacket() {
 							variant="outline"
 							onClick={loadWidePreset}
 							title="Paquet large - Forte dispersion"
+							style={{ cursor: 'pointer' }}
 						>
 							📐 Large
 						</Button>
@@ -245,6 +241,7 @@ export default function ParametreWavePacket() {
 								variant={visualizationMode === option.value ? 'default' : 'outline'}
 								onClick={() => setVisualizationMode(option.value)}
 								aria-pressed={visualizationMode === option.value}
+								style={{ fontSize: '0.8rem', cursor: 'pointer' }}
 							>
 								{option.label}
 							</Button>
@@ -259,7 +256,7 @@ export default function ParametreWavePacket() {
 				<div className={style.rangeInputs}>
 					<div className={style.inputContainer}>
 						<label htmlFor="xmin-input">
-							<p>x min</p>
+							<p>Borne inférieure</p>
 						</label>
 						<Input
 							id="xmin-input"
@@ -276,7 +273,7 @@ export default function ParametreWavePacket() {
 					<div className={style.rangeSeparator}>→</div>
 					<div className={style.inputContainer}>
 						<label htmlFor="xmax-input">
-							<p>x max</p>
+							<p>Borne supérieure</p>
 						</label>
 						<Input
 							id="xmax-input"

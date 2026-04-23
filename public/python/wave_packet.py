@@ -9,7 +9,6 @@ def generate_wave_packet(
     sigma_k: float = 1.0,
     x_center: float = 0.0,
     n_waves: int = 50,
-    time: float = 0.0,
     x_min: float = -5.0,
     x_max: float = 5.0,
     visualization_mode: str = "wavefunction",
@@ -29,7 +28,6 @@ def generate_wave_packet(
             sigma_k=sigma,
             position_center=x_center,
             n_waves=n_waves,
-            time=time,
         )
 
     elif packet_type == "custom" and custom_waves:
@@ -41,9 +39,7 @@ def generate_wave_packet(
                 wave = PlaneWave(
                     amplitude=w["amplitude"],
                     wave_number=w["waveNumber"] * cst.PI,
-                    omega=0,
                     phase=w.get("phase", 0.0),
-                    time=time,
                 )
                 waves.append(wave)
             except KeyError:
@@ -54,7 +50,6 @@ def generate_wave_packet(
             sigma_k=sigma,
             position_center=x_center,
             n_waves=n_waves,
-            time=time,
         )
 
     elif packet_type == "random":
@@ -67,7 +62,6 @@ def generate_wave_packet(
             sigma_k=sigma,
             position_center=x_center,
             n_waves=n_waves,
-            time=time,
         )
 
     packet.normalize(x_min, x_max, n_points)
