@@ -15,7 +15,7 @@ const Hero = forwardRef<HTMLDivElement>((props, ref) => {
           width={600}
           height={500}
           loading="eager"
-          style={{ height: 'auto' }}
+          style={{ width: 'auto', height: 'auto' }}
         />
       </div>
       <div className={`right ${styles.right}`}>

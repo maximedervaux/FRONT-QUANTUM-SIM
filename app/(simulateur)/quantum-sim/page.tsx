@@ -23,7 +23,7 @@ export default function Simulateur() {
 									width={120}
 									height={40}
 									loading="eager"
-									style={{ height: 'auto' }}
+									style={{ width: 'auto', height: 'auto' }}
 								/>
 							</Link>
 							<NavigationTabs />

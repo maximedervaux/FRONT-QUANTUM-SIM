@@ -136,8 +136,6 @@
 }
 
 .academicLogo {
-	height: auto;
-	width: 196px;
 	max-width: 42%;
 	flex-shrink: 0;
 }
@@ -163,6 +161,5 @@
 
 	.academicLogo {
 		max-width: 210px;
-		width: 100%;
 	}
 }

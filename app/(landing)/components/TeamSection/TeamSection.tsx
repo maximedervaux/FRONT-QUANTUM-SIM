@@ -89,6 +89,7 @@ export default function TeamSection() {
 						alt="JUNIA ISEN"
 						width={196}
 						height={64}
+						style={{ width: 'auto', height: 'auto' }}
 						className={styles.academicLogo}
 					/>
 					<p>Projet developpe dans le cadre du module R&D - JUNIA ISEN . Annee 2025-2026.</p>
