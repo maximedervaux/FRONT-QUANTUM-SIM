@@ -8,13 +8,15 @@ import { usePythonWorker } from '../../../core/contexts/PythonWorkerContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Cpu, FlaskConical, Gauge, Play, RotateCcw } from 'lucide-react';
+import { BookOpenText, Cpu, FlaskConical, Gauge, Play } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useWaveStore } from '../../store/onde.store';
 import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
 import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketParametre';
 import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
 import PythonEngineLoader from '../Loader/PythonEngineLoader'
+import WaveTour, { WAVE_TOUR_REQUEST_KEY, WAVE_TOUR_SEEN_COOKIE } from '../Ondes/Tour/WaveTour';
+import WavePacketTour, { WAVE_PACKET_TOUR_REQUEST_KEY } from '../WavePacket/Tour/WavePacketTour';
 
 
 export default function DashBoard() {
@@ -45,12 +47,17 @@ export default function DashBoard() {
 	}>(null);
 
 	useEffect(() => {
-		const visitKey = 'quantum-sim-visited';
 		const snapshotKey = 'quantum-sim-last-snapshot';
+		const hasSeenWaveTour = document.cookie
+			.split('; ')
+			.some(cookie => cookie.startsWith(`${WAVE_TOUR_SEEN_COOKIE}=`));
 
-		const hasVisited = localStorage.getItem(visitKey) === 'true';
-		setIsFirstVisit(!hasVisited);
-		localStorage.setItem(visitKey, 'true');
+		setIsFirstVisit(!hasSeenWaveTour);
+
+		if (!hasSeenWaveTour) {
+			window.localStorage.setItem(WAVE_TOUR_REQUEST_KEY, '1');
+			setActivePage('ondes');
+		}
 
 		const rawSnapshot = localStorage.getItem(snapshotKey);
 		if (!rawSnapshot) return;
@@ -66,7 +73,7 @@ export default function DashBoard() {
 		} catch {
 			setLastSnapshot(null);
 		}
-	}, []);
+	}, [setActivePage]);
 
 	useEffect(() => {
 		const snapshot = {
@@ -110,6 +117,16 @@ export default function DashBoard() {
 		resetTime();
 	};
 
+	const launchWaveTutorial = () => {
+		window.localStorage.setItem(WAVE_TOUR_REQUEST_KEY, '1');
+		setActivePage('ondes');
+	};
+
+	const launchWavePacketTutorial = () => {
+		window.localStorage.setItem(WAVE_PACKET_TOUR_REQUEST_KEY, '1');
+		setActivePage('packets');
+	};
+
 	if (!isReady) {
 		return <PythonEngineLoader />
 	}
@@ -143,6 +160,29 @@ export default function DashBoard() {
 							</CardContent>
 						</Card>
 
+						<Card className={styles.tutorialCard}>
+							<CardHeader>
+								<CardTitle className={styles.cardTitle}>
+									<BookOpenText />
+									Faire le tour complet des guides
+								</CardTitle>
+								<CardDescription>
+									Lance un parcours guidé pour la section ondes ou la section paquets
+									d’ondes selon ce que tu veux explorer.
+								</CardDescription>
+							</CardHeader>
+							<CardContent className={styles.heroActions}>
+								<Button onClick={launchWaveTutorial}>
+									<BookOpenText data-icon="inline-start" />
+									Lancer le tutoriel ondes
+								</Button>
+								<Button onClick={launchWavePacketTutorial} variant="outline">
+									<BookOpenText data-icon="inline-start" />
+									Lancer le tutoriel paquets d’ondes
+								</Button>
+							</CardContent>
+						</Card>
+
 						<Card className={styles.statusCard}>
 							<CardHeader>
 								<CardTitle className={styles.cardTitle}>
@@ -164,6 +204,7 @@ export default function DashBoard() {
 
 				{activePage === 'ondes' && (
 					<>
+						<WaveTour />
 						<Equation />
 						{viewMode === '2d' ? <Chart /> : <ThreeChart />}
 						<HarmonicsDrawer />
@@ -171,6 +212,7 @@ export default function DashBoard() {
 				)}
 				{activePage === 'packets' && (
 					<>
+						<WavePacketTour />
 						<ChartWavePacket />
 					</>
 				)}

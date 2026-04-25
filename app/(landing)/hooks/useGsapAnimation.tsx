@@ -6,12 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-//TODO: Controler pourquoi le gsap n'arrive pas à détecter les éléments basés sur leur classe
-// -> Génére des warnings en console
-// Solutions possibles :
-// 1. Faire en sorte qu'il applique les animations aux éléments depuis les classes
-// 2. Supprimer les appels qui générent des warnings
-// 3. (Pas ouf) Set l'attribut nullTargetWarn à false dans gsap.config()
 export function useGsapAnimations(
 	heroRef: React.RefObject<HTMLDivElement | null>,
 	bentoRef: React.RefObject<HTMLDivElement | null>,
@@ -27,7 +21,9 @@ export function useGsapAnimations(
 		const notebookText = notebookRef.current.querySelector('.text');
 
 		const tl = gsap.timeline({
-			onComplete: () => setIsLoading(false),
+			onComplete: () => {
+				setIsLoading(false);
+			},
 		});
 
 		// Hero
@@ -53,7 +49,7 @@ export function useGsapAnimations(
 			);
 		}
 
-		// Bento
+		// BENTO
 		gsap.fromTo(
 			bentoRef.current,
 			{ opacity: 0, y: 100 },
@@ -71,7 +67,7 @@ export function useGsapAnimations(
 			}
 		);
 
-		// Notebook
+		// NOTEBOOK
 		gsap.fromTo(
 			notebookRef.current,
 			{ opacity: 0, y: 100 },

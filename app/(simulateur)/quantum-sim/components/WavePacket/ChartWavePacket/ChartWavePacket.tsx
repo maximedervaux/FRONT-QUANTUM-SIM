@@ -109,7 +109,7 @@ function ChartWavePacket() {
 
 	if (!packetData) {
 		return (
-			<div className={styles.chart}>
+			<div className={styles.chart} data-tour="packet-chart">
 				<div
 					style={{
 						display: 'flex',
@@ -191,7 +191,7 @@ function ChartWavePacket() {
 	};
 
 	return (
-		<div className={styles.chart}>
+		<div className={styles.chart} data-tour="packet-chart">
 			<Plot
 				data={plotData}
 				layout={plotLayout}

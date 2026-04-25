@@ -16,7 +16,7 @@ const LIMITS = {
 
 const WAVE_DESCRIPTIONS = {
 	gaussian: 'Onde gaussienne - Distribution normale, lisse et symétrique',
-	sinus: 'Onde sinusoidale - Oscillation régulière et périodique',
+	sinus: 'Onde sinusoïdale - Oscillation régulière et périodique',
 };
 
 export default function Parametre() {
@@ -59,7 +59,7 @@ export default function Parametre() {
 			<h1>⚛️ Paramètres de l'onde</h1>
 
 			{/* Section: Fonction d'onde */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-function-select">
 				<p className={style.sectionTitle}>Fonction d'onde</p>
 				<div className={style.selectContainer}>
 					<select 
@@ -72,7 +72,7 @@ export default function Parametre() {
 							Choisir une fonction d'onde...
 						</option>
 						<option value="gaussian">Gaussienne</option>
-						<option value="sinus">Sinusoidale</option>
+						<option value="sinus">Sinusoïdale</option>
 					</select>
 				</div>
 			</div>
@@ -82,7 +82,7 @@ export default function Parametre() {
 				<p className={style.sectionTitle}>Paramètres fondamentaux</p>
 
 				{/* Période */}
-				<div className={style.inputContainer}>
+				<div className={style.inputContainer} data-tour="wave-period">
 					<div className={style.inputHeader}>
 						<label htmlFor="period-slider">
 							<p>Période (T)</p>
@@ -104,7 +104,7 @@ export default function Parametre() {
 				</div>
 
 				{/* Nombre d'onde */}
-				<div className={style.inputContainer}>
+				<div className={style.inputContainer} data-tour="wave-number">
 					<div className={style.inputHeader}>
 						<label htmlFor="wave-number-input">
 							<p>Nombre d'onde (k)</p>
@@ -136,7 +136,7 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Harmoniques */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-harmonics">
 				<div className={style.harmonicHeader}>
 					<div>
 						<p className={style.sectionTitle}>Harmoniques</p>
@@ -170,15 +170,15 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Contrôles temporels */}
-			<div className={style.buttonContainer}>
+			<div className={style.buttonContainer} data-tour="wave-time-controls">
 				<p>
 					⏱️ <strong>Temps:</strong> {time.toFixed(1)} s
 				</p>
 				<Button 
 					onClick={toggleAnimationTime}
 					variant={isAnimatingTime ? 'default' : 'outline'}
-					title={isAnimatingTime ? 'Pausser l\'animation' : 'Lancer l\'animation'}
-					aria-label={isAnimatingTime ? 'Pausser' : 'Lancer'}
+					title={isAnimatingTime ? 'Mettre en pause l\'animation' : 'Lancer l\'animation'}
+					aria-label={isAnimatingTime ? 'Mettre en pause' : 'Lancer'}
 				>
 					{isAnimatingTime ? '⏸️' : '▶️'}
 				</Button>
@@ -188,12 +188,12 @@ export default function Parametre() {
 					title="Réinitialiser le temps à 0"
 					aria-label="Réinitialiser"
 				>
-					↻ Reset
+					↻ Réinitialiser
 				</Button>
 			</div>
 
 			{/* Section: Visualisation */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-visual-options">
 				<p className={style.sectionTitle}>Options de visualisation</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>

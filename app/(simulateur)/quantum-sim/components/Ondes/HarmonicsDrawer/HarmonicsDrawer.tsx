@@ -29,7 +29,7 @@ export default function HarmonicsDrawer() {
 			open={isHarmonicsDrawerOpen}
 			onOpenChange={setHarmonicsDrawerOpen}
 		>
-			<DrawerContent className={styles.drawerContent}>
+			<DrawerContent className={styles.drawerContent} data-tour="harmonics-drawer">
 				<DrawerHeader className={styles.header}>
 					<div className={styles.headerTop}>
 						<DrawerTitle className={styles.title}>
