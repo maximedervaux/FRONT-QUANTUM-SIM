@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import type { Layout, Data } from 'plotly.js';
+import type { Layout, Data, Shape, Frame } from 'plotly.js';
 import { useEffect, useState, useRef, useCallback, memo } from 'react';
 import { usePythonFunction } from '../../../hooks/usePythonFunction';
 import styles from './ChartSchrodinger.module.css';
@@ -97,7 +97,7 @@ function ChartSchrodinger() {
 			]
 		: [];
 
-	const frames = schrodingerData
+	const frames: Frame[] = schrodingerData
 		? schrodingerData.prob.map((frame, i) => ({
 				name: i.toString(),
 				data: [{ x: schrodingerData.x, y: frame, type: 'scatter', mode: 'lines' }],
@@ -115,7 +115,7 @@ function ChartSchrodinger() {
 			}, 0) * 1.1
 		: undefined;
 
-	const shapes =
+	const shapes: Partial<Shape>[] =
 		potentialType === 'infiniteWell'
 			? [
 					// Mur gauche
