@@ -94,8 +94,8 @@ export function usePlaneWavesData() {
 			phase,
 			time,
 			harmonic_amplitudes,
-			x_min: xMax,
-			x_max: xMin,
+			x_min: xMin,
+			x_max: xMax,
 		};
 		void runExecution(params);
 	}, [

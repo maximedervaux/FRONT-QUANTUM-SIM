@@ -19,23 +19,31 @@ function ChartSchrodinger() {
 	const isExecutingRef = useRef(false);
 	const pendingParamsRef = useRef<Record<string, unknown> | null>(null);
 	const [schrodingerData, setSchrodingerData] = useState<SchrodingerData | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
 
-	const { potentialType } = useSchrodingerStore();
+	const {
+		potentialType,
+		wellWidth,
+		stepHeight,
+		barrierWidth,
+		barrierHeight,
+		timeSteps,
+		spatialPoints,
+		absorbingBoundaries,
+	} = useSchrodingerStore();
 	const { k_center, sigma_k, x_center, nWaves, xMin, xMax } = useWavePacketStore();
 
-	const { execute: executePacket, isReady: isPacketReady } = usePythonFunction(
+	const { execute: executePotential, isReady: isPacketReady } = usePythonFunction(
 		'schrodinger_solver',
 		'schrodinger_solving_function'
 	);
 
-	const executePacketRef = useRef(executePacket);
+	const executePotentialRef = useRef(executePotential);
 	const isReadyRef = useRef(isPacketReady);
 
 	useEffect(() => {
-		executePacketRef.current = executePacket;
+		executePotentialRef.current = executePotential;
 		isReadyRef.current = isPacketReady;
-	}, [executePacket, isPacketReady]);
+	}, [executePotential, isPacketReady]);
 
 	const runExecution = useCallback(async (params: Record<string, unknown>) => {
 		if (!isReadyRef.current) return;
@@ -46,16 +54,14 @@ function ChartSchrodinger() {
 		}
 
 		isExecutingRef.current = true;
-		setIsLoading(true);
 
 		try {
-			const [x, prob] = await executePacketRef.current(params);
+			const [x, prob] = await executePotentialRef.current(params);
 			setSchrodingerData({ x, prob });
 		} catch (err) {
 			console.error("[ChartSchrodinger] Erreur lors de l'exécution:", err);
 		} finally {
 			isExecutingRef.current = false;
-			setIsLoading(false);
 
 			if (pendingParamsRef.current) {
 				const pending = pendingParamsRef.current;
@@ -74,10 +80,33 @@ function ChartSchrodinger() {
 			x_min: Number(xMin),
 			x_max: Number(xMax),
 			potential_type: potentialType,
+			well_width: wellWidth,
+			step_height: stepHeight,
+			barrier_width: barrierWidth,
+			barrier_height: barrierHeight,
+			time_steps: timeSteps,
+			spatial_points: spatialPoints,
+			absorbing_boundaries: absorbingBoundaries,
 		};
 
 		runExecution(params);
-	}, [k_center, sigma_k, x_center, nWaves, xMin, xMax, potentialType, runExecution]);
+	}, [
+		k_center,
+		sigma_k,
+		x_center,
+		nWaves,
+		xMin,
+		xMax,
+		potentialType,
+		wellWidth,
+		stepHeight,
+		barrierWidth,
+		barrierHeight,
+		timeSteps,
+		spatialPoints,
+		absorbingBoundaries,
+		runExecution,
+	]);
 
 	const plotData: Data[] = schrodingerData
 		? [
@@ -86,7 +115,7 @@ function ChartSchrodinger() {
 					y: schrodingerData.prob[0],
 					type: 'scatter',
 					mode: 'lines',
-					name: 'ψ²(x)',
+					name: '|ψ|²(x,t)',
 					line: {
 						width: 2,
 						shape: 'spline',
@@ -115,41 +144,78 @@ function ChartSchrodinger() {
 			}, 0) * 1.1
 		: undefined;
 
-	const shapes: Partial<Shape>[] =
-		potentialType === 'infiniteWell'
-			? [
-					// Mur gauche
-					{
-						type: 'rect',
-						x0: -3.6 * 2 + xMin,
-						x1: -3.6,
-						y0: 0,
-						y1: yMax,
-						fillcolor: 'rgba(0,0,0,0.1)',
-						line: { width: 0 },
-						layer: 'below',
-					},
-					// Mur droit
-					{
-						type: 'rect',
-						x0: 3.6,
-						x1: 3.6 * 2 + xMax,
-						y0: 0,
-						y1: yMax,
-						fillcolor: 'rgba(0,0,0,0.1)',
-						line: { width: 0 },
-						layer: 'below',
-					},
-				]
-			: [];
+	const shapes: Partial<Shape>[] = [];
 
-	const plotLayout: Partial<Layout> = {
+	// Ajouter les formes de potentiel selon le type
+	if (potentialType === 'infiniteWell' && yMax) {
+		const wellLeft = -wellWidth / 2;
+		const wellRight = wellWidth / 2;
+
+		shapes.push(
+			// Mur gauche
+			{
+				type: 'rect',
+				x0: xMin - 20,
+				x1: wellLeft,
+				y0: 0,
+				y1: yMax,
+				fillcolor: 'rgba(100, 100, 100, 0.2)',
+				line: { width: 2, color: 'rgba(100, 100, 100, 0.5)' },
+				layer: 'below',
+			},
+			// Mur droit
+			{
+				type: 'rect',
+				x0: wellRight,
+				x1: xMax + 20,
+				y0: 0,
+				y1: yMax,
+				fillcolor: 'rgba(100, 100, 100, 0.2)',
+				line: { width: 2, color: 'rgba(100, 100, 100, 0.5)' },
+				layer: 'below',
+			}
+		);
+	} else if (potentialType === 'step' && yMax) {
+		shapes.push({
+			type: 'rect',
+			x0: 0,
+			x1: xMax + 20,
+			y0: 0,
+			y1: yMax,
+			fillcolor: 'rgba(220, 100, 100, 0.15)',
+			line: { width: 2, color: 'rgba(220, 100, 100, 0.5)' },
+			layer: 'below',
+		});
+	} else if (potentialType === 'barrier' && yMax) {
+		const barrierLeft = -barrierWidth / 2;
+		const barrierRight = barrierWidth / 2;
+
+		shapes.push({
+			type: 'rect',
+			x0: barrierLeft,
+			x1: barrierRight,
+			y0: 0,
+			y1: yMax,
+			fillcolor: 'rgba(100, 150, 220, 0.15)',
+			line: { width: 2, color: 'rgba(100, 150, 220, 0.5)' },
+			layer: 'below',
+		});
+	}
+
+	const potentialLabel = {
+		free: 'Particule libre',
+		infiniteWell: `Puits infini (L=${wellWidth.toFixed(1)})`,
+		step: `Marche V=${stepHeight.toFixed(0)} eV`,
+		barrier: `Barrière tunnel (h=${barrierHeight.toFixed(0)}, w=${barrierWidth.toFixed(1)})`,
+	};
+
+	const plotLayout: any = {
 		title: {
-			text: `Puits Infini - Évolution Temporelle (k₀=${k_center}, σₖ=${sigma_k})`,
+			text: `${potentialLabel[potentialType as keyof typeof potentialLabel]} - Évolution Temporelle (k₀=${k_center}, σₖ=${sigma_k})`,
 			font: { size: 14 },
 		},
 		xaxis: {
-			title: { text: 'Position x' },
+			title: { text: 'Position x (m)' },
 			showgrid: true,
 			gridwidth: 1,
 			gridcolor: '#e5e7eb',
@@ -161,7 +227,7 @@ function ChartSchrodinger() {
 			gridcolor: '#e5e7eb',
 			range: [0, yMax],
 		},
-		margin: { t: 60, l: 70, r: 60, b: 60 },
+		margin: { t: 80, l: 70, r: 60, b: 60 },
 		legend: { x: 1.02, y: 1, xanchor: 'left', yanchor: 'top' },
 		hovermode: 'closest',
 		plot_bgcolor: '#f9fafb',
@@ -197,7 +263,7 @@ function ChartSchrodinger() {
 									label: '⏸ Pause',
 									method: 'animate',
 									args: [
-										null,
+										[],
 										{
 											mode: 'immediate',
 											frame: { duration: 0, redraw: false },

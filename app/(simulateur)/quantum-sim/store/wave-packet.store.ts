@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 export type WavePacketType = 'gaussian' | 'custom' | 'random';
-export type VisualizationMode = 'wavefunction' | 'probability';
+export type VisualizationMode = 'wavefunction' | 'probability' | 'densityPhase';
 
 interface IndividualWave {
 	id: string;

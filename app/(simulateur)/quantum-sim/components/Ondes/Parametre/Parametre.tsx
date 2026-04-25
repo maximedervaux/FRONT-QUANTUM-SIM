@@ -7,11 +7,14 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { formatTimeQuantum } from '../../../services/formatQuantumTime.service';
 import {
 	SlidersHorizontal,
-	Info,
 	TimerResetIcon,
 	CirclePlayIcon,
 	CirclePauseIcon,
 	TimerIcon,
+	SquareIcon,
+	BoxIcon,
+	Axis3DIcon,
+	WavesIcon,
 } from 'lucide-react';
 
 const LIMITS = {
@@ -71,7 +74,9 @@ export default function Parametre() {
 
 	return (
 		<div className={style.parametre}>
-			<h1>⚛️ Paramètres de l'onde</h1>
+			<h1>
+				<WavesIcon size={30} /> Paramètres de l'onde
+			</h1>
 
 			{/* Section: Fonction d'onde */}
 			<div className={style.section} data-tour="wave-function-select">
@@ -231,7 +236,7 @@ export default function Parametre() {
 							aria-pressed={viewMode === '2d'}
 							style={{ cursor: 'pointer' }}
 						>
-							📊 2D
+							<SquareIcon /> 2D
 						</Button>
 						<Button
 							size="sm"
@@ -240,7 +245,7 @@ export default function Parametre() {
 							aria-pressed={viewMode === '3d'}
 							style={{ cursor: 'pointer' }}
 						>
-							🎯 3D
+							<BoxIcon /> 3D
 						</Button>
 						<Button
 							size="sm"
@@ -249,7 +254,7 @@ export default function Parametre() {
 							aria-pressed={showImaginary}
 							style={{ cursor: 'pointer' }}
 						>
-							𝑖 Imaginaire
+							<Axis3DIcon /> Imaginaire
 						</Button>
 					</ButtonGroup>
 				</div>

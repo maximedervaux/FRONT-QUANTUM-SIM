@@ -74,17 +74,14 @@ def generate_wave_packet(
         result["y_imag"] = np.imag(psi_complex).tolist()
 
     elif visualization_mode == "probability":
-        result["y"] = (np.abs(psi_complex) ** 2).tolist()
+        result["y"] = packet.probability_density(x).tolist()
+        integral = np.trapezoid(result["y"], x)
+        print(integral)
 
-    elif visualization_mode == "phase":
-        result["y"] = np.angle(psi_complex).tolist()
-
-    elif visualization_mode == "fourier":
-        psi_k = np.fft.fftshift(np.fft.fft(psi_complex))
-        k_vals = np.fft.fftshift(np.fft.fftfreq(len(x), d=(x[1] - x[0])))
-
-        result["k"] = k_vals.tolist()
-        result["y"] = (np.abs(psi_k) ** 2).tolist()
+    elif visualization_mode == "densityPhase":
+        result["y"] = packet.probability_density(x).tolist()
+        result["phase"] = np.angle(psi_complex).tolist()
+        result["amplitude"] = np.abs(psi_complex).tolist()
 
     # -------------------------
     # Enveloppe gaussienne

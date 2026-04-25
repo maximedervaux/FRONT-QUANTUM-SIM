@@ -5,10 +5,19 @@ import {
 	type VisualizationMode,
 	type WavePacketType,
 } from '../../../store/wave-packet.store';
-import { useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
+import {
+	ActivityIcon,
+	AudioWaveformIcon,
+	ChartNoAxesColumnIcon,
+	ExpandIcon,
+	FocusIcon,
+	OrbitIcon,
+	ZapIcon,
+} from 'lucide-react';
+import { ReactElement } from 'react';
 
 const LIMITS = {
 	k_center: { min: -20, max: 20, step: 0.1 },
@@ -68,9 +77,14 @@ export default function ParametreWavePacket() {
 		{ label: 'Personnalisé', value: 'custom' },
 	];
 
-	const visualizationButtons: Array<{ label: string; value: VisualizationMode }> = [
-		{ label: "ψ(x) Fonction d'onde", value: 'wavefunction' },
-		{ label: '|ψ|² Densité de probabilité', value: 'probability' },
+	const visualizationButtons: Array<{
+		label: string;
+		value: VisualizationMode;
+		icon?: ReactElement;
+	}> = [
+		{ label: 'Ondes', value: 'wavefunction', icon: <AudioWaveformIcon /> },
+		{ label: 'Densité', value: 'probability', icon: <ChartNoAxesColumnIcon /> },
+		{ label: 'Phase', value: 'densityPhase', icon: <OrbitIcon /> },
 	];
 
 	const getPacketDescription = () => {
@@ -79,7 +93,9 @@ export default function ParametreWavePacket() {
 
 	return (
 		<div className={style.parametre}>
-			<h1 data-tour="packet-header">📦 Paquet d'ondes quantiques</h1>
+			<h1 data-tour="packet-header">
+				<ActivityIcon size={30} /> Paquet d'ondes
+			</h1>
 
 			{/* Section: Type de paquet */}
 			<div className={style.section} data-tour="packet-type">
@@ -116,7 +132,7 @@ export default function ParametreWavePacket() {
 							title="Charger configuration standard"
 							style={{ cursor: 'pointer' }}
 						>
-							⚡ Standard
+							<ZapIcon /> Standard
 						</Button>
 						<Button
 							size="sm"
@@ -125,7 +141,7 @@ export default function ParametreWavePacket() {
 							title="Paquet étroit - Faible dispersion"
 							style={{ cursor: 'pointer' }}
 						>
-							🎯 Étroit
+							<FocusIcon /> Étroit
 						</Button>
 						<Button
 							size="sm"
@@ -134,7 +150,7 @@ export default function ParametreWavePacket() {
 							title="Paquet large - Forte dispersion"
 							style={{ cursor: 'pointer' }}
 						>
-							📐 Large
+							<ExpandIcon /> Large
 						</Button>
 					</ButtonGroup>
 				</div>
@@ -243,6 +259,7 @@ export default function ParametreWavePacket() {
 								aria-pressed={visualizationMode === option.value}
 								style={{ fontSize: '0.8rem', cursor: 'pointer' }}
 							>
+								{option.icon}
 								{option.label}
 							</Button>
 						))}
@@ -253,44 +270,42 @@ export default function ParametreWavePacket() {
 			{/* Section: Fenêtre spatiale */}
 			<div className={style.section} data-tour="packet-window">
 				<p className={style.sectionTitle}>Fenêtre spatiale</p>
-				<div className={style.rangeInputs}>
-					<div className={style.inputContainer}>
+				<div className={style.inputContainer}>
+					<div className={style.inputHeader}>
 						<label htmlFor="xmin-input">
 							<p>Borne inférieure</p>
 						</label>
-						<Input
-							id="xmin-input"
-							type="number"
-							value={xMin}
-							min={LIMITS.xMin.min}
-							max={LIMITS.xMin.max}
-							step={LIMITS.xMin.step}
-							onChange={e => setSafeXMin(Number(e.target.value))}
-							aria-label="Position minimum de la fenêtre"
-							placeholder="Min"
-						/>
 					</div>
-					<div className={style.rangeSeparator}>→</div>
-					<div className={style.inputContainer}>
+					<Input
+						id="xmin-input"
+						type="number"
+						value={xMin}
+						min={LIMITS.xMin.min}
+						max={LIMITS.xMin.max}
+						step={LIMITS.xMin.step}
+						onChange={e => setSafeXMin(Number(e.target.value))}
+						aria-label="Position minimum de la fenêtre"
+						placeholder="Min"
+					/>
+				</div>
+				<div className={style.inputContainer}>
+					<div className={style.inputHeader}>
 						<label htmlFor="xmax-input">
 							<p>Borne supérieure</p>
 						</label>
-						<Input
-							id="xmax-input"
-							type="number"
-							value={xMax}
-							min={LIMITS.xMax.min}
-							max={LIMITS.xMax.max}
-							step={LIMITS.xMax.step}
-							onChange={e => setSafeXMax(Number(e.target.value))}
-							aria-label="Position maximum de la fenêtre"
-							placeholder="Max"
-						/>
 					</div>
+					<Input
+						id="xmax-input"
+						type="number"
+						value={xMax}
+						min={LIMITS.xMax.min}
+						max={LIMITS.xMax.max}
+						step={LIMITS.xMax.step}
+						onChange={e => setSafeXMax(Number(e.target.value))}
+						aria-label="Position maximum de la fenêtre"
+						placeholder="Max"
+					/>
 				</div>
-				<p className={style.subText}>
-					💡 Astuce : garde une fenêtre centrée autour de x = 0 pour une lecture plus stable.
-				</p>
 			</div>
 		</div>
 	);
