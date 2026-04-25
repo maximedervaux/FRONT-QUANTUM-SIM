@@ -74,7 +74,7 @@ export default function Parametre() {
 			<h1>⚛️ Paramètres de l'onde</h1>
 
 			{/* Section: Fonction d'onde */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-function-select">
 				<p className={style.sectionTitle}>Fonction d'onde</p>
 				<div className={style.selectContainer}>
 					<select
@@ -129,7 +129,7 @@ export default function Parametre() {
 					/>
 				</div>
 				{/* Nombre d'onde */}
-				<div className={style.inputContainer}>
+				<div className={style.inputContainer} data-tour="wave-number">
 					<div className={style.inputHeader}>
 						<label htmlFor="wave-number-input">
 							<p>Nombre d’onde k (en multiples de π)</p>
@@ -159,7 +159,7 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Harmoniques */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-harmonics">
 				<div className={style.harmonicHeader}>
 					<div>
 						<p className={style.sectionTitle}>Harmoniques</p>
@@ -202,8 +202,8 @@ export default function Parametre() {
 				<Button
 					onClick={toggleAnimationTime}
 					variant={isAnimatingTime ? 'default' : 'outline'}
-					title={isAnimatingTime ? "Pausser l'animation" : "Lancer l'animation"}
-					aria-label={isAnimatingTime ? 'Pausser' : 'Lancer'}
+					title={isAnimatingTime ? "Mettre en pause l'animation" : "Lancer l'animation"}
+					aria-label={isAnimatingTime ? 'Mettre en pause' : 'Lancer'}
 					style={{ cursor: 'pointer' }}
 				>
 					{isAnimatingTime ? <CirclePauseIcon /> : <CirclePlayIcon />}
@@ -220,7 +220,7 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Visualisation */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-visual-options">
 				<p className={style.sectionTitle}>Options de visualisation</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>

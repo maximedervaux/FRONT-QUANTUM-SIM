@@ -6,12 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-//TODO: Controler pourquoi le gsap n'arrive pas à détecter les éléments basés sur leur classe
-// -> Génére des warnings en console
-// Solutions possibles :
-// 1. Faire en sorte qu'il applique les animations aux éléments depuis les classes
-// 2. Supprimer les appels qui générent des warnings
-// 3. (Pas ouf) Set l'attribut nullTargetWarn à false dans gsap.config()
 export function useGsapAnimations(
 	heroRef: React.RefObject<HTMLDivElement | null>,
 	bentoRef: React.RefObject<HTMLDivElement | null>,
@@ -21,8 +15,15 @@ export function useGsapAnimations(
 	useEffect(() => {
 		if (!heroRef.current || !bentoRef.current || !notebookRef.current) return;
 
+		const heroLeft = heroRef.current.querySelector('.left');
+		const heroRight = heroRef.current.querySelector('.right');
+		const notebookImage = notebookRef.current.querySelector('img');
+		const notebookText = notebookRef.current.querySelector('.text');
+
 		const tl = gsap.timeline({
-			onComplete: () => setIsLoading(false),
+			onComplete: () => {
+				setIsLoading(false);
+			},
 		});
 
 		// Hero
@@ -31,20 +32,24 @@ export function useGsapAnimations(
 			{ opacity: 0, y: -80 },
 			{ opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }
 		);
-		tl.fromTo(
-			'.hero .left h1',
-			{ opacity: 0, x: '-10%' },
-			{ opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' },
-			'-=0.6'
-		);
-		tl.fromTo(
-			'.hero .right',
-			{ opacity: 0, x: '10%' },
-			{ opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' },
-			'-=0.6'
-		);
+		if (heroLeft) {
+			tl.fromTo(
+				heroLeft,
+				{ opacity: 0, x: '-10%' },
+				{ opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' },
+				'-=0.6'
+			);
+		}
+		if (heroRight) {
+			tl.fromTo(
+				heroRight,
+				{ opacity: 0, x: '10%' },
+				{ opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' },
+				'-=0.6'
+			);
+		}
 
-		// Bento
+		// BENTO
 		gsap.fromTo(
 			bentoRef.current,
 			{ opacity: 0, y: 100 },
@@ -62,7 +67,7 @@ export function useGsapAnimations(
 			}
 		);
 
-		// Notebook
+		// NOTEBOOK
 		gsap.fromTo(
 			notebookRef.current,
 			{ opacity: 0, y: 100 },
@@ -81,35 +86,39 @@ export function useGsapAnimations(
 		);
 
 		// Notebook children
-		gsap.fromTo(
-			'.notebook img',
-			{ opacity: 0, scale: 0.8, x: '-10%' },
-			{
-				opacity: 1,
-				scale: 1,
-				x: 0,
-				duration: 1,
-				ease: 'power2.out',
-				scrollTrigger: {
-					trigger: notebookRef.current,
-					start: 'top 70%',
-				},
-			}
-		);
-		gsap.fromTo(
-			'.notebook .text',
-			{ opacity: 0, x: '10%' },
-			{
-				opacity: 1,
-				x: 0,
-				duration: 1,
-				ease: 'power2.out',
-				scrollTrigger: {
-					trigger: notebookRef.current,
-					start: 'top 70%',
-				},
-			}
-		);
+		if (notebookImage) {
+			gsap.fromTo(
+				notebookImage,
+				{ opacity: 0, scale: 0.8, x: '-10%' },
+				{
+					opacity: 1,
+					scale: 1,
+					x: 0,
+					duration: 1,
+					ease: 'power2.out',
+					scrollTrigger: {
+						trigger: notebookRef.current,
+						start: 'top 70%',
+					},
+				}
+			);
+		}
+		if (notebookText) {
+			gsap.fromTo(
+				notebookText,
+				{ opacity: 0, x: '10%' },
+				{
+					opacity: 1,
+					x: 0,
+					duration: 1,
+					ease: 'power2.out',
+					scrollTrigger: {
+						trigger: notebookRef.current,
+						start: 'top 70%',
+					},
+				}
+			);
+		}
 
 		return () => {
 			ScrollTrigger.getAll().forEach(t => t.kill());
