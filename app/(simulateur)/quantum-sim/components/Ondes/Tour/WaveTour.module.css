@@ -1,0 +1,304 @@
+.tourCard {
+	position: relative;
+	overflow: hidden;
+	border-radius: 18px;
+	border: 1px solid rgba(15, 23, 42, 0.1);
+	background:
+		radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 42%),
+		linear-gradient(135deg, #f8fbff 0%, #eef6ff 55%, #f9fafb 100%);
+	box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.tourCard::after {
+	content: '';
+	position: absolute;
+	inset: auto -40px -70px auto;
+	width: 180px;
+	height: 180px;
+	border-radius: 999px;
+	background: radial-gradient(circle, rgba(14, 165, 233, 0.22) 0%, rgba(14, 165, 233, 0) 70%);
+	pointer-events: none;
+}
+
+.tourContent {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	align-items: flex-end;
+	padding: 22px;
+	z-index: 1;
+}
+
+.tourText {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-width: 580px;
+}
+
+.eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #0369a1;
+}
+
+.eyebrow::before {
+	content: '';
+	width: 10px;
+	height: 10px;
+	border-radius: 999px;
+	background: linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%);
+	box-shadow: 0 0 0 6px rgba(14, 165, 233, 0.12);
+}
+
+.tourTitle {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 800;
+	line-height: 1.1;
+	color: #0f172a;
+}
+
+.tourDescription {
+	margin: 0;
+	font-size: 0.96rem;
+	line-height: 1.6;
+	color: #334155;
+}
+
+.tourChips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.tourChip {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.8);
+	border: 1px solid rgba(14, 165, 233, 0.14);
+	font-size: 0.82rem;
+	font-weight: 600;
+	color: #0f172a;
+	backdrop-filter: blur(8px);
+}
+
+.tourActions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	min-width: 220px;
+}
+
+.tourHint {
+	margin: 0;
+	width: 100%;
+	font-size: 0.8rem;
+	text-align: right;
+	color: #64748b;
+}
+
+.tooltipCard {
+	position: relative;
+	overflow: visible;
+	width: min(420px, calc(100vw - 32px));
+	padding: 0;
+	border-radius: 20px;
+	border: 1px solid rgba(15, 23, 42, 0.08);
+	background:
+		radial-gradient(circle at top right, rgba(34, 197, 94, 0.16), transparent 38%),
+		linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
+	box-shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
+	backdrop-filter: blur(18px);
+}
+
+/* Mascot lives in the guide card and overflows from its corner. */
+.tooltipCard::before {
+	content: '';
+	position: absolute;
+	bottom: -35px;
+	left: -70px;
+	width: 130px;
+	height: 100px;
+	background: url('/assets/quark.png') no-repeat center/contain;
+	z-index: 10;
+	pointer-events: none;
+	transform-origin: center 80%;
+	animation: mascotIdle 2.6s ease-in-out infinite;
+	filter: drop-shadow(0 10px 24px rgba(15, 23, 42, 0.28)) drop-shadow(0 2px 6px rgba(14, 165, 233, 0.18));
+}
+
+/* Add this class via JS to switch to talking animation */
+.tooltipCard.mascotTalking::before {
+	animation: mascotTalk 0.44s ease-in-out infinite;
+}
+
+.tooltipHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	padding: 18px 20px 0;
+}
+
+.tooltipStep {
+	display: inline-flex;
+	align-items: center;
+	padding: 6px 10px;
+	border-radius: 999px;
+	background: rgba(14, 165, 233, 0.12);
+	font-size: 0.76rem;
+	font-weight: 700;
+	color: #0369a1;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+.tooltipTitle {
+	margin: 0;
+	padding: 10px 20px 0;
+	font-size: 1.08rem;
+	font-weight: 800;
+	color: #0f172a;
+	line-height: 1.25;
+}
+
+.tooltipBody {
+	padding: 12px 20px 20px;
+	font-size: 0.95rem;
+	line-height: 1.6;
+	color: #334155;
+}
+
+.tooltipBody p {
+	margin: 0;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+.tooltipFooter {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	padding: 0 20px 22px 148px;
+	flex-wrap: wrap;
+}
+
+.tooltipMeta {
+	display: none;
+}
+
+.tooltipActions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-left: auto;
+	flex-wrap: wrap;
+}
+
+/* Idle – pronounced float & tilt */
+@keyframes mascotIdle {
+	0%   { transform: translateY(0)     rotate(0deg)   scale(1); }
+	25%  { transform: translateY(-9px)  rotate(-5deg)  scale(1.04); }
+	55%  { transform: translateY(-4px)  rotate(3.5deg) scale(0.97); }
+	80%  { transform: translateY(-7px)  rotate(-2deg)  scale(1.02); }
+	100% { transform: translateY(0)     rotate(0deg)   scale(1); }
+}
+
+/* Talking – rapid expressive nod, hook mascotTalking class to activate */
+@keyframes mascotTalk {
+	0%   { transform: translateY(0)     rotate(0deg)    scale(1,    1); }
+	15%  { transform: translateY(-7px)  rotate(-5deg)   scale(1.05, 0.97); }
+	30%  { transform: translateY(0)     rotate(4deg)    scale(0.96, 1.04); }
+	45%  { transform: translateY(-5px)  rotate(-3.5deg) scale(1.04, 0.98); }
+	60%  { transform: translateY(1px)   rotate(3deg)    scale(0.98, 1.03); }
+	75%  { transform: translateY(-4px)  rotate(-2deg)   scale(1.02, 0.99); }
+	100% { transform: translateY(0)     rotate(0deg)    scale(1,    1); }
+}
+
+.beacon {
+	position: relative;
+	width: 26px;
+	height: 26px;
+	border-radius: 999px;
+	border: 0;
+	padding: 0;
+	background: linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%);
+	box-shadow: 0 10px 26px rgba(14, 165, 233, 0.45);
+	cursor: pointer;
+}
+
+.beacon::before,
+.beacon::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	border: 2px solid rgba(14, 165, 233, 0.35);
+	animation: beaconPulse 1.8s ease-out infinite;
+}
+
+.beacon::after {
+	animation-delay: 0.6s;
+}
+
+@keyframes beaconPulse {
+	0% {
+		transform: scale(1);
+		opacity: 0.95;
+	}
+	70% {
+		transform: scale(2.25);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(2.25);
+		opacity: 0;
+	}
+}
+
+@media (max-width: 900px) {
+	.tourContent {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.tourActions {
+		justify-content: flex-start;
+	}
+
+	.tourHint {
+		text-align: left;
+	}
+
+	.tooltipFooter {
+		align-items: stretch;
+		padding-left: 124px;
+	}
+
+	.tooltipCard::before {
+		bottom: -58px;
+		left: 10px;
+		width: 110px;
+		height: 84px;
+	}
+
+	.tooltipActions {
+		margin-left: 0;
+		width: 100%;
+		justify-content: flex-end;
+	}
+}

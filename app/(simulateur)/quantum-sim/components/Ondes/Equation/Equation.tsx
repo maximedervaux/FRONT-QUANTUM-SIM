@@ -18,7 +18,7 @@ export default function Equation() {
 	const numericEquation = `\\psi(x,${time.toFixed(2)})=A\\exp[i(n\\cdot ${waveNumber.toFixed(2)}(x-0)-\\frac{\\hbar}{2m}(${waveNumber.toFixed(2)})^2${time.toFixed(2)}+\\phi)]`;
 
 	return (
-		<Card className={style.equationContainer}>
+		<Card className={style.equationContainer} data-tour="wave-equation">
 			<CardContent className={style.equationContent}>
 				<p className={style.equationText}>
 					<span className="latex">
@@ -26,6 +26,7 @@ export default function Equation() {
 					</span>
 				</p>
 				<Button
+					data-tour="equation-live-toggle"
 					onClick={() => setShowValues(!showValues)}
 					size="sm"
 					title={
