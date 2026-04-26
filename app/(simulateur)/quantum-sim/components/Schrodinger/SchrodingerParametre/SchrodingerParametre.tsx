@@ -3,9 +3,9 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { Slider } from '@/components/ui/slider';
 import { useSchrodingerStore, type PotentialType } from '../../../store/schrodinger.store';
 import styles from './SchrodingerParametre.module.css';
-import { ReactElement } from 'react';
-import { BoxIcon, CircleOffIcon, FenceIcon } from 'lucide-react';
-import StairsIcon from '@/app/assets/icons/stairsIcon';
+import { ReactElement, useEffect } from 'react';
+import { BoxIcon, CircleOffIcon, FenceIcon, SquareIcon } from 'lucide-react';
+//import StairsIcon from '@/app/assets/icons/stairsIcon';
 
 const POTENTIAL_INFO = {
 	free: 'Sans potentiel - Propagation libre',
@@ -34,6 +34,7 @@ export default function SchrodingerParametre() {
 		spatialPoints,
 		absorbingBoundaries,
 		potentialType,
+		viewMode,
 		setWellWidth,
 		setStepHeight,
 		setBarrierWidth,
@@ -42,14 +43,21 @@ export default function SchrodingerParametre() {
 		setSpatialPoints,
 		setAbsorbingBoundaries,
 		setPotentialType,
+		setViewMode,
 	} = useSchrodingerStore();
 
 	const potentialSelect: Array<{ label: string; value: PotentialType; icon?: ReactElement }> = [
 		{ label: 'Sans potentiel', value: 'free', icon: <CircleOffIcon /> },
 		{ label: 'Puits infini', value: 'infiniteWell', icon: <BoxIcon /> },
-		{ label: 'Marche de potentiel', value: 'step', icon: <StairsIcon /> },
-		{ label: 'Barrière tunnel', value: 'barrier', icon: <FenceIcon /> },
+		// { label: 'Marche de potentiel', value: 'step', icon: <StairsIcon /> },
+		// { label: 'Barrière tunnel', value: 'barrier', icon: <FenceIcon /> },
 	];
+
+	useEffect(() => {
+		if (potentialType === 'free') {
+			setViewMode('2d');
+		}
+	}, [potentialType]);
 
 	return (
 		<div className={styles.parametreContainer}>
@@ -97,6 +105,36 @@ export default function SchrodingerParametre() {
 							onValueChange={value => setWellWidth(value[0])}
 						/>
 						<p className={styles.subText}>Distance entre les murs (m)</p>
+					</div>
+
+					<div className={styles.inputContainer}>
+						<div className={styles.inputHeader}>
+							<label htmlFor="view-mode-button">
+								<p>Mode de visualisation</p>
+							</label>
+							<div className={styles.buttonGroupWrap}>
+								<ButtonGroup>
+									<Button
+										size="sm"
+										variant={viewMode === '2d' ? 'default' : 'outline'}
+										onClick={() => setViewMode('2d')}
+										aria-pressed={viewMode === '2d'}
+										style={{ cursor: 'pointer' }}
+									>
+										<SquareIcon /> 2D
+									</Button>
+									<Button
+										size="sm"
+										variant={viewMode === '3d' ? 'default' : 'outline'}
+										onClick={() => setViewMode('3d')}
+										aria-pressed={viewMode === '3d'}
+										style={{ cursor: 'pointer' }}
+									>
+										<BoxIcon /> 3D
+									</Button>
+								</ButtonGroup>
+							</div>
+						</div>
 					</div>
 				</div>
 			)}

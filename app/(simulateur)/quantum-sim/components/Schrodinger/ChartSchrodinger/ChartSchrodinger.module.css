@@ -4,3 +4,117 @@
 	border-radius: 10px;
 	overflow: hidden;
 }
+
+.chartWrapper {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.viewControlBar {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: 12px 16px;
+	background: #f3f4f6;
+	border-bottom: 1px solid #e5e7eb;
+	min-height: 44px;
+}
+
+.view3DButton,
+.view2DButton {
+	padding: 8px 16px;
+	background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+	border: none;
+	border-radius: 4px;
+	color: #ffffff;
+	cursor: pointer;
+	font-size: 13px;
+	font-weight: 600;
+	transition: all 0.2s ease;
+	font-family: inherit;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.view3DButton:hover,
+.view2DButton:hover {
+	background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+	box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+	transform: translateY(-1px);
+}
+
+.view3DButton:active,
+.view2DButton:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+
+.view3DButton:disabled,
+.view2DButton:disabled {
+	background: #9ca3af;
+	cursor: not-allowed;
+	box-shadow: none;
+	opacity: 0.6;
+}
+
+.chart {
+	flex: 1;
+	position: relative;
+	overflow: hidden;
+	background: #ffffff;
+	padding: 0;
+	min-height: 400px;
+}
+
+.chart > div {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+@media (max-width: 768px) {
+	.viewControlBar {
+		padding: 10px 12px;
+		gap: 6px;
+	}
+
+	.view3DButton,
+	.view2DButton {
+		padding: 6px 12px;
+		font-size: 12px;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.chart,
+.wrapper {
+	animation: fadeIn 0.3s ease-out;
+}
+
+.view3DButton:focus,
+.view2DButton:focus {
+	outline: none;
+	box-shadow:
+		0 0 0 3px rgba(59, 130, 246, 0.1),
+		0 4px 12px rgba(59, 130, 246, 0.4);
+}

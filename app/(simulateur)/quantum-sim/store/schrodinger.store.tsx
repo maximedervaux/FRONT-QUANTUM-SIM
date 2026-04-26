@@ -28,6 +28,9 @@ interface SchrodingerStore {
 	setSpatialPoints: (points: number) => void;
 	absorbingBoundaries: boolean;
 	setAbsorbingBoundaries: (enabled: boolean) => void;
+
+	viewMode: '2d' | '3d';
+	setViewMode: (viewMode: '2d' | '3d') => void;
 }
 
 export const useSchrodingerStore = create<SchrodingerStore>(set => ({
@@ -52,4 +55,6 @@ export const useSchrodingerStore = create<SchrodingerStore>(set => ({
 	setSpatialPoints: points => set({ spatialPoints: points }),
 	absorbingBoundaries: false,
 	setAbsorbingBoundaries: enabled => set({ absorbingBoundaries: enabled }),
+	viewMode: '2d',
+	setViewMode: viewMode => set({ viewMode: viewMode }),
 }));

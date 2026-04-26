@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import type { Layout, Data, Shape, Frame } from 'plotly.js';
+import type { Data, Shape, Frame } from 'plotly.js';
 import { useEffect, useState, useRef, useCallback, memo } from 'react';
 import { usePythonFunction } from '../../../hooks/usePythonFunction';
 import styles from './ChartSchrodinger.module.css';
@@ -9,6 +9,12 @@ import { useWavePacketStore } from '../../../store/wave-packet.store';
 import { useSchrodingerStore } from '../../../store/schrodinger.store';
 
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
+const ThreeChartSchrodinger = dynamic(
+	() => import('../ThreeChartSchrodinger/ThreeChartSchrodinger'),
+	{
+		ssr: false,
+	}
+);
 
 interface SchrodingerData {
 	x: number[];
@@ -29,6 +35,7 @@ function ChartSchrodinger() {
 		timeSteps,
 		spatialPoints,
 		absorbingBoundaries,
+		viewMode,
 	} = useSchrodingerStore();
 	const { k_center, sigma_k, x_center, nWaves, xMin, xMax } = useWavePacketStore();
 
@@ -155,7 +162,7 @@ function ChartSchrodinger() {
 			// Mur gauche
 			{
 				type: 'rect',
-				x0: xMin - 20,
+				x0: Number(xMin) - 20,
 				x1: wellLeft,
 				y0: 0,
 				y1: yMax,
@@ -167,7 +174,7 @@ function ChartSchrodinger() {
 			{
 				type: 'rect',
 				x0: wellRight,
-				x1: xMax + 20,
+				x1: Number(xMax) + 20,
 				y0: 0,
 				y1: yMax,
 				fillcolor: 'rgba(100, 100, 100, 0.2)',
@@ -179,7 +186,7 @@ function ChartSchrodinger() {
 		shapes.push({
 			type: 'rect',
 			x0: 0,
-			x1: xMax + 20,
+			x1: Number(xMax) + 20,
 			y0: 0,
 			y1: yMax,
 			fillcolor: 'rgba(220, 100, 100, 0.15)',
@@ -243,41 +250,58 @@ function ChartSchrodinger() {
 	};
 
 	return (
-		<div className={styles.chart}>
-			<Plot
-				data={plotData}
-				style={{ width: '100%', height: '100%', overflow: 'hidden' }}
-				layout={{
-					...plotLayout,
-					updatemenus: [
-						{
-							type: 'buttons',
-							showactive: false,
-							buttons: [
-								{
-									label: '▶ Lecture',
-									method: 'animate',
-									args: [null, { frame: { duration: 50, redraw: true } }],
-								},
-								{
-									label: '⏸ Pause',
-									method: 'animate',
-									args: [
-										[],
-										{
-											mode: 'immediate',
-											frame: { duration: 0, redraw: false },
-											transition: { duration: 0 },
-										},
-									],
-								},
-							],
-						},
-					],
-				}}
-				frames={frames}
-				config={plotConfig}
-			/>
+		<div className={styles.chartWrapper}>
+			{/* Vue 2D */}
+			{viewMode === '2d' && (
+				<>
+					<div className={styles.chart}>
+						<Plot
+							data={plotData}
+							style={{ width: '100%', height: '100%', overflow: 'hidden' }}
+							layout={{
+								...plotLayout,
+								updatemenus: [
+									{
+										type: 'buttons',
+										showactive: false,
+										buttons: [
+											{
+												label: '▶ Lecture',
+												method: 'animate',
+												args: [null, { frame: { duration: 50, redraw: true } }],
+											},
+											{
+												label: '⏸ Pause',
+												method: 'animate',
+												args: [
+													[],
+													{
+														mode: 'immediate',
+														frame: { duration: 0, redraw: false },
+														transition: { duration: 0 },
+													},
+												],
+											},
+										],
+									},
+								],
+							}}
+							frames={frames}
+							config={plotConfig}
+						/>
+					</div>
+				</>
+			)}
+
+			{viewMode === '3d' && potentialType === 'infiniteWell' && (
+				<ThreeChartSchrodinger
+					data={schrodingerData}
+					potentialType={potentialType}
+					wellWidth={wellWidth}
+					barrierWidth={barrierWidth}
+					showWireframe={true}
+				/>
+			)}
 		</div>
 	);
 }
