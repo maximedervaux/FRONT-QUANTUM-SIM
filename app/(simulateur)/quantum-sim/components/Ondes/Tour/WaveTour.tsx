@@ -77,7 +77,7 @@ export default function WaveTour() {
 						tu changes aura un effet visible ici.
 					</p>
 				),
-				placement: 'auto',
+				placement: 'bottom',
 			},
 			{
 				target: '[data-tour="wave-function-select"]',

@@ -143,7 +143,7 @@ export default function WavePacketTour() {
 							pour construire ton intuition pas à pas.
 						</p>
 					),
-					placement: 'auto',
+					placement: 'bottom',
 				},
 			],
 		[]
