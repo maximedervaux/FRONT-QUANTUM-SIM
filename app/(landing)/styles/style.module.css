@@ -1,6 +1,6 @@
 .containerLanding {
 	position: relative;
-	width: min(1500px, 100%);
+	width: 100%;
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
