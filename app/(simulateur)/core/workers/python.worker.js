@@ -180,7 +180,7 @@ self.onmessage = async event => {
 				} else {
 					throw new Error(`Invalid part: ${part}. Must be 'real', 'imag', or 'complex'.`);
 				}
-			} else if (functionName === 'generate_wave_packet') {
+			} else {
 				resultProxy = await pyodide.runPythonAsync(`
 					${functionName}(${paramKeys.join(', ')})
 				`);
@@ -194,9 +194,12 @@ self.onmessage = async event => {
 				pyodide.globals.delete(key);
 			});
 
+			const safeResult =
+				functionName !== 'generate_plane_waves' ? JSON.parse(JSON.stringify(result)) : result;
+
 			self.postMessage({
 				type: 'result',
-				data: result,
+				data: safeResult,
 				scriptName: scriptName,
 				callbackKey,
 			});

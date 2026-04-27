@@ -14,6 +14,7 @@ interface ThreeTrace {
 	kind: TraceKind;
 	x: number[];
 	y: number[];
+	yImag?: number[];
 	harmonicIndex: number;
 }
 
@@ -68,16 +69,28 @@ const EMPTY_HOVER: HoverState = {
 
 // ─── coordinate helpers ────────────────────────────────────────────────────
 
-function makeMappers(bounds: Bounds) {
+function makeMappers(bounds: Bounds, traces: ThreeTrace[]) {
 	const spanX = Math.max(1e-9, bounds.xMax - bounds.xMin);
 	const spanY = Math.max(1e-9, bounds.yMax - bounds.yMin);
-	const spanZ = Math.max(1, bounds.zMax);
+
+	// Calculer les bounds de Z (imaginaire)
+	let zMin = Infinity;
+	let zMax = -Infinity;
+	for (const t of traces) {
+		if (t.yImag) {
+			for (const z of t.yImag) {
+				zMin = Math.min(zMin, z);
+				zMax = Math.max(zMax, z);
+			}
+		}
+	}
+	const spanZ = Math.max(1e-9, zMax - zMin);
 
 	return {
 		toSceneX: (x: number) => ((x - bounds.xMin) / spanX) * 10 - 5,
 		toSceneY: (y: number) => ((y - bounds.yMin) / spanY) * 4 - 2,
-		toSceneZ: (trace: ThreeTrace) =>
-			(trace.harmonicIndex / spanZ) * 6 - 3 + (trace.kind === 'imag' ? 0.2 : 0),
+		toSceneZ: (yImag: number | undefined) =>
+			yImag !== undefined ? ((yImag - zMin) / spanZ) * 6 - 3 : 0,
 	};
 }
 
@@ -135,24 +148,25 @@ function ThreeChart() {
 				kind: 'real',
 				x: realPoints.map(p => p.x),
 				y: realPoints.map(p => p.y),
+				yImag: wave.yImag ? sanitizePairs(wave.x, wave.yImag).map(p => p.y) : undefined,
 				harmonicIndex: index,
 			};
 
-			if (!showImaginary || !wave.yImag) {
-				return real.x.length > 1 ? [real] : [];
-			}
+			// if (!showImaginary || !wave.yImag) {
+			// 	return real.x.length > 1 ? [real] : [];
+			// }
 
-			const imagPoints = sanitizePairs(wave.x, wave.yImag);
-			const imag: ThreeTrace = {
-				id: `h-${index + 1}-imag`,
-				name: `H${index + 1} Imag`,
-				kind: 'imag',
-				x: imagPoints.map(p => p.x),
-				y: imagPoints.map(p => p.y),
-				harmonicIndex: index,
-			};
+			// const imagPoints = sanitizePairs(wave.x, wave.yImag);
+			// const imag: ThreeTrace = {
+			// 	id: `h-${index + 1}-imag`,
+			// 	name: `H${index + 1} Imag`,
+			// 	kind: 'imag',
+			// 	x: imagPoints.map(p => p.x),
+			// 	y: imagPoints.map(p => p.y),
+			// 	harmonicIndex: index,
+			// };
 
-			return [real, imag].filter(t => t.x.length > 1);
+			return [real];
 		});
 	}, [waves, showImaginary]);
 
@@ -179,8 +193,14 @@ function ThreeChart() {
 			}
 		}
 
-		if (xMin === xMax) { xMin -= 1; xMax += 1; }
-		if (yMin === yMax) { yMin -= 1; yMax += 1; }
+		if (xMin === xMax) {
+			xMin -= 1;
+			xMax += 1;
+		}
+		if (yMin === yMax) {
+			yMin -= 1;
+			yMax += 1;
+		}
 
 		return { xMin, xMax, yMin, yMax, zMax: Math.max(1, zMax) };
 	}, [traces]);
@@ -350,28 +370,30 @@ function ThreeChart() {
 		const structuralChange = newIds !== prevTraceIdsRef.current;
 		prevTraceIdsRef.current = newIds;
 
-		const { toSceneX, toSceneY, toSceneZ } = makeMappers(bounds);
-
 		if (structuralChange) {
-			// ── Rebuild all geometries ────────────────────────────────────────
 			clearGroup(group);
 			trackedLinesRef.current = [];
+
+			const { toSceneX, toSceneY, toSceneZ } = makeMappers(bounds, traces);
 
 			traces.forEach((trace, i) => {
 				if (trace.x.length < 2) return;
 
-				const z = toSceneZ(trace);
-				const pts = trace.x.map((xv, j) => new THREE.Vector3(toSceneX(xv), toSceneY(trace.y[j]), z));
+				// Utiliser yImag pour Z (ou 0 si pas imaginaire)
+				const pts = trace.x.map((xv, j) => {
+					const z = trace.yImag ? toSceneZ(trace.yImag[j]) : 0;
+					return new THREE.Vector3(toSceneX(xv), toSceneY(trace.y[j]), z);
+				});
 
 				const geo = new THREE.BufferGeometry().setFromPoints(pts);
-				geo.setDrawRange(0, 2); // will be opened by draw animation
+				geo.setDrawRange(0, 2);
 
-				const color = trace.kind === 'real' ? realColor(i) : imagColor(i);
+				const color = realColor(i);
 				const mat = new THREE.LineBasicMaterial({
 					color,
 					transparent: true,
-					opacity: trace.kind === 'real' ? 0.95 : 0.75,
-					linewidth: 2, // note: only works on WebGL2 / certain drivers
+					opacity: 0.95,
+					linewidth: 2,
 				});
 
 				const line = new THREE.Line(geo, mat);
@@ -386,33 +408,32 @@ function ThreeChart() {
 				});
 			});
 
-			// Start draw animation only on structural change
 			if (trackedLinesRef.current.length > 0) {
 				drawAnimRef.current = { start: performance.now(), duration: 650 };
 			} else {
 				drawAnimRef.current = null;
 			}
 		} else {
-			// ── In-place position update (time tick) ─────────────────────────
-			// Stop any running draw animation immediately and show full lines
+			// ── In-place position update ──────────────────────────────────
 			drawAnimRef.current = null;
+
+			const { toSceneX, toSceneY, toSceneZ } = makeMappers(bounds, traces);
 
 			traces.forEach((trace, i) => {
 				const tl = trackedLinesRef.current[i];
 				if (!tl || trace.x.length < 2) return;
 
-				const z = toSceneZ(trace);
 				const posAttr = tl.geometry.attributes.position as THREE.BufferAttribute;
 				const count = Math.min(trace.x.length, posAttr.count);
 
 				for (let j = 0; j < count; j++) {
+					const z = trace.yImag ? toSceneZ(trace.yImag[j]) : 0;
 					posAttr.setXYZ(j, toSceneX(trace.x[j]), toSceneY(trace.y[j]), z);
 				}
 				posAttr.needsUpdate = true;
 				tl.geometry.setDrawRange(0, count);
 				tl.geometry.computeBoundingSphere();
 
-				// Keep userData in sync for hover tooltips
 				(tl.line.userData as LineUserData).trace = trace;
 			});
 		}
@@ -426,15 +447,12 @@ function ThreeChart() {
 
 			<div className={styles.axisLabels}>
 				<span>X · position (m)</span>
-				<span>Y · amplitude |ψ(x,t)|</span>
-				<span>Z · harmoniques</span>
+				<span>Y · réel Re(ψ)</span>
+				<span>Z · imaginaire Im(ψ)</span>
 			</div>
 
 			{hover.visible && (
-				<div
-					className={styles.tooltip}
-					style={{ left: hover.left, top: hover.top }}
-				>
+				<div className={styles.tooltip} style={{ left: hover.left, top: hover.top }}>
 					<strong>{hover.label}</strong>
 					<p>x : {hover.x.toFixed(3)}</p>
 					<p>amp : {hover.y.toFixed(3)}</p>

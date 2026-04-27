@@ -1,0 +1,178 @@
+.wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.canvas {
+	flex: 1;
+	position: relative;
+	overflow: hidden;
+	background: linear-gradient(135deg, #0d1117 0%, #1a2332 100%);
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.axisLabels {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	padding: 12px;
+	font-size: 12px;
+	color: #8b949e;
+	background: rgba(13, 17, 23, 0.5);
+	border-top: 1px solid #30363d;
+	font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+	font-weight: 500;
+}
+
+.axisLabels span {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.axisLabels span::before {
+	content: '';
+	width: 12px;
+	height: 12px;
+	border-radius: 2px;
+	display: inline-block;
+}
+
+.axisLabels span:nth-child(1)::before {
+	background: #ff6b6b;
+}
+
+.axisLabels span:nth-child(2)::before {
+	background: #4ecdc4;
+}
+
+.axisLabels span:nth-child(3)::before {
+	background: #95e1d3;
+}
+
+.tooltip {
+	position: fixed;
+	background: rgba(13, 17, 23, 0.95);
+	border: 1px solid #30363d;
+	border-radius: 6px;
+	padding: 8px 12px;
+	font-size: 12px;
+	color: #c9d1d9;
+	pointer-events: none;
+	z-index: 100;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+	font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+	max-width: 200px;
+}
+
+.tooltip strong {
+	display: block;
+	color: #58a6ff;
+	margin-bottom: 4px;
+	font-weight: 600;
+}
+
+.tooltip p {
+	margin: 2px 0;
+	color: #8b949e;
+}
+
+.controls {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 16px;
+	background: rgba(13, 17, 23, 0.8);
+	border-top: 1px solid #30363d;
+	border-bottom: 1px solid #30363d;
+	flex-wrap: wrap;
+}
+
+.controls button {
+	padding: 6px 12px;
+	background: #21262d;
+	border: 1px solid #30363d;
+	border-radius: 4px;
+	color: #8b949e;
+	cursor: pointer;
+	font-size: 12px;
+	transition: all 0.2s ease;
+	font-family: inherit;
+}
+
+.controls button:hover {
+	background: #30363d;
+	border-color: #58a6ff;
+	color: #58a6ff;
+}
+
+.controls button.active {
+	background: #58a6ff;
+	border-color: #58a6ff;
+	color: #0d1117;
+	font-weight: 600;
+}
+
+.sliceControls {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
+	min-width: 250px;
+}
+
+.slider {
+	flex: 1;
+	height: 4px;
+	border-radius: 2px;
+	background: #30363d;
+	outline: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: #58a6ff;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+	width: 14px;
+	height: 14px;
+	background: #79c0ff;
+	box-shadow: 0 0 8px rgba(88, 166, 255, 0.5);
+}
+
+.slider::-moz-range-thumb {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: #58a6ff;
+	cursor: pointer;
+	border: none;
+	transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+	width: 14px;
+	height: 14px;
+	background: #79c0ff;
+	box-shadow: 0 0 8px rgba(88, 166, 255, 0.5);
+}
+
+.sliceControls span {
+	color: #8b949e;
+	font-size: 11px;
+	font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+	min-width: 50px;
+}

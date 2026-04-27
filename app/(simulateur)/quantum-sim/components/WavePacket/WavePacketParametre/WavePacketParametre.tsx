@@ -5,14 +5,22 @@ import {
 	type VisualizationMode,
 	type WavePacketType,
 } from '../../../store/wave-packet.store';
-import { useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
-import { Zap, Waves } from 'lucide-react';
+import {
+	ActivityIcon,
+	AudioWaveformIcon,
+	ChartNoAxesColumnIcon,
+	ExpandIcon,
+	FocusIcon,
+	OrbitIcon,
+	ZapIcon,
+} from 'lucide-react';
+import { ReactElement } from 'react';
 
 const LIMITS = {
-	k_center: { min: 0.1, max: 20, step: 0.1 },
+	k_center: { min: -20, max: 20, step: 0.1 },
 	sigma_k: { min: 0.1, max: 5, step: 0.1 },
 	x_center: { min: -10, max: 10, step: 0.5 },
 	nWaves: { min: 5, max: 200, step: 1 },
@@ -33,8 +41,6 @@ export default function ParametreWavePacket() {
 		sigma_k,
 		x_center,
 		nWaves,
-		time,
-		isAnimatingTime,
 		visualizationMode,
 		xMin,
 		xMax,
@@ -43,9 +49,6 @@ export default function ParametreWavePacket() {
 		setSigmaK,
 		setXCenter,
 		setNWaves,
-		setTime,
-		toggleAnimationTime,
-		resetTime,
 		setVisualizationMode,
 		setXMin,
 		setXMax,
@@ -54,8 +57,7 @@ export default function ParametreWavePacket() {
 		loadWidePreset,
 	} = useWavePacketStore();
 
-	const clamp = (value: number, min: number, max: number) => 
-		Math.max(min, Math.min(max, value));
+	const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 	const setSafeXMin = (raw: number) => {
 		if (Number.isNaN(raw)) return;
@@ -69,21 +71,20 @@ export default function ParametreWavePacket() {
 		setXMax(Math.max(clamped, xMin + 1));
 	};
 
-	useEffect(() => {
-		if (!isAnimatingTime) return;
-		const interval = setInterval(() => setTime(10), 50);
-		return () => clearInterval(interval);
-	}, [isAnimatingTime, setTime]);
-
 	const packetTypeButtons: Array<{ label: string; value: WavePacketType }> = [
 		{ label: 'Gaussien', value: 'gaussian' },
 		{ label: 'Aléatoire', value: 'random' },
 		{ label: 'Personnalisé', value: 'custom' },
 	];
 
-	const visualizationButtons: Array<{ label: string; value: VisualizationMode }> = [
-		{ label: 'ψ(x) Fonction d\'onde', value: 'wavefunction' },
-		{ label: '|ψ|² Densité de probabilité', value: 'probability' },
+	const visualizationButtons: Array<{
+		label: string;
+		value: VisualizationMode;
+		icon?: ReactElement;
+	}> = [
+		{ label: 'Ondes', value: 'wavefunction', icon: <AudioWaveformIcon /> },
+		{ label: 'Densité', value: 'probability', icon: <ChartNoAxesColumnIcon /> },
+		{ label: 'Phase', value: 'densityPhase', icon: <OrbitIcon /> },
 	];
 
 	const getPacketDescription = () => {
@@ -92,7 +93,9 @@ export default function ParametreWavePacket() {
 
 	return (
 		<div className={style.parametre}>
-			<h1 data-tour="packet-header">📦 Paquet d'ondes quantiques</h1>
+			<h1 data-tour="packet-header">
+				<ActivityIcon size={30} /> Paquet d'ondes
+			</h1>
 
 			{/* Section: Type de paquet */}
 			<div className={style.section} data-tour="packet-type">
@@ -107,15 +110,14 @@ export default function ParametreWavePacket() {
 								onClick={() => setPacketType(option.value)}
 								aria-pressed={packetType === option.value}
 								title={PACKET_TYPE_INFO[option.value as keyof typeof PACKET_TYPE_INFO]}
+								style={{ cursor: 'pointer' }}
 							>
 								{option.label}
 							</Button>
 						))}
 					</ButtonGroup>
 				</div>
-				<p className={style.subText}>
-					{getPacketDescription()}
-				</p>
+				<p className={style.subText}>{getPacketDescription()}</p>
 			</div>
 
 			{/* Section: Présets rapides */}
@@ -123,29 +125,32 @@ export default function ParametreWavePacket() {
 				<p className={style.sectionTitle}>Présets rapides</p>
 				<div className={style.buttonGroupWrap}>
 					<ButtonGroup>
-						<Button 
-							size="sm" 
-							variant="outline" 
+						<Button
+							size="sm"
+							variant="outline"
 							onClick={loadGaussianPreset}
 							title="Charger configuration standard"
+							style={{ cursor: 'pointer' }}
 						>
-							⚡ Standard
+							<ZapIcon /> Standard
 						</Button>
-						<Button 
-							size="sm" 
-							variant="outline" 
+						<Button
+							size="sm"
+							variant="outline"
 							onClick={loadNarrowPreset}
 							title="Paquet étroit - Faible dispersion"
+							style={{ cursor: 'pointer' }}
 						>
-							🎯 Étroit
+							<FocusIcon /> Étroit
 						</Button>
-						<Button 
-							size="sm" 
-							variant="outline" 
+						<Button
+							size="sm"
+							variant="outline"
 							onClick={loadWidePreset}
 							title="Paquet large - Forte dispersion"
+							style={{ cursor: 'pointer' }}
 						>
-							📐 Large
+							<ExpandIcon /> Large
 						</Button>
 					</ButtonGroup>
 				</div>
@@ -173,9 +178,7 @@ export default function ParametreWavePacket() {
 							onValueChange={value => setKCenter(value[0])}
 							aria-label="Vecteur d'onde central"
 						/>
-						<p className={style.subText}>
-							Fréquence d'oscillation dominante du paquet
-						</p>
+						<p className={style.subText}>Fréquence d'oscillation dominante du paquet</p>
 					</div>
 
 					{/* Largeur spectrale */}
@@ -195,9 +198,7 @@ export default function ParametreWavePacket() {
 							onValueChange={value => setSigmaK(value[0])}
 							aria-label="Largeur spectrale"
 						/>
-						<p className={style.subText}>
-							Relation d'incertitude : Δx · Δk ≥ 1/2
-						</p>
+						<p className={style.subText}>Relation d'incertitude : Δx · Δk ≥ 1/2</p>
 					</div>
 
 					{/* Position centrale */}
@@ -240,33 +241,8 @@ export default function ParametreWavePacket() {
 						onValueChange={value => setNWaves(value[0])}
 						aria-label="Nombre d'ondes planes composant le paquet"
 					/>
-					<p className={style.subText}>
-						Plus d'ondes = meilleure résolution du paquet
-					</p>
+					<p className={style.subText}>Plus d'ondes = meilleure résolution du paquet</p>
 				</div>
-			</div>
-
-			{/* Section: Contrôles temporels */}
-			<div className={style.buttonContainer} data-tour="packet-time-controls">
-				<p>
-					⏱️ <strong>Temps:</strong> {time.toFixed(1)} s
-				</p>
-				<Button 
-					onClick={toggleAnimationTime}
-					variant={isAnimatingTime ? 'default' : 'outline'}
-					title={isAnimatingTime ? 'Mettre en pause l\'animation' : 'Lancer l\'animation'}
-					aria-label={isAnimatingTime ? 'Mettre en pause' : 'Lancer'}
-				>
-					{isAnimatingTime ? '⏸️' : '▶️'}
-				</Button>
-				<Button 
-					onClick={resetTime} 
-					variant="outline"
-					title="Réinitialiser le temps à 0"
-					aria-label="Réinitialiser"
-				>
-					↻ Réinitialiser
-				</Button>
 			</div>
 
 			{/* Section: Visualisation */}
@@ -281,7 +257,9 @@ export default function ParametreWavePacket() {
 								variant={visualizationMode === option.value ? 'default' : 'outline'}
 								onClick={() => setVisualizationMode(option.value)}
 								aria-pressed={visualizationMode === option.value}
+								style={{ fontSize: '0.8rem', cursor: 'pointer' }}
 							>
+								{option.icon}
 								{option.label}
 							</Button>
 						))}
@@ -292,47 +270,43 @@ export default function ParametreWavePacket() {
 			{/* Section: Fenêtre spatiale */}
 			<div className={style.section} data-tour="packet-window">
 				<p className={style.sectionTitle}>Fenêtre spatiale</p>
-				<div className={style.rangeInputs}>
-					<div className={style.inputContainer}>
+				<div className={style.inputContainer}>
+					<div className={style.inputHeader}>
 						<label htmlFor="xmin-input">
-							<p>x min</p>
+							<p>Borne inférieure</p>
 						</label>
-						<Input
-							id="xmin-input"
-							type="number"
-							value={xMin}
-							min={LIMITS.xMin.min}
-							max={LIMITS.xMin.max}
-							step={LIMITS.xMin.step}
-							onChange={e => setSafeXMin(Number(e.target.value))}
-							aria-label="Position minimum de la fenêtre"
-							placeholder="Min"
-						/>
 					</div>
-					<div className={style.rangeSeparator}>→</div>
-					<div className={style.inputContainer}>
-						<label htmlFor="xmax-input">
-							<p>x max</p>
-						</label>
-						<Input
-							id="xmax-input"
-							type="number"
-							value={xMax}
-							min={LIMITS.xMax.min}
-							max={LIMITS.xMax.max}
-							step={LIMITS.xMax.step}
-							onChange={e => setSafeXMax(Number(e.target.value))}
-							aria-label="Position maximum de la fenêtre"
-							placeholder="Max"
-						/>
-					</div>
+					<Input
+						id="xmin-input"
+						type="number"
+						value={xMin}
+						min={LIMITS.xMin.min}
+						max={LIMITS.xMin.max}
+						step={LIMITS.xMin.step}
+						onChange={e => setSafeXMin(Number(e.target.value))}
+						aria-label="Position minimum de la fenêtre"
+						placeholder="Min"
+					/>
 				</div>
-				<p className={style.subText}>
-					💡 Astuce : garde une fenêtre centrée autour de x = 0 pour une lecture plus stable.
-				</p>
+				<div className={style.inputContainer}>
+					<div className={style.inputHeader}>
+						<label htmlFor="xmax-input">
+							<p>Borne supérieure</p>
+						</label>
+					</div>
+					<Input
+						id="xmax-input"
+						type="number"
+						value={xMax}
+						min={LIMITS.xMax.min}
+						max={LIMITS.xMax.max}
+						step={LIMITS.xMax.step}
+						onChange={e => setSafeXMax(Number(e.target.value))}
+						aria-label="Position maximum de la fenêtre"
+						placeholder="Max"
+					/>
+				</div>
 			</div>
-
-			
 		</div>
 	);
 }

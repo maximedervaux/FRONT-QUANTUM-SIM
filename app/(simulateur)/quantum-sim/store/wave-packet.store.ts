@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 
 export type WavePacketType = 'gaussian' | 'custom' | 'random';
-export type VisualizationMode = 'wavefunction' | 'probability';
+export type VisualizationMode = 'wavefunction' | 'probability' | 'densityPhase';
 
 interface IndividualWave {
 	id: string;
 	amplitude: number;
-	waveNumber: number; // k
+	waveNumber: number;
 	phase: number;
 	enabled: boolean;
 }
@@ -22,8 +22,6 @@ interface WavePacketState {
 
 	// Paramètres généraux
 	nWaves: number; // nombre d'ondes planes dans le paquet
-	time: number;
-	isAnimatingTime: boolean;
 
 	// Visualisation
 	visualizationMode: VisualizationMode;
@@ -50,9 +48,6 @@ interface WavePacketState {
 
 	// Actions - Générales
 	setNWaves: (value: number) => void;
-	setTime: (value: number) => void;
-	toggleAnimationTime: () => void;
-	resetTime: () => void;
 
 	// Actions - Visualisation
 	setVisualizationMode: (mode: VisualizationMode) => void;
@@ -86,14 +81,12 @@ export const useWavePacketStore = create<WavePacketState>(set => ({
 	sigma_k: 1.0,
 	x_center: 0.0,
 	nWaves: 50,
-	time: 0,
-	isAnimatingTime: false,
 	visualizationMode: 'wavefunction',
 	showEnvelope: true,
 	showIndividualWaves: false,
 	customWaves: [],
-	xMin: -10,
-	xMax: 10,
+	xMin: -2,
+	xMax: 2,
 	isWavesDrawerOpen: false,
 
 	// Type de paquet
@@ -106,9 +99,6 @@ export const useWavePacketStore = create<WavePacketState>(set => ({
 
 	// Générales
 	setNWaves: value => set({ nWaves: Math.max(1, Math.min(200, value)) }),
-	setTime: value => set(state => ({ time: state.time + value })),
-	toggleAnimationTime: () => set(state => ({ isAnimatingTime: !state.isAnimatingTime })),
-	resetTime: () => set({ time: 0 }),
 
 	// Visualisation
 	setVisualizationMode: mode => set({ visualizationMode: mode }),
@@ -152,7 +142,6 @@ export const useWavePacketStore = create<WavePacketState>(set => ({
 			sigma_k: 1.0,
 			x_center: 0.0,
 			nWaves: 50,
-			time: 0,
 		}),
 	loadNarrowPreset: () =>
 		set({
@@ -161,7 +150,6 @@ export const useWavePacketStore = create<WavePacketState>(set => ({
 			sigma_k: 2.0,
 			x_center: 0.0,
 			nWaves: 80,
-			time: 0,
 		}),
 	loadWidePreset: () =>
 		set({
@@ -170,6 +158,5 @@ export const useWavePacketStore = create<WavePacketState>(set => ({
 			sigma_k: 0.5,
 			x_center: 0.0,
 			nWaves: 30,
-			time: 0,
 		}),
 }));

@@ -13,6 +13,7 @@ interface WavePacketData {
 	y: number[];
 	y_imag?: number[];
 	amplitude?: number[];
+	phase?: number[];
 }
 
 function ChartWavePacket() {
@@ -22,7 +23,6 @@ function ChartWavePacket() {
 		sigma_k,
 		x_center,
 		nWaves,
-		time,
 		xMin,
 		xMax,
 		visualizationMode,
@@ -85,7 +85,6 @@ function ChartWavePacket() {
 			sigma_k,
 			x_center,
 			n_waves: nWaves,
-			time,
 			x_min: xMin,
 			x_max: xMax,
 			visualization_mode: visualizationMode,
@@ -99,7 +98,6 @@ function ChartWavePacket() {
 		sigma_k,
 		x_center,
 		nWaves,
-		time,
 		xMin,
 		xMax,
 		visualizationMode,
@@ -126,9 +124,7 @@ function ChartWavePacket() {
 
 	const plotData: Data[] = [];
 
-	// Wave Packet
 	if (visualizationMode === 'wavefunction') {
-		// Real part
 		plotData.push({
 			x: packetData.x,
 			y: packetData.y,
@@ -138,7 +134,6 @@ function ChartWavePacket() {
 			line: { width: 2, color: '#6366f1' },
 		} as Data);
 
-		// Imaginary part (optional)
 		if (packetData.y_imag) {
 			plotData.push({
 				x: packetData.x,
@@ -160,14 +155,43 @@ function ChartWavePacket() {
 			fill: 'tozeroy',
 			fillcolor: 'rgba(245, 158, 11, 0.2)',
 		} as Data);
+	} else if (visualizationMode === 'densityPhase') {
+		if (packetData.y && packetData.phase) {
+			const colors = packetData.phase.map(ph => {
+				const normalized = (ph + Math.PI) / (2 * Math.PI);
+				const hue = normalized * 360;
+				return `hsl(${hue}, 100%, 50%)`;
+			});
+
+			plotData.push({
+				x: packetData.x,
+				y: packetData.y,
+				type: 'bar',
+				name: '|ψ|² (couleur = phase)',
+				marker: { color: colors, line: { width: 0 } },
+				hovertemplate:
+					'<b>Position:</b> %{x:.2f}<br>' + '<b>Densité:</b> %{y:.4f}<br>' + '<extra></extra>',
+			} as Data);
+		}
 	}
 
 	const getAxisLabels = () => {
 		switch (visualizationMode) {
 			case 'wavefunction':
-				return { x: 'Position x (m)', y: 'ψ(x,t)' };
+				return {
+					x: 'Position x (m)',
+					y: 'ψ(x,t)',
+				};
 			case 'probability':
-				return { x: 'Position x (m)', y: '|ψ(x,t)|²' };
+				return {
+					x: 'Position x (m)',
+					y: '|ψ(x,t)|²',
+				};
+			case 'densityPhase':
+				return {
+					x: 'Position x (m)',
+					y: 'Densité de probabilité |ψ|²',
+				};
 			default:
 				return { x: 'x', y: 'y' };
 		}
@@ -175,7 +199,7 @@ function ChartWavePacket() {
 
 	const axisLabels = getAxisLabels();
 
-	const plotLayout: Partial<Layout> = {
+	const plotLayout: any = {
 		xaxis: {
 			title: { text: axisLabels.x },
 			showgrid: true,
@@ -185,10 +209,23 @@ function ChartWavePacket() {
 			showgrid: true,
 		},
 		margin: { t: 10, l: 60, r: 60, b: 50 },
-		showlegend: visualizationMode === 'wavefunction',
+		showlegend: visualizationMode !== 'densityPhase',
 		legend: { x: 1.02, y: 1, xanchor: 'left' },
 		hovermode: 'closest',
 	};
+
+	if (visualizationMode === 'densityPhase') {
+		plotLayout.coloraxis = {
+			colorscale: 'HSL',
+			cmin: -Math.PI,
+			cmax: Math.PI,
+			colorbar: {
+				title: 'Phase (rad)',
+				tickvals: [-Math.PI, -Math.PI / 2, 0, Math.PI / 2, Math.PI],
+				ticktext: ['-π', '-π/2', '0', 'π/2', 'π'],
+			},
+		};
+	}
 
 	return (
 		<div className={styles.chart} data-tour="packet-chart">
