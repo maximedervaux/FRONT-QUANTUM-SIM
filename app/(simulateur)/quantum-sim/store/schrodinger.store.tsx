@@ -6,7 +6,7 @@ interface SchrodingerStore {
 	// Type de potentiel
 	potentialType: PotentialType;
 	setPotentialType: (type: PotentialType) => void;
-
+	setAnimatingTime: (value: boolean) => void; 
 	// Animation temporelle
 	isAnimatingTime: boolean;
 	toggleAnimationTime: () => void;
@@ -63,4 +63,6 @@ export const useSchrodingerStore = create<SchrodingerStore>(set => ({
 	setAbsorbingBoundaries: enabled => set({ absorbingBoundaries: enabled }),
 	viewMode: '2d',
 	setViewMode: viewMode => set({ viewMode: viewMode }),
+
+	setAnimatingTime: (value: boolean) => set({ isAnimatingTime: value }),
 }));

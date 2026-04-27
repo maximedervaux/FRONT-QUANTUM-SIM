@@ -253,7 +253,6 @@ function ChartSchrodinger() {
 		modeBarButtonsToRemove:   ['lasso2d', 'select2d'] as any,
 	};
 
-	// ── Render ─────────────────────────────────────────────────────────────
 
 	return (
 		<div className={styles.chartWrapper}>

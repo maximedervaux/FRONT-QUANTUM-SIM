@@ -4,6 +4,7 @@ import { memo, useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import styles from './ThreeChartSchrodinger.module.css';
+import { useSchrodingerStore } from '../../../store/schrodinger.store';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -140,7 +141,7 @@ function ThreeChartSchrodinger({
 	const axisGroupRef       = useRef<THREE.Group | null>(null);
 
 	const [currentTime, setCurrentTime]   = useState(0);
-	const [isPlaying,   setIsPlaying]     = useState(false);
+	const isPlaying = useSchrodingerStore(state => state.isAnimatingTime);
 	const [showProj,    setShowProj]      = useState(true);
 	const [showWalls,   setShowWalls]     = useState(true);
 
@@ -148,6 +149,8 @@ function ThreeChartSchrodinger({
 	const isPlayingRef    = useRef(false);
 	const currentTimeRef  = useRef(0);
 	const dataTotalFrames = data?.prob.length ?? 0;
+
+	const setAnimatingTime = useSchrodingerStore(s => s.setAnimatingTime);
 
 	useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
 	useEffect(() => { currentTimeRef.current = currentTime; }, [currentTime]);
@@ -409,15 +412,6 @@ function ThreeChartSchrodinger({
 				position: 'absolute', top: 12, left: 12,
 				display: 'flex', gap: 8, flexWrap: 'wrap',
 			}}>
-				{/* Play / Pause */}
-				<button
-					onClick={() => setIsPlaying(p => !p)}
-					style={hudBtn(isPlaying)}
-					title={isPlaying ? 'Pause' : 'Lecture'}
-				>
-					{isPlaying ? '⏸ Pause' : '▶ Play'}
-				</button>
-
 				{/* Projections */}
 				<button
 					onClick={() => setShowProj(p => !p)}
@@ -453,7 +447,10 @@ function ThreeChartSchrodinger({
 						min={0}
 						max={data.prob.length - 1}
 						value={currentTime}
-						onChange={e => { setIsPlaying(false); setCurrentTime(+e.target.value); }}
+						onChange={e => {
+							setAnimatingTime(false); // stop global animation
+							setCurrentTime(+e.target.value);
+							}}
 						style={{ flex: 1, accentColor: '#60a5fa' }}
 					/>
 				</div>
