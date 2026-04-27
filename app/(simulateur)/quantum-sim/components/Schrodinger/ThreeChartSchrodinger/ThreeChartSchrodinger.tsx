@@ -461,7 +461,6 @@ function ThreeChartSchrodinger({
 				position: 'absolute', bottom: 10, left: 16,
 				display: 'flex', gap: 16, fontSize: 11, fontFamily: 'monospace',
 			}}>
-				<span style={{ color: '#ffffff' }}>— x (position)</span>
 				<span style={{ color: '#4ade80' }}>— Re(ψ)</span>
 				<span style={{ color: '#e879f9' }}>— Im(ψ)</span>
 			</div>
