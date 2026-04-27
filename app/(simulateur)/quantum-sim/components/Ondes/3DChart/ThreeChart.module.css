@@ -34,7 +34,6 @@
 	font-size: 0.72rem;
 	color: #d1d5db;
 	pointer-events: none;
-	backdrop-filter: blur(3px);
 }
 
 .tooltip {
