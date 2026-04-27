@@ -7,6 +7,10 @@ interface SchrodingerStore {
 	potentialType: PotentialType;
 	setPotentialType: (type: PotentialType) => void;
 
+	// Animation temporelle
+	isAnimatingTime: boolean;
+	toggleAnimationTime: () => void;
+
 	// Paramètres du puits infini
 	wellWidth: number;
 	setWellWidth: (width: number) => void;
@@ -37,6 +41,8 @@ export const useSchrodingerStore = create<SchrodingerStore>(set => ({
 	// Valeurs par défaut
 	potentialType: 'free',
 	setPotentialType: type => set({ potentialType: type }),
+	isAnimatingTime: false,
+	toggleAnimationTime: () => set(state => ({ isAnimatingTime: !state.isAnimatingTime })),
 
 	wellWidth: 7.2,
 	setWellWidth: width => set({ wellWidth: width }),
