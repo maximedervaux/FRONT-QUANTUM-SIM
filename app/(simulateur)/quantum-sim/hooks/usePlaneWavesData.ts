@@ -14,14 +14,15 @@ export interface WaveData {
 interface PlaneWaveParams {
 	harmonics: number;
 	waveNumber: number;
-	period: number;
 	phase: number;
 	time: number;
 	harmonic_amplitudes: number[];
+	x_min: number;
+	x_max: number;
 }
 
 export function usePlaneWavesData() {
-	const { harmonicAmplitudes, phase, harmonics, waveNumber, period, time, showImaginary } =
+	const { harmonicAmplitudes, phase, harmonics, waveNumber, time, showImaginary, xMin, xMax } =
 		useWaveStore();
 
 	const [waves, setWaves] = useState<WaveData[]>([]);
@@ -87,9 +88,27 @@ export function usePlaneWavesData() {
 			(_, i) => harmonicAmplitudes[i + 1] ?? 1.0
 		);
 
-		const params: PlaneWaveParams = { harmonics, waveNumber, period, phase, time, harmonic_amplitudes };
+		const params: PlaneWaveParams = {
+			harmonics,
+			waveNumber,
+			phase,
+			time,
+			harmonic_amplitudes,
+			x_min: xMin,
+			x_max: xMax,
+		};
 		void runExecution(params);
-	}, [harmonicAmplitudes, phase, time, harmonics, waveNumber, period, showImaginary, runExecution]);
+	}, [
+		harmonicAmplitudes,
+		phase,
+		time,
+		harmonics,
+		waveNumber,
+		showImaginary,
+		xMin,
+		xMax,
+		runExecution,
+	]);
 
 	const plotData = useMemo(
 		() =>

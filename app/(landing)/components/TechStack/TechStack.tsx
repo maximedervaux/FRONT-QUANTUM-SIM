@@ -1,7 +1,7 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { forwardRef } from "react";
-import Image from "next/image";
-import styles from "./TechStack.module.css";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { forwardRef } from 'react';
+import Image from 'next/image';
+import styles from './TechStack.module.css';
 
 type StackItem = {
 	category: string;
@@ -13,36 +13,36 @@ type StackItem = {
 
 const stackItems: StackItem[] = [
 	{
-		category: "Python",
-		title: "Python - Coeur du projet",
+		category: 'Python',
+		title: 'Python - Coeur du projet',
 		description:
-			"Le package principal. Toute la logique quantique calculs d'ondes, potentiels, evolution temporelle est executee ici . Cote front on le concomme via Pyodide l'application n'a donc pas de backend dedie.",
-		logoSrc: "/assets/tech/python.svg",
-		logoAlt: "Logo Python",
+			'Package principal contenant toute la logique quantique (calculs d’ondes, potentiels, évolution temporelle). Il est utilisé côté frontend via Pyodide, ce qui rend l’application entièrement sans backend dédié.',
+		logoSrc: '/assets/tech/python.svg',
+		logoAlt: 'Logo Python',
 	},
 	{
-		category: "Google Colab",
-		title: "Compatible Jupyter Notebooks",
+		category: 'Google Colab',
+		title: 'Compatible Jupyter Notebooks',
 		description:
-			"Des notebooks educatifs pour explorer les concepts pas a pas, avec du code executable et des visualisations integrees. Ideal pour un usage en TD ou en auto-apprentissage.",
-		logoSrc: "/assets/tech/colab.svg",
-		logoAlt: "Logo Google Colab",
+			'Des notebooks éducatifs permettant d’explorer les concepts pas à pas, avec du code exécutable et des visualisations intégrées. Idéal pour les TD ou l’auto-apprentissage.',
+		logoSrc: '/assets/tech/colab.svg',
+		logoAlt: 'Logo Google Colab',
 	},
 	{
-		category: "Simulateur Web",
-		title: "Simulateur interactif (Next.js)",
+		category: 'Simulateur Web',
+		title: 'Simulateur interactif (Next.js)',
 		description:
-			"Une interface web pour visualiser en temps reel l'evolution des ondes quantiques, accessible depuis un navigateur sans installation requise.",
-		logoSrc: "/assets/next.svg",
-		logoAlt: "Logo Next.js",
+			'Une interface web permettant de visualiser en temps réel l’évolution des ondes quantiques, directement depuis un navigateur, sans installation requise.',
+		logoSrc: '/assets/next.svg',
+		logoAlt: 'Logo Next.js',
 	},
 	{
-		category: "Visualisation 3D",
-		title: "Three.js - Visualisation 3D",
+		category: 'Visualisation 3D',
+		title: 'Three.js - Visualisation 3D',
 		description:
-			"Les representations tridimensionnelles (surfaces de phase, evolution temporelle, harmoniques) sont rendues avec Three.js pour une comprehension spatiale des phenomenes quantiques.",
-		logoSrc: "/assets/tech/three.png",
-		logoAlt: "Logo Three.js",
+			'Les représentations tridimensionnelles (surfaces de phase, évolution temporelle, harmoniques) sont rendues avec Three.js afin de faciliter la compréhension spatiale des phénomènes quantiques.',
+		logoSrc: '/assets/tech/three.png',
+		logoAlt: 'Logo Three.js',
 	},
 ];
 
@@ -51,13 +51,11 @@ const TechStack = forwardRef<HTMLDivElement>((props, ref) => {
 		<section className={styles.techStack} ref={ref}>
 			<div className={styles.heading}>
 				<h2>Les technologies derriere le projet.</h2>
-				<p>
-					Une stack simple, robuste et pensee pour la communaute scientifique.
-				</p>
+				<p>Une stack simple, robuste et pensée pour la communauté scientifique.</p>
 			</div>
 
 			<div className={styles.grid}>
-				{stackItems.map((item) => (
+				{stackItems.map(item => (
 					<Card key={item.title} className={styles.card}>
 						<CardHeader>
 							<div className={styles.cardTop}>
@@ -78,6 +76,6 @@ const TechStack = forwardRef<HTMLDivElement>((props, ref) => {
 	);
 });
 
-TechStack.displayName = "TechStack";
+TechStack.displayName = 'TechStack';
 
 export default TechStack;

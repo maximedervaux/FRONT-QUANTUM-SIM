@@ -12,6 +12,8 @@ interface WaveState {
 	isHarmonicsDrawerOpen: boolean;
 	viewMode: '2d' | '3d';
 	showImaginary: boolean;
+	xMin: number;
+	xMax: number;
 	setAmplitude: (value: number) => void;
 	setPhase: (value: number) => void;
 	setFunction: (value: string) => void;
@@ -27,6 +29,8 @@ interface WaveState {
 	resetTime: () => void;
 	setViewMode: (mode: '2d' | '3d') => void;
 	toggleShowImaginary: () => void;
+	setXMin: (value: number) => void;
+	setXMax: (value: number) => void;
 }
 
 export const useWaveStore = create<WaveState>(set => ({
@@ -41,6 +45,8 @@ export const useWaveStore = create<WaveState>(set => ({
 	isHarmonicsDrawerOpen: false,
 	viewMode: '2d',
 	showImaginary: false,
+	xMin: -10,
+	xMax: 10,
 
 	setAmplitude: value => set({ amplitude: value }),
 	setPhase: value => set(state => ({ phase: (state.phase + value) % (2 * Math.PI) })),
@@ -50,15 +56,16 @@ export const useWaveStore = create<WaveState>(set => ({
 				set(state => ({
 					phase: 0.1,
 					amplitude: 1,
-					harmonics: state.harmonics,
+					harmonics: 11,
 					harmonicAmplitudes: gaussianAmplitudes(state.harmonics),
 				}));
 				break;
 			case 'sinus':
-			case 'sinusoidale':
+			case 'sinusoïde':
 				set(state => ({
 					phase: 0.005,
 					amplitude: 1,
+					harmonics: 1,
 					harmonicAmplitudes: sinusoidalAmplitudes(state.harmonics),
 				}));
 				break;
@@ -90,6 +97,8 @@ export const useWaveStore = create<WaveState>(set => ({
 	resetTime: () => set({ time: 0 }),
 	setViewMode: mode => set({ viewMode: mode }),
 	toggleShowImaginary: () => set(state => ({ showImaginary: !state.showImaginary })),
+	setXMin: value => set({ xMin: value }),
+	setXMax: value => set({ xMax: value }),
 }));
 
 function buildAmplitudes(n: number, current: Record<number, number>): Record<number, number> {

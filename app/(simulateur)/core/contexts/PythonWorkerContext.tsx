@@ -242,7 +242,7 @@ export function PythonWorkerProvider({ children }: { children: ReactNode }) {
 						cleanupCallback(callbackKey);
 						reject(new Error(`Timeout lors de l'exécution de ${functionName} dans ${scriptName}`));
 					}
-				}, 60000);
+				}, 30000);
 
 				pendingTimeouts.current.set(callbackKey, timeoutId);
 			});

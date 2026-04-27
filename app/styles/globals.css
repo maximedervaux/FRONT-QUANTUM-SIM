@@ -96,13 +96,13 @@ body {
 	align-items: center;
 	width: 100%;
 	overflow-y: auto;
+	overflow-x: hidden;
 	scrollbar-gutter: stable;
 	padding: 10px;
 	font-size: 100%;
 }
 
-
-:root{
+:root {
 	height: 100%;
 	width: 100%;
 }

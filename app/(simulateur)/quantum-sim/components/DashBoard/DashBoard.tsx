@@ -14,10 +14,11 @@ import { useWaveStore } from '../../store/onde.store';
 import HarmonicsDrawer from '../Ondes/HarmonicsDrawer/HarmonicsDrawer';
 import ParametreWavePacket from '../WavePacket/WavePacketParametre/WavePacketParametre';
 import ChartWavePacket from '../WavePacket/ChartWavePacket/ChartWavePacket';
-import PythonEngineLoader from '../Loader/PythonEngineLoader'
+import PythonEngineLoader from '../Loader/PythonEngineLoader';
+import ChartSchrodinger from '../Schrodinger/ChartSchrodinger/ChartSchrodinger';
+import SchrodingerParametre from '../Schrodinger/SchrodingerParametre/SchrodingerParametre';
 import WaveTour, { WAVE_TOUR_REQUEST_KEY, WAVE_TOUR_SEEN_COOKIE } from '../Ondes/Tour/WaveTour';
 import WavePacketTour, { WAVE_PACKET_TOUR_REQUEST_KEY } from '../WavePacket/Tour/WavePacketTour';
-
 
 export default function DashBoard() {
 	const { activePage, setActivePage } = useNavigationStore();
@@ -128,7 +129,7 @@ export default function DashBoard() {
 	};
 
 	if (!isReady) {
-		return <PythonEngineLoader />
+		return <PythonEngineLoader />;
 	}
 
 	return (
@@ -167,8 +168,8 @@ export default function DashBoard() {
 									Faire le tour complet des guides
 								</CardTitle>
 								<CardDescription>
-									Lance un parcours guidé pour la section ondes ou la section paquets
-									d’ondes selon ce que tu veux explorer.
+									Lance un parcours guidé pour la section ondes ou la section paquets d’ondes selon
+									ce que tu veux explorer.
 								</CardDescription>
 							</CardHeader>
 							<CardContent className={styles.heroActions}>
@@ -216,11 +217,17 @@ export default function DashBoard() {
 						<ChartWavePacket />
 					</>
 				)}
+				{activePage === 'potentials' && (
+					<>
+						<ChartSchrodinger />
+					</>
+				)}
 			</div>
 			<div className={styles.parametersContainer}>
 				{activePage === 'default'}
 				{activePage === 'ondes' && <Parametre />}
 				{activePage === 'packets' && <ParametreWavePacket />}
+				{activePage === 'potentials' && <SchrodingerParametre />}
 			</div>
 		</div>
 	);

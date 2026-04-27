@@ -23,6 +23,9 @@ export function NavigationTabs() {
 				<TabsTrigger className={style.tabTrigger} value="packets">
 					Paquets d'ondes
 				</TabsTrigger>
+				<TabsTrigger className={style.tabTrigger} value="potentials">
+					Potentiels
+				</TabsTrigger>
 			</TabsList>
 		</Tabs>
 	);
