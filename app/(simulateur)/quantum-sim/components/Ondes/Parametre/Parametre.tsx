@@ -95,7 +95,7 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Paramètres de base */}
-			<div className={style.section}>
+			<div className={style.section} data-tour="wave-window">
 				<p className={style.sectionTitle}>Paramètres fondamentaux</p>
 				<div className={style.inputContainer}>
 					<div className={style.inputHeader}>
@@ -196,7 +196,7 @@ export default function Parametre() {
 			</div>
 
 			{/* Section: Contrôles temporels */}
-			<div className={style.buttonContainer}>
+			<div className={style.buttonContainer} data-tour="wave-time-controls">
 				<div className={style.timeContainer}>
 					<div className={style.timeLabel}>
 						<TimerIcon size={20} />

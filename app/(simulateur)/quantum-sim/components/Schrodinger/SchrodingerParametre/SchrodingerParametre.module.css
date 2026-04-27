@@ -8,7 +8,10 @@
 	justify-content: flex-start;
 	align-items: center;
 	width: 100%;
-	overflow-y: auto;
+	overflow-y: visible;
+	overflow-x: hidden;
+	overscroll-behavior-x: none;
+	touch-action: pan-y;
 	max-width: 100%;
 	gap: 16px;
 	padding: 16px;

@@ -10,6 +10,11 @@ import {
 	type Step,
 } from 'react-joyride';
 
+import {
+	getExistingStepDefinitions,
+	toJoyrideSteps,
+	type TourStepDefinition,
+} from '../../shared/Tour/tourSteps';
 import { useWaveStore } from '../../../store/onde.store';
 import WaveTourTooltip from './WaveTourTooltip';
 import styles from './WaveTour.module.css';
@@ -17,7 +22,7 @@ import styles from './WaveTour.module.css';
 export const WAVE_TOUR_REQUEST_KEY = 'quantum-sim-wave-tour-request';
 export const WAVE_TOUR_SEEN_COOKIE = 'quantum-sim-wave-tour-seen';
 const WAVE_TOUR_SEEN_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
-const HARMONICS_DRAWER_STEP = 7;
+const HARMONICS_DRAWER_TARGET = '[data-tour="harmonics-drawer"]';
 
 function hasCookie(cookieName: string): boolean {
 	return document.cookie
@@ -35,123 +40,123 @@ const TourBeacon = forwardRef<HTMLSpanElement, BeaconRenderProps>(function TourB
 
 export default function WaveTour() {
 	const [run, setRun] = useState(false);
+	const [steps, setSteps] = useState<Step[]>([]);
 	const { isHarmonicsDrawerOpen, setHarmonicsDrawerOpen } = useWaveStore();
 
-	const steps = useMemo(
+	const stepDefinitions = useMemo<TourStepDefinition[]>(
 		() =>
 			[
 			{
 				target: '[data-tour="wave-equation"]',
-				title: 'La fonction d’onde',
+				title: 'Point de départ: la fonction d’onde',
 				content: (
 					<p>
-						Cette formule est le point de départ du module ondes. Elle te donne la structure
-						mathématique de ce que tu observes dans le visualiseur.
+						Cette formule décrit l’onde que tu vas manipuler. Pense-la comme la recette qui
+						produit la courbe affichée dans le graphe.
 					</p>
 				),
 				placement: 'bottom',
 			},
 			{
 				target: '[data-tour="equation-live-toggle"]',
-				title: 'Valeurs en temps réel',
+				title: 'Lire la formule en direct',
 				content: (
 					<p>
-						Ici, tu peux basculer entre l’écriture symbolique et les valeurs numériques mises à
-						jour en direct. C’est la meilleure façon de voir l’impact immédiat des réglages.
+						Ici, tu alternes entre écriture symbolique et valeurs numériques. Pratique pour
+						comprendre immédiatement l’effet d’un réglage.
 					</p>
 				),
 				placement: 'left',
 			},
 			{
 				target: '[data-tour="wave-visualizer"]',
-				title: 'Le visualiseur',
+				title: 'Observer l’onde',
 				content: (
 					<p>
-						Le graphe traduit l’onde en représentation visuelle. Chaque paramètre modifie ce
-						tracé, ce qui te permet d’explorer la dynamique sans quitter l’écran.
+						Le graphe montre la forme de l’onde. À partir de maintenant, chaque paramètre que
+						tu changes aura un effet visible ici.
 					</p>
 				),
 				placement: 'auto',
 			},
 			{
 				target: '[data-tour="wave-function-select"]',
-				title: 'Choisir une onde gaussienne',
+				title: '1) Choisir la famille d’onde',
 				content: (
 					<p>
-						Commence ici pour choisir la famille d’onde. Pour ce parcours, la gaussienne sert
-						de base pédagogique car elle met bien en évidence les variations de forme.
+						Commence par le type d’onde (sinusoïde ou gaussienne). C’est le réglage global qui
+						donne la forme de base du signal.
 					</p>
 				),
 				placement: 'left',
 			},
 			{
-				target: '[data-tour="wave-period"]',
-				title: 'Régler la période',
+				target: '[data-tour="wave-window"]',
+				title: '2) Définir la fenêtre spatiale',
 				content: (
 					<p>
-						La période contrôle la vitesse de répétition de l’oscillation. En la changeant, tu
-						modifies le rythme global de l’onde visible dans le visualiseur.
+						Ces bornes définissent la zone x min / x max affichée. Un bon cadrage aide à mieux
+						lire la forme de l’onde et ses variations.
 					</p>
 				),
 				placement: 'left',
 			},
 			{
 				target: '[data-tour="wave-number"]',
-				title: 'Ajuster le nombre d’onde',
+				title: '3) Régler le nombre d’onde k',
 				content: (
 					<p>
-						Le nombre d’onde agit directement sur la densité spatiale des oscillations. C’est un
-						paramètre fondamental pour comprendre la fréquence spatiale du signal.
+						Le nombre d’onde contrôle la densité des oscillations dans l’espace. Plus k augmente,
+						plus les bosses et creux se resserrent.
 					</p>
 				),
 				placement: 'left',
 			},
 			{
 				target: '[data-tour="wave-harmonics"]',
-				title: 'Construire une onde plus riche',
+				title: '4) Enrichir avec des harmoniques',
 				content: (
 					<p>
-						Le nombre d’harmoniques détermine combien de composantes fréquentielles sont
-						superposées. Plus tu en ajoutes, plus la forme de l’onde peut devenir complexe.
+						Ici, tu règles combien de composantes fréquentielles sont superposées. En ajouter
+						permet de construire des formes d’onde plus riches.
 					</p>
 				),
 				placement: 'left',
 			},
 			{
-				target: '[data-tour="harmonics-drawer"]',
-				title: 'Affiner chaque harmonique',
+				target: HARMONICS_DRAWER_TARGET,
+				title: '5) Ajuster amplitude par amplitude',
 				content: (
 					<p>
-						Cette fenêtre avancée te permet de régler amplitude par amplitude. C’est ici que tu
-						passes d’une exploration globale à une sculpture fine de la forme d’onde.
+						Dans ce panneau, tu ajustes chaque harmonique séparément. C’est la partie la plus
+						fine du réglage, idéale pour comprendre la superposition.
 					</p>
 				),
 				placement: 'top',
 			},
 			{
 				target: '[data-tour="wave-time-controls"]',
-				title: 'Observer l’évolution temporelle',
+				title: '6) Faire évoluer l’onde dans le temps',
 				content: (
 					<p>
-						Lecture, pause et réinitialisation te permettent de voir l’onde évoluer dans le temps.
-						Tu peux ainsi relier la formule, les paramètres et le mouvement observé.
+						Lecture, pause et reset te permettent de suivre la dynamique temporelle. Transition:
+						on passe maintenant de la forme statique au comportement dans le temps.
 					</p>
 				),
 				placement: 'left',
 			},
 			{
 				target: '[data-tour="wave-visual-options"]',
-				title: 'Faire évoluer la visualisation',
+				title: '7) Comparer les modes de visualisation',
 				content: (
 					<p>
-						Termine ici pour changer le mode d’affichage, afficher la partie imaginaire et comparer
-						les effets de tous les paramètres. Toute la section ondes est faite pour cette boucle
-						d’essais visuels.
+						Termine en testant 2D/3D et la partie imaginaire. Tu relieras ainsi paramètres,
+						représentation visuelle et intuition physique en un seul coup d’œil.
 					</p>
 				),
 				placement: 'left',
 			},
-			].map(step => ({ ...step, skipBeacon: true } as Step)),
+			],
 		[]
 	);
 
@@ -168,8 +173,11 @@ export default function WaveTour() {
 		const startWhenReady = () => {
 			if (cancelled) return;
 
-			const firstTarget = document.querySelector('[data-tour="wave-equation"]');
+			const availableSteps = getExistingStepDefinitions(stepDefinitions);
+			const firstTarget = availableSteps[0]?.target;
+
 			if (firstTarget) {
+				setSteps(toJoyrideSteps(availableSteps));
 				if (shouldStartFromButton) {
 					window.localStorage.removeItem(WAVE_TOUR_REQUEST_KEY);
 				}
@@ -190,7 +198,7 @@ export default function WaveTour() {
 			cancelled = true;
 			window.clearTimeout(timer);
 		};
-	}, []);
+	}, [stepDefinitions]);
 
 	const closeGuide = useCallback(() => {
 		setRun(false);
@@ -199,7 +207,8 @@ export default function WaveTour() {
 
 	const handleJoyrideCallback = useCallback(
 		(data: EventData) => {
-			const { index, status, type } = data;
+			const { status, type } = data;
+			const currentTarget = typeof data.step?.target === 'string' ? data.step.target : null;
 
 			if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
 				closeGuide();
@@ -207,7 +216,7 @@ export default function WaveTour() {
 			}
 
 			if (type === EVENTS.STEP_BEFORE) {
-				if (index === HARMONICS_DRAWER_STEP) {
+				if (currentTarget === HARMONICS_DRAWER_TARGET) {
 					setHarmonicsDrawerOpen(true);
 				} else if (isHarmonicsDrawerOpen) {
 					setHarmonicsDrawerOpen(false);

@@ -252,7 +252,7 @@ function ChartSchrodinger() {
 	};
 
 	return (
-		<div className={styles.chartWrapper}>
+		<div className={styles.chartWrapper} data-tour="sch-chart">
 			{viewMode === '2d' && (
 				<div className={styles.chart}>
 					<Plot data={plotData} layout={plotLayout} style={{ width: '100%', height: '100%', overflow: 'hidden' }} config={plotConfig} />

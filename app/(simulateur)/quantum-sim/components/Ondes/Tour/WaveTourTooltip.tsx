@@ -32,7 +32,7 @@ export default function WaveTourTooltip({
 			<div className={styles.tooltipBody}>{step.content}</div>
 			<div className={styles.tooltipFooter}>
 				<span className={styles.tooltipMeta}>
-					Guide interactif de la section ondes
+					Guide interactif du simulateur
 				</span>
 				<div className={styles.tooltipActions}>
 					{index > 0 ? (
