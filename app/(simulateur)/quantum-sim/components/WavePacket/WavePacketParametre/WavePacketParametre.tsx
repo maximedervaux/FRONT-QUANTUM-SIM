@@ -158,11 +158,11 @@ export default function ParametreWavePacket() {
 
 			{/* Section: Paramètres gaussiens */}
 			{packetType === 'gaussian' && (
-				<div className={style.section}>
+				<div className={style.section} data-tour="packet-gaussian-params">
 					<p className={style.sectionTitle}>Paramètres gaussiens</p>
 
 					{/* Vecteur d'onde central */}
-					<div className={style.inputContainer}>
+					<div className={style.inputContainer} data-tour="packet-k-center">
 						<div className={style.inputHeader}>
 							<label htmlFor="k-center-slider">
 								<p>Vecteur d'onde central (k₀)</p>
@@ -182,7 +182,7 @@ export default function ParametreWavePacket() {
 					</div>
 
 					{/* Largeur spectrale */}
-					<div className={style.inputContainer}>
+					<div className={style.inputContainer} data-tour="packet-sigma-k">
 						<div className={style.inputHeader}>
 							<label htmlFor="sigma-k-slider">
 								<p>Largeur spectrale (Δk)</p>
@@ -202,7 +202,7 @@ export default function ParametreWavePacket() {
 					</div>
 
 					{/* Position centrale */}
-					<div className={style.inputContainer}>
+					<div className={style.inputContainer} data-tour="packet-x-center">
 						<div className={style.inputHeader}>
 							<label htmlFor="x-center-slider">
 								<p>Position centrale (x₀)</p>

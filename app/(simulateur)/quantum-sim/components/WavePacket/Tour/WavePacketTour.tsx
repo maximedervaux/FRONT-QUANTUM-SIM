@@ -1,8 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Joyride, type BeaconRenderProps, type Step } from 'react-joyride';
+import { EVENTS, Joyride, STATUS, type BeaconRenderProps, type EventData, type Step } from 'react-joyride';
 
+import {
+	getExistingStepDefinitions,
+	toJoyrideSteps,
+	type TourStepDefinition,
+} from '../../shared/Tour/tourSteps';
 import WaveTourTooltip from '../../Ondes/Tour/WaveTourTooltip';
 import styles from '../../Ondes/Tour/WaveTour.module.css';
 
@@ -14,99 +19,133 @@ function TourBeacon(_: BeaconRenderProps) {
 
 export default function WavePacketTour() {
 	const [run, setRun] = useState(false);
+	const [steps, setSteps] = useState<Step[]>([]);
 
-	const steps = useMemo(
+	const stepDefinitions = useMemo<TourStepDefinition[]>(
 		() =>
 			[
 				{
 					target: '[data-tour="packet-header"]',
-					title: 'Le paquet d’ondes',
+					title: 'Point de départ: le paquet d’ondes',
 					content: (
 						<p>
-							Bienvenue dans le mode paquet d’ondes. Cette section te permet d’explorer
-							la superposition d’ondes planes et son évolution temporelle.
+							Ici, on construit une onde localisée en superposant plusieurs ondes planes.
+							Tu vas voir comment chaque réglage influence sa forme.
 						</p>
 					),
 					placement: 'left',
 				},
 				{
 					target: '[data-tour="packet-type"]',
-					title: 'Choisir le type de paquet',
+					title: '1) Choisir le type de paquet',
 					content: (
 						<p>
-							Ici, tu sélectionnes la structure du paquet : gaussien, aléatoire ou
-							personnalisé selon l’expérience que tu veux faire.
+							Gaussien, aléatoire ou personnalisé: ce choix fixe la logique de construction du
+							paquet avant les réglages fins.
 						</p>
 					),
 					placement: 'left',
 				},
 				{
 					target: '[data-tour="packet-presets"]',
-					title: 'Présets rapides',
+					title: '2) Tester des présets',
 					content: (
 						<p>
-							Les présets appliquent instantanément des configurations utiles pour
-							comparer paquet standard, étroit et large.
+							Les présets chargent des cas utiles (standard, étroit, large). C’est la façon la
+							plus rapide de comparer la dispersion.
+						</p>
+					),
+					placement: 'left',
+				},
+				{
+					target: '[data-tour="packet-gaussian-params"]',
+					title: '3) Paramètres gaussiens (vue d’ensemble)',
+					content: (
+						<p>
+							Transition: maintenant on affine le paquet gaussien avec trois paramètres clés:
+							k₀, Δk et x₀.
+						</p>
+					),
+					placement: 'left',
+				},
+				{
+					target: '[data-tour="packet-k-center"]',
+					title: '4) Vecteur d’onde central k₀',
+					content: (
+						<p>
+							k₀ règle l’oscillation dominante: il influence la structure interne des franges du
+							paquet.
+						</p>
+					),
+					placement: 'left',
+				},
+				{
+					target: '[data-tour="packet-sigma-k"]',
+					title: '5) Largeur spectrale Δk',
+					content: (
+						<p>
+							Δk contrôle l’étalement en nombre d’onde. En pratique, il joue sur la localisation
+							spatiale du paquet.
+						</p>
+					),
+					placement: 'left',
+				},
+				{
+					target: '[data-tour="packet-x-center"]',
+					title: '6) Position centrale x₀',
+					content: (
+						<p>
+							x₀ déplace le paquet dans l’espace. Idéal pour observer la propagation depuis une
+							position initiale différente.
 						</p>
 					),
 					placement: 'left',
 				},
 				{
 					target: '[data-tour="packet-composition"]',
-					title: 'Composition en ondes planes',
+					title: '7) Composition en ondes planes',
 					content: (
 						<p>
-							Ce curseur contrôle le nombre d’ondes composantes. Plus la base est riche,
-							plus la représentation du paquet est fine.
-						</p>
-					),
-					placement: 'left',
-				},
-				{
-					target: '[data-tour="packet-time-controls"]',
-					title: 'Animation temporelle',
-					content: (
-						<p>
-							Lecture, pause et réinitialisation servent à observer la propagation du paquet dans
-							le temps et comparer les régimes.
+							Ce curseur fixe combien d’ondes sont superposées. Plus il est élevé, plus le paquet
+							est reconstruit finement.
 						</p>
 					),
 					placement: 'left',
 				},
 				{
 					target: '[data-tour="packet-visualization"]',
-					title: 'Mode d’affichage',
+					title: '8) Changer de point de vue',
 					content: (
 						<p>
-							Bascule entre la fonction d’onde et la densité de probabilité pour
-							changer de point de vue physique.
+							Passe de la fonction d’onde à la densité de probabilité (ou la phase) pour relier
+							lecture mathématique et interprétation physique.
 						</p>
 					),
 					placement: 'left',
 				},
 				{
 					target: '[data-tour="packet-window"]',
-					title: 'Fenêtre spatiale',
+					title: '9) Ajuster la fenêtre spatiale',
 					content: (
 						<p>
-							Ajuste x min et x max pour cadrer proprement la zone d’étude et stabiliser
-							la lecture du signal.
+							Régle x min / x max pour cadrer ta zone d’étude et garder une lecture stable du
+							signal.
 						</p>
 					),
 					placement: 'left',
 				},
 				{
 					target: '[data-tour="packet-chart"]',
-					title: 'Visualiseur du paquet',
+					title: '10) Vérification finale dans le graphe',
 					content: (
 						<p>
-							Le graphe reflète instantanément tes réglages. C’est ici que tu vérifies
-							l’effet des paramètres sur la forme et la propagation.
+							Le graphe résume l’effet de tous les paramètres. Fais varier un réglage à la fois
+							pour construire ton intuition pas à pas.
 						</p>
 					),
 					placement: 'auto',
 				},
-			].map(step => ({ ...step, skipBeacon: true } as Step)),
+			],
 		[]
 	);
 
@@ -121,8 +160,11 @@ export default function WavePacketTour() {
 		const startWhenReady = () => {
 			if (cancelled) return;
 
-			const firstTarget = document.querySelector('[data-tour="packet-header"]');
+			const availableSteps = getExistingStepDefinitions(stepDefinitions);
+			const firstTarget = availableSteps[0]?.target;
+
 			if (firstTarget) {
+				setSteps(toJoyrideSteps(availableSteps));
 				window.localStorage.removeItem(WAVE_PACKET_TOUR_REQUEST_KEY);
 				setRun(true);
 				return;
@@ -140,13 +182,18 @@ export default function WavePacketTour() {
 			cancelled = true;
 			window.clearTimeout(timer);
 		};
-	}, []);
+	}, [stepDefinitions]);
 
 	return (
 		<Joyride
 			beaconComponent={TourBeacon}
-			onEvent={data => {
-				if (data.status === 'finished' || data.status === 'skipped') {
+			onEvent={(data: EventData) => {
+				if (data.status === STATUS.FINISHED || data.status === STATUS.SKIPPED) {
+					setRun(false);
+					return;
+				}
+
+				if (data.type === EVENTS.TOUR_END) {
 					setRun(false);
 				}
 			}}

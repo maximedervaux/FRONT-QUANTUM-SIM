@@ -19,6 +19,7 @@ import ChartSchrodinger from '../Schrodinger/ChartSchrodinger/ChartSchrodinger';
 import SchrodingerParametre from '../Schrodinger/SchrodingerParametre/SchrodingerParametre';
 import WaveTour, { WAVE_TOUR_REQUEST_KEY, WAVE_TOUR_SEEN_COOKIE } from '../Ondes/Tour/WaveTour';
 import WavePacketTour, { WAVE_PACKET_TOUR_REQUEST_KEY } from '../WavePacket/Tour/WavePacketTour';
+import SchrodingerTour, { SCHRODINGER_TOUR_REQUEST_KEY } from '../Schrodinger/Tour/SchrodingerTour';
 
 export default function DashBoard() {
 	const { activePage, setActivePage } = useNavigationStore();
@@ -128,6 +129,11 @@ export default function DashBoard() {
 		setActivePage('packets');
 	};
 
+	const launchPotentialTutorial = () => {
+		window.localStorage.setItem(SCHRODINGER_TOUR_REQUEST_KEY, '1');
+		setActivePage('potentials');
+	};
+
 	if (!isReady) {
 		return <PythonEngineLoader />;
 	}
@@ -181,6 +187,10 @@ export default function DashBoard() {
 									<BookOpenText data-icon="inline-start" />
 									Lancer le tutoriel paquets d’ondes
 								</Button>
+								<Button onClick={launchPotentialTutorial} variant="outline">
+									<BookOpenText data-icon="inline-start" />
+									Lancer le tutoriel potentiel
+								</Button>
 							</CardContent>
 						</Card>
 
@@ -219,6 +229,7 @@ export default function DashBoard() {
 				)}
 				{activePage === 'potentials' && (
 					<>
+						<SchrodingerTour />
 						<ChartSchrodinger />
 					</>
 				)}
