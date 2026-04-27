@@ -106,7 +106,8 @@ def schrodinger_solving_function(
         solver.init_from_array(psi0, normalize=True)
     
     print("start solving")
-    solved = solver.solve(t_final=100000, dt=time_steps)
+    dt = 100000 / time_steps
+    solved = solver.solve(t_final=100000, dt=dt)
     
     x = solved["x"]
     print("solving finish")
