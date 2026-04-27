@@ -4,7 +4,14 @@ import { Slider } from '@/components/ui/slider';
 import { useSchrodingerStore, type PotentialType } from '../../../store/schrodinger.store';
 import styles from './SchrodingerParametre.module.css';
 import { ReactElement, useEffect } from 'react';
-import { BoxIcon, CircleOffIcon, CirclePauseIcon, CirclePlayIcon, SquareIcon } from 'lucide-react';
+import {
+	AlignHorizontalSpaceAroundIcon,
+	BoxIcon,
+	CircleOffIcon,
+	CirclePauseIcon,
+	CirclePlayIcon,
+	SquareIcon,
+} from 'lucide-react';
 
 const POTENTIAL_INFO = {
 	free: 'Sans potentiel - Propagation libre',
@@ -49,7 +56,7 @@ export default function SchrodingerParametre() {
 
 	const potentialSelect: Array<{ label: string; value: PotentialType; icon?: ReactElement }> = [
 		{ label: 'Sans potentiel', value: 'free', icon: <CircleOffIcon /> },
-		{ label: 'Puits infini', value: 'infiniteWell', icon: <BoxIcon /> },
+		{ label: 'Puits infini', value: 'infiniteWell', icon: <AlignHorizontalSpaceAroundIcon /> },
 	];
 
 	useEffect(() => {
@@ -73,12 +80,14 @@ export default function SchrodingerParametre() {
 								aria-pressed={potentialType === option.value}
 								title={POTENTIAL_INFO[option.value as keyof typeof POTENTIAL_INFO]}
 							>
-								{option.icon}
+								{option.icon} {option.label}
 							</Button>
 						))}
 					</ButtonGroup>
 				</div>
-				<p className={styles.subText}>{POTENTIAL_INFO[potentialType as keyof typeof POTENTIAL_INFO]}</p>
+				<p className={styles.subText}>
+					{POTENTIAL_INFO[potentialType as keyof typeof POTENTIAL_INFO]}
+				</p>
 			</div>
 
 			{potentialType === 'infiniteWell' && (
