@@ -1,20 +1,17 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import type { Data, Shape, Frame } from 'plotly.js';
-import { useEffect, useState, useRef, useCallback, memo } from 'react';
+import type { Data, Shape } from 'plotly.js';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { usePythonFunction } from '../../../hooks/usePythonFunction';
-import styles from './ChartSchrodinger.module.css';
-import { useWavePacketStore } from '../../../store/wave-packet.store';
 import { useSchrodingerStore } from '../../../store/schrodinger.store';
+import { useWavePacketStore } from '../../../store/wave-packet.store';
+import styles from './ChartSchrodinger.module.css';
 
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
-const ThreeChartSchrodinger = dynamic(
-	() => import('../ThreeChartSchrodinger/ThreeChartSchrodinger'),
-	{
-		ssr: false,
-	}
-);
+const ThreeChartSchrodinger = dynamic(() => import('../ThreeChartSchrodinger/ThreeChartSchrodinger'), {
+	ssr: false,
+});
 
 interface SchrodingerData {
 	x: number[];
@@ -25,6 +22,7 @@ function ChartSchrodinger() {
 	const isExecutingRef = useRef(false);
 	const pendingParamsRef = useRef<Record<string, unknown> | null>(null);
 	const [schrodingerData, setSchrodingerData] = useState<SchrodingerData | null>(null);
+	const [currentTimeSlice, setCurrentTimeSlice] = useState(0);
 
 	const {
 		potentialType,
@@ -36,6 +34,7 @@ function ChartSchrodinger() {
 		spatialPoints,
 		absorbingBoundaries,
 		viewMode,
+		isAnimatingTime,
 	} = useSchrodingerStore();
 	const { k_center, sigma_k, x_center, nWaves, xMin, xMax } = useWavePacketStore();
 
@@ -73,7 +72,7 @@ function ChartSchrodinger() {
 			if (pendingParamsRef.current) {
 				const pending = pendingParamsRef.current;
 				pendingParamsRef.current = null;
-				runExecution(pending);
+				runExecution(pending as Record<string, unknown>);
 			}
 		}
 	}, []);
@@ -96,7 +95,7 @@ function ChartSchrodinger() {
 			absorbing_boundaries: absorbingBoundaries,
 		};
 
-		runExecution(params);
+		void runExecution(params);
 	}, [
 		k_center,
 		sigma_k,
@@ -115,11 +114,26 @@ function ChartSchrodinger() {
 		runExecution,
 	]);
 
+	useEffect(() => {
+		if (!schrodingerData) return;
+		setCurrentTimeSlice(0);
+	}, [schrodingerData]);
+
+	useEffect(() => {
+		if (!isAnimatingTime || !schrodingerData || schrodingerData.prob.length <= 1) return;
+
+		const interval = window.setInterval(() => {
+			setCurrentTimeSlice(current => (current + 1) % schrodingerData.prob.length);
+		}, 50);
+
+		return () => window.clearInterval(interval);
+	}, [isAnimatingTime, schrodingerData]);
+
 	const plotData: Data[] = schrodingerData
 		? [
 				{
 					x: schrodingerData.x,
-					y: schrodingerData.prob[0],
+					y: schrodingerData.prob[currentTimeSlice] ?? schrodingerData.prob[0],
 					type: 'scatter',
 					mode: 'lines',
 					name: '|ψ|²(x,t)',
@@ -133,17 +147,6 @@ function ChartSchrodinger() {
 			]
 		: [];
 
-	const frames: Frame[] = schrodingerData
-		? schrodingerData.prob.map((frame, i) => ({
-				name: i.toString(),
-				data: [{ x: schrodingerData.x, y: frame, type: 'scatter', mode: 'lines' }],
-				traces: [0],
-				group: 'animation',
-				baseframe: '',
-				layout: {},
-			}))
-		: [];
-
 	const yMax = schrodingerData
 		? schrodingerData.prob.reduce((max, frame) => {
 				const frameMax = Math.max(...frame);
@@ -153,13 +156,11 @@ function ChartSchrodinger() {
 
 	const shapes: Partial<Shape>[] = [];
 
-	// Ajouter les formes de potentiel selon le type
 	if (potentialType === 'infiniteWell' && yMax) {
 		const wellLeft = -wellWidth / 2;
 		const wellRight = wellWidth / 2;
 
 		shapes.push(
-			// Mur gauche
 			{
 				type: 'rect',
 				x0: Number(xMin) - 20,
@@ -170,7 +171,6 @@ function ChartSchrodinger() {
 				line: { width: 2, color: 'rgba(100, 100, 100, 0.5)' },
 				layer: 'below',
 			},
-			// Mur droit
 			{
 				type: 'rect',
 				x0: wellRight,
@@ -216,9 +216,11 @@ function ChartSchrodinger() {
 		barrier: `Barrière tunnel (h=${barrierHeight.toFixed(0)}, w=${barrierWidth.toFixed(1)})`,
 	};
 
+	const currentTimeLabel = schrodingerData ? `${currentTimeSlice + 1}/${schrodingerData.prob.length}` : '0/0';
+
 	const plotLayout: any = {
 		title: {
-			text: `${potentialLabel[potentialType as keyof typeof potentialLabel]} - Évolution Temporelle (k₀=${k_center}, σₖ=${sigma_k})`,
+			text: `${potentialLabel[potentialType as keyof typeof potentialLabel]} - Évolution Temporelle (k₀=${k_center}, σₖ=${sigma_k}) - Frame ${currentTimeLabel}`,
 			font: { size: 14 },
 		},
 		xaxis: {
@@ -251,46 +253,10 @@ function ChartSchrodinger() {
 
 	return (
 		<div className={styles.chartWrapper}>
-			{/* Vue 2D */}
 			{viewMode === '2d' && (
-				<>
-					<div className={styles.chart}>
-						<Plot
-							data={plotData}
-							style={{ width: '100%', height: '100%', overflow: 'hidden' }}
-							layout={{
-								...plotLayout,
-								updatemenus: [
-									{
-										type: 'buttons',
-										showactive: false,
-										buttons: [
-											{
-												label: '▶ Lecture',
-												method: 'animate',
-												args: [null, { frame: { duration: 50, redraw: true } }],
-											},
-											{
-												label: '⏸ Pause',
-												method: 'animate',
-												args: [
-													[],
-													{
-														mode: 'immediate',
-														frame: { duration: 0, redraw: false },
-														transition: { duration: 0 },
-													},
-												],
-											},
-										],
-									},
-								],
-							}}
-							frames={frames}
-							config={plotConfig}
-						/>
-					</div>
-				</>
+				<div className={styles.chart}>
+					<Plot data={plotData} layout={plotLayout} style={{ width: '100%', height: '100%', overflow: 'hidden' }} config={plotConfig} />
+				</div>
 			)}
 
 			{viewMode === '3d' && potentialType === 'infiniteWell' && (

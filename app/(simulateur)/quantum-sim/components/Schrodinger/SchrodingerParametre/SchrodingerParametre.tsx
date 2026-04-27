@@ -4,8 +4,7 @@ import { Slider } from '@/components/ui/slider';
 import { useSchrodingerStore, type PotentialType } from '../../../store/schrodinger.store';
 import styles from './SchrodingerParametre.module.css';
 import { ReactElement, useEffect } from 'react';
-import { BoxIcon, CircleOffIcon, FenceIcon, SquareIcon } from 'lucide-react';
-//import StairsIcon from '@/app/assets/icons/stairsIcon';
+import { BoxIcon, CircleOffIcon, CirclePauseIcon, CirclePlayIcon, SquareIcon } from 'lucide-react';
 
 const POTENTIAL_INFO = {
 	free: 'Sans potentiel - Propagation libre',
@@ -34,6 +33,7 @@ export default function SchrodingerParametre() {
 		spatialPoints,
 		absorbingBoundaries,
 		potentialType,
+		isAnimatingTime,
 		viewMode,
 		setWellWidth,
 		setStepHeight,
@@ -44,20 +44,19 @@ export default function SchrodingerParametre() {
 		setAbsorbingBoundaries,
 		setPotentialType,
 		setViewMode,
+		toggleAnimationTime,
 	} = useSchrodingerStore();
 
 	const potentialSelect: Array<{ label: string; value: PotentialType; icon?: ReactElement }> = [
 		{ label: 'Sans potentiel', value: 'free', icon: <CircleOffIcon /> },
 		{ label: 'Puits infini', value: 'infiniteWell', icon: <BoxIcon /> },
-		// { label: 'Marche de potentiel', value: 'step', icon: <StairsIcon /> },
-		// { label: 'Barrière tunnel', value: 'barrier', icon: <FenceIcon /> },
 	];
 
 	useEffect(() => {
 		if (potentialType === 'free') {
 			setViewMode('2d');
 		}
-	}, [potentialType]);
+	}, [potentialType, setViewMode]);
 
 	return (
 		<div className={styles.parametreContainer}>
@@ -79,12 +78,9 @@ export default function SchrodingerParametre() {
 						))}
 					</ButtonGroup>
 				</div>
-				<p className={styles.subText}>
-					{POTENTIAL_INFO[potentialType as keyof typeof POTENTIAL_INFO]}
-				</p>
+				<p className={styles.subText}>{POTENTIAL_INFO[potentialType as keyof typeof POTENTIAL_INFO]}</p>
 			</div>
 
-			{/* PUITS INFINI */}
 			{potentialType === 'infiniteWell' && (
 				<div className={styles.section}>
 					<p className={styles.sectionTitle}>Paramètres du puits infini</p>
@@ -139,7 +135,6 @@ export default function SchrodingerParametre() {
 				</div>
 			)}
 
-			{/* MARCHE DE POTENTIEL */}
 			{potentialType === 'step' && (
 				<div className={styles.section}>
 					<p className={styles.sectionTitle}>Paramètres de la marche</p>
@@ -164,7 +159,6 @@ export default function SchrodingerParametre() {
 				</div>
 			)}
 
-			{/* BARRIÈRE TUNNEL */}
 			{potentialType === 'barrier' && (
 				<div className={styles.section}>
 					<p className={styles.sectionTitle}>Paramètres de la barrière</p>
@@ -207,9 +201,26 @@ export default function SchrodingerParametre() {
 				</div>
 			)}
 
-			{/* PARAMÈTRES DE SIMULATION GÉNÉRAUX */}
 			<div className={styles.section}>
 				<p className={styles.sectionTitle}>Simulation numérique</p>
+
+				<div className={styles.inputContainer}>
+					<div className={styles.inputHeader}>
+						<label htmlFor="schrodinger-animation-button">
+							<p>Lecture temporelle</p>
+						</label>
+					</div>
+					<Button
+						id="schrodinger-animation-button"
+						onClick={toggleAnimationTime}
+						variant={isAnimatingTime ? 'default' : 'outline'}
+						title={isAnimatingTime ? "Mettre en pause l'animation" : "Lancer l'animation"}
+						aria-label={isAnimatingTime ? 'Mettre en pause' : 'Lancer'}
+						style={{ cursor: 'pointer' }}
+					>
+						{isAnimatingTime ? <CirclePauseIcon /> : <CirclePlayIcon />}
+					</Button>
+				</div>
 
 				<div className={styles.inputContainer}>
 					<div className={styles.inputHeader}>
