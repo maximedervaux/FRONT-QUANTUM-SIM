@@ -67,7 +67,7 @@ export default function SchrodingerParametre() {
 
 	return (
 		<div className={styles.parametreContainer}>
-			<div className={styles.section}>
+			<div className={styles.section} data-tour="sch-potential-type">
 				<p className={styles.sectionTitle}>Type de potentiel</p>
 				<div className={styles.buttonGroupWrap}>
 					<ButtonGroup>
@@ -91,10 +91,10 @@ export default function SchrodingerParametre() {
 			</div>
 
 			{potentialType === 'infiniteWell' && (
-				<div className={styles.section}>
+				<div className={styles.section} data-tour="sch-well-params">
 					<p className={styles.sectionTitle}>Paramètres du puits infini</p>
 
-					<div className={styles.inputContainer}>
+					<div className={styles.inputContainer} data-tour="sch-well-width">
 						<div className={styles.inputHeader}>
 							<label htmlFor="well-width-slider">
 								<p>Largeur du puits</p>
@@ -112,7 +112,7 @@ export default function SchrodingerParametre() {
 						<p className={styles.subText}>Distance entre les murs (m)</p>
 					</div>
 
-					<div className={styles.inputContainer}>
+					<div className={styles.inputContainer} data-tour="sch-view-mode">
 						<div className={styles.inputHeader}>
 							<label htmlFor="view-mode-button">
 								<p>Mode de visualisation</p>
@@ -210,10 +210,10 @@ export default function SchrodingerParametre() {
 				</div>
 			)}
 
-			<div className={styles.section}>
+			<div className={styles.section} data-tour="sch-numerical-sim">
 				<p className={styles.sectionTitle}>Simulation numérique</p>
 
-				<div className={styles.inputContainer}>
+				<div className={styles.inputContainer} data-tour="sch-time-playback">
 					<div className={styles.inputHeader}>
 						<label htmlFor="schrodinger-animation-button">
 							<p>Lecture temporelle</p>
@@ -231,7 +231,7 @@ export default function SchrodingerParametre() {
 					</Button>
 				</div>
 
-				<div className={styles.inputContainer}>
+				<div className={styles.inputContainer} data-tour="sch-time-steps">
 					<div className={styles.inputHeader}>
 						<label htmlFor="time-steps-slider">
 							<p>Pas de temps</p>
@@ -249,7 +249,7 @@ export default function SchrodingerParametre() {
 					<p className={styles.subText}>Nombre d'images d'animation</p>
 				</div>
 
-				<div className={styles.inputContainer}>
+				<div className={styles.inputContainer} data-tour="sch-spatial-points">
 					<div className={styles.inputHeader}>
 						<label htmlFor="spatial-points-slider">
 							<p>Points spatiaux</p>
@@ -267,7 +267,7 @@ export default function SchrodingerParametre() {
 					<p className={styles.subText}>Résolution spatiale (plus = plus précis mais lent)</p>
 				</div>
 
-				<div className={styles.inputContainer}>
+				<div className={styles.inputContainer} data-tour="sch-absorbing-boundaries">
 					<div className={styles.checkboxWrap}>
 						<input
 							type="checkbox"

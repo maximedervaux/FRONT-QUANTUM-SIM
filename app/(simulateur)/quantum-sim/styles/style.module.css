@@ -10,17 +10,19 @@
 .content {
 	flex: 1;
 	min-height: 0;
+	min-width: 0;
+	width: 100%;
 
 	background: var(--foreground);
 	color: var(--foreground);
 
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: stretch;
 
 	padding: 10px;
 	border-radius: 20px;
-	overflow: hidden;
+	overflow: auto;
 }
 
 .headerBar {
@@ -28,5 +30,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
 	padding-bottom: 10px;
 }
