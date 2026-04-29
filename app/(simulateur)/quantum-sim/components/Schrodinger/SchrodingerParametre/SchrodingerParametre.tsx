@@ -266,19 +266,6 @@ export default function SchrodingerParametre() {
 					/>
 					<p className={styles.subText}>Résolution spatiale (plus = plus précis mais lent)</p>
 				</div>
-
-				<div className={styles.inputContainer} data-tour="sch-absorbing-boundaries">
-					<div className={styles.checkboxWrap}>
-						<input
-							type="checkbox"
-							id="absorbing-boundaries"
-							checked={absorbingBoundaries}
-							onChange={e => setAbsorbingBoundaries(e.target.checked)}
-						/>
-						<label htmlFor="absorbing-boundaries">Conditions aux limites absorbantes</label>
-					</div>
-					<p className={styles.subText}>Évite les réflexions parasites aux bords du domaine</p>
-				</div>
 			</div>
 		</div>
 	);
