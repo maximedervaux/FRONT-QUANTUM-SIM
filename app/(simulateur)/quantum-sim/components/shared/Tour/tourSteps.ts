@@ -5,7 +5,7 @@ export interface TourStepDefinition {
 	target: string;
 	title: string;
 	content: ReactNode;
-	placement?: Placement;
+	placement?: Step['placement'];
 }
 
 export function toJoyrideSteps(stepDefinitions: TourStepDefinition[]): Step[] {

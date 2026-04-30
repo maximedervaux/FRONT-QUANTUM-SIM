@@ -137,7 +137,7 @@ export default function Parametre() {
 				<div className={style.inputContainer} data-tour="wave-number">
 					<div className={style.inputHeader}>
 						<label htmlFor="wave-number-input">
-							<p>Nombre d’onde k (en multiples de π)</p>
+							<p>Nombre d’onde k</p>
 						</label>
 					</div>
 					<div className={style.inputRow}>

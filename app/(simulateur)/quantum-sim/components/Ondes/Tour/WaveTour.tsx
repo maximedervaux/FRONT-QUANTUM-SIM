@@ -25,9 +25,7 @@ const WAVE_TOUR_SEEN_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 const HARMONICS_DRAWER_TARGET = '[data-tour="harmonics-drawer"]';
 
 function hasCookie(cookieName: string): boolean {
-	return document.cookie
-		.split('; ')
-		.some(cookie => cookie.startsWith(`${cookieName}=`));
+	return document.cookie.split('; ').some(cookie => cookie.startsWith(`${cookieName}=`));
 }
 
 function setSeenCookie(cookieName: string): void {
@@ -44,15 +42,14 @@ export default function WaveTour() {
 	const { isHarmonicsDrawerOpen, setHarmonicsDrawerOpen } = useWaveStore();
 
 	const stepDefinitions = useMemo<TourStepDefinition[]>(
-		() =>
-			[
+		() => [
 			{
 				target: '[data-tour="wave-equation"]',
 				title: 'Point de départ: la fonction d’onde',
 				content: (
 					<p>
-						Cette formule décrit l’onde que tu vas manipuler. Pense-la comme la recette qui
-						produit la courbe affichée dans le graphe.
+						Cette formule décrit l’onde que tu vas manipuler. Pense-la comme la recette qui produit
+						la courbe affichée dans le graphe.
 					</p>
 				),
 				placement: 'bottom',
@@ -73,19 +70,19 @@ export default function WaveTour() {
 				title: 'Observer l’onde',
 				content: (
 					<p>
-						Le graphe montre la forme de l’onde. À partir de maintenant, chaque paramètre que
-						tu changes aura un effet visible ici.
+						Le graphe montre la forme de l’onde. À partir de maintenant, chaque paramètre que tu
+						changes aura un effet visible ici.
 					</p>
 				),
-				placement: 'bottom',
+				placement: 'auto',
 			},
 			{
 				target: '[data-tour="wave-function-select"]',
 				title: '1) Choisir la famille d’onde',
 				content: (
 					<p>
-						Commence par le type d’onde (sinusoïde ou gaussienne). C’est le réglage global qui
-						donne la forme de base du signal.
+						Commence par le type d’onde (sinusoïde ou gaussienne). C’est le réglage global qui donne
+						la forme de base du signal.
 					</p>
 				),
 				placement: 'left',
@@ -95,8 +92,8 @@ export default function WaveTour() {
 				title: '2) Définir la fenêtre spatiale',
 				content: (
 					<p>
-						Ces bornes définissent la zone x min / x max affichée. Un bon cadrage aide à mieux
-						lire la forme de l’onde et ses variations.
+						Ces bornes définissent la zone x min / x max affichée. Un bon cadrage aide à mieux lire
+						la forme de l’onde et ses variations.
 					</p>
 				),
 				placement: 'left',
@@ -117,8 +114,8 @@ export default function WaveTour() {
 				title: '4) Enrichir avec des harmoniques',
 				content: (
 					<p>
-						Ici, tu règles combien de composantes fréquentielles sont superposées. En ajouter
-						permet de construire des formes d’onde plus riches.
+						Ici, tu règles combien de composantes fréquentielles sont superposées. En ajouter permet
+						de construire des formes d’onde plus riches.
 					</p>
 				),
 				placement: 'left',
@@ -128,8 +125,8 @@ export default function WaveTour() {
 				title: '5) Ajuster amplitude par amplitude',
 				content: (
 					<p>
-						Dans ce panneau, tu ajustes chaque harmonique séparément. C’est la partie la plus
-						fine du réglage, idéale pour comprendre la superposition.
+						Dans ce panneau, tu ajustes chaque harmonique séparément. C’est la partie la plus fine
+						du réglage, idéale pour comprendre la superposition.
 					</p>
 				),
 				placement: 'top',
@@ -139,8 +136,8 @@ export default function WaveTour() {
 				title: '6) Faire évoluer l’onde dans le temps',
 				content: (
 					<p>
-						Lecture, pause et reset te permettent de suivre la dynamique temporelle. Transition:
-						on passe maintenant de la forme statique au comportement dans le temps.
+						Lecture, pause et reset te permettent de suivre la dynamique temporelle. Transition: on
+						passe maintenant de la forme statique au comportement dans le temps.
 					</p>
 				),
 				placement: 'left',
@@ -156,7 +153,7 @@ export default function WaveTour() {
 				),
 				placement: 'left',
 			},
-			],
+		],
 		[]
 	);
 
