@@ -106,10 +106,24 @@ def schrodinger_solving_function(
         solver.init_from_array(psi0, normalize=True)
     
     print("start solving")
-    solved = solver.solve(t_final=100000, dt=time_steps)
+    dt = 100000 / time_steps
+    solved = solver.solve(t_final=100000, dt=dt)
     
     x = solved["x"]
-    prob = np.real(solved["prob"]).T
     print("solving finish")
     
-    return (x.tolist(), prob.tolist())
+
+    psi = solved["psi"]
+
+    psi_real = np.real(psi).T
+    psi_imag = np.imag(psi).T
+    prob = np.abs(psi)**2
+    prob = prob.T
+
+
+    return (
+    x.tolist(),
+    prob.tolist(),
+    psi_real.tolist(),
+    psi_imag.tolist()
+)
